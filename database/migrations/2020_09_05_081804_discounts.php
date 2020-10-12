@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class Themes extends Migration
+class Discounts extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,11 @@ class Themes extends Migration
      */
     public function up()
     {
-        Schema::create('themes', function (Blueprint $table) {
+        Schema::create('discounts', function(Blueprint $table){
             $table->bigIncrements('id');
-            $table->string('name');
+            $table->string('discount_code');
+            $table->string('discount_percent');
             
-            $table->timestamps();
         });
     }
 
@@ -28,6 +28,6 @@ class Themes extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('themes');
+        Schema::dropIfExists('discounts');
     }
 }

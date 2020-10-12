@@ -28,14 +28,19 @@ class UserSeeder extends Seeder
     		"access_name" => "admin"
     	]);
 
-    	$user = DB::table('users')->insert([
+    	$user = DB::table('admin_table')->insert([
     		"fname" => "admin",
     		"lname" => "admin",
             "username" => "admin",
     		"password" => bcrypt('password'),
     		"email" => "admin@test.com",
     		"position_id" => 1
-    	]);
+        ]);
+        
+        $user = DB::table('discounts')->insert([
+            "discount_code" => "thesis",
+            "discount_percent"  => 30
+        ]);
         
     }
 }

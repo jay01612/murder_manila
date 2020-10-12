@@ -43,6 +43,6 @@ class ClientInfo extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('client_info');
     }
 }

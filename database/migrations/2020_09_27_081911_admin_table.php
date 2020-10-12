@@ -18,6 +18,7 @@ class AdminTable extends Migration
 
             $table->string('fname');
             $table->string('lname');
+            $table->string('username');
             $table->string('password');
             $table->string('email');
 
@@ -38,6 +39,6 @@ class AdminTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('admin_table');
     }
 }

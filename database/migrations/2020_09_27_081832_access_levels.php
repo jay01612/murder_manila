@@ -30,6 +30,6 @@ class AccessLevels extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('access_levels');
     }
 }
