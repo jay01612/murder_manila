@@ -24,4 +24,5 @@ Route::post('SaveClient', [bookingController::class, 'clientInfoSave']);
 Route::post('booking', [ bookingController::class, 'bookingInfoSave']);
 Route::post('Availability', [bookingController::class, 'checkIfAvailable']);
 Route::get('themes', [bookingController::class, 'showTheme']);
+Route::get('bookingSummary', [bookingController::class, 'bookingSummary']);
 
