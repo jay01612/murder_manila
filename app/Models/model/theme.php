@@ -22,6 +22,7 @@ class theme extends Model
         return $query = DB::connection('mysql')
         ->table ('themes')
         ->select(
+            'themes.id',
             'themes.name'
         )->get();
         

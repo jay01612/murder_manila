@@ -12,115 +12,6 @@ use DB;
 
 class bookingController extends Controller
 {
-    
-        
-    // public function clientAddBooking (Request $request) {
-
-    //     $newDate = str_replace('/', '', $request->date);
-    //     $newTime = str_replace(':', '', $request->time);
-
-    //     return $referenceNumber = $newDate . $newTime;
-
-    //     $addbooking = booking::bookClient($request, $referenceNumber);
-
-    //     if($addbooking){
-    //         return response() ->json([
-    //             'success'   => true,
-    //             'data'      =>  $addbooking,
-    //             'message'   => 'Successfully made a booking'
-    //         ],200);
-    //         return response() ->json([
-    //             'success'   => false,
-    //             'data'      =>  [],
-    //             'message'   => 'There is something wrong'
-    //         ],200);
-    //     }
-    
-    //     $validation = Validator::make($request->all(), [
-    //             // 'reference_number'  =>  'required|unique:booking_table,reference_number,NULL,id,reference_number,id',
-    //             'reference_number'  =>  'required|unique:booking_table,reference_number,id',
-    //             'book_date'         =>  'required|date_format:Y-m-d',
-    //             'book_time'         =>  'required|date_format:H:i:s',
-    //             'theme_id'          =>  'required|exists:themes,id',
-    //             'discount_id'       =>  'required|exists:discounts,id',
-    //             'maxpax'            =>  'required|int',
-    //             'venue'             =>  'required|string'
-
-    //     ]);
-
-    //     if($validation->fails()){
-    //         $error = $validation->messages()->first();
-    //         return response() -> json([
-    //             'response'  => 'false',
-    //             'message'   =>  $error
-    //         ],200);
-    //     }
-
-       
-   //}
-
-    // public function checkIfAvailable (Requeset $request) {
-
-    //     $query = booking::checkAvailableBooking($request);
-
-    //     if(!$query){
-    //         return response()   ->json([
-    //             'response'  =>true,
-    //             'message'   =>'date and time available'
-    //         ],200);
-    //     }else{
-    //         return response()   ->json([
-    //             'response'  =>false,
-    //             'message'   =>'choose another date and time'
-    //         ],200);
-    //     }
-    // }
-
-    
-    // public function clientAddBooking (Request $request){
-
-    //     $referenceNumber = $this->generaterefnumber(date('Y-m-d H:i:s'));
-         
-
-    //      //$checkifexists = $this->checkifrefexists($referenceNumber);
-
-    //     if($checkexists){   
-    //         $validation = Validator::make($request->all(), [
-               
-    //             'book_date'         =>  'required|date_format:Y-m-d',
-    //             'book_time'         =>  'required|date_format:H:i:s',
-    //             'theme_id'          =>  'required|exists:themes,id',
-    //             'maxpax'            =>  'required|int',
-    //             'venue'             =>  'required|string'
-    
-    //         ]);
-    
-    //         if($validation->fails()){
-    //              $error = $validation->messages()->first();
-    //             return response() -> json([
-    //             'response'  => 'false',
-    //             'message'   =>  $error
-    //             ],200);
-    //         }
-    //     }
-    //     $addInfo = booking::bookClient($request, $referenceNumber);
-    
-    //     if($addInfo){
-    //         return response() ->json([
-    //             'success'   => true,
-    //             'data'      => $addInfo,
-    //             'message'   => 'Successfully made a booking'
-    //                 ],200);
-    //     }else{
-    //         return response()->json([
-    //             'response'      => false,
-    //             'message'       => "Failed",
-    //             'data'          =>  []
-    //             ], 200);
-    //     }
-        
-    // }
-
     public function generaterefnumber($date){
    
         $dataDate;
@@ -136,37 +27,11 @@ class bookingController extends Controller
 
     }
 
-    public function checkifrefexists($referenceNumber){
-        $checkexists = booking::where('reference_number', $referenceNumber)->get();
-        if($checkexists){
-            $regenerate = $this->generaterefnumber(date("Y-m-d H:i:s"));
-            $this->checkifrefexists($regenerate);
-            return $referenceNumber;
-        }
-    } 
-
-    public function addRefNum (Request $request){
-
-        $referenceNumber = $this->generaterefnumber(date('Y-m-d H:i:s'));
-
-        $query = booking::addref($request, $referenceNumber);
-        
-        if($query){
-            return response()->json([
-                'success'   => true,
-                'data'      => $query,
-            ],200);
-        }else{
-            return response()->json([
-                'success'   =>false,
-                'data'      =>[]
-            ],200);
-        }
-    }
-
     public function bookingInfoSave(Request $request){
-        $validation = Validator::make($request->all(), [
-              
+        //return $request;
+        $referenceNumber = $this->generaterefnumber(date('Y-m-d H:i:s'));
+        
+        $validation = Validator::make($request->all(), [ 
             'book_date'         =>  'required|date_format:Y-m-d',
             'book_time'         =>  'required|date_format:H:i:s',
             'theme_id'          =>  'required|exists:themes,id',
@@ -183,9 +48,8 @@ class bookingController extends Controller
             ],200);
         }
 
-        $query = booking::bookingInfo($request);
+        $query = booking::bookingInfo($request, $referenceNumber);
         
-
         if($query){
             return response()->json([
                 'success'   => true,
@@ -197,16 +61,16 @@ class bookingController extends Controller
                 'data'      =>[]
             ],200);
         }
+
     }
 
     public function clientInfoSave(Request $request){
+        
         $validation = Validator::make($request->all(), [
-            'game_id'               =>  'required|unique:booking_table,reference_number,id',
             'fname'                 =>  'required|string',
             'lname'                 =>  'required|string',
-            'mobile_number'         =>  'required|string',
-            'verification_number'   =>  'required|string',
-            'email'                 =>  'required|string',
+            'mobile_number'         =>  'required|int',
+            'email'                 =>  'required|string'
             
         ]);
 
@@ -225,11 +89,13 @@ class bookingController extends Controller
             return response() ->json([
                 'success'   => true,
                 'message'   => 'Client Save',
+                'data'      =>  $clientSave
                 
             ],200);
             return response() ->json([
                 'success'   => false,
                 'message'   => 'There is something wrong',
+                'data'      => []
                 
             ],200);
         }
@@ -267,20 +133,21 @@ class bookingController extends Controller
 
     public function bookingSummary (Request $request){
 
-        $query = client::getInformationClient($request);
+        $query = booking::ClientBookingSummary($request);
 
-        if(sizeof($query) > 0){
-            return response()   ->json([
-                'response'  =>  true,
-                'message'   =>  'success',
+        if($query){
+            return response() ->json([
+                'success'   => true,
                 'data'      =>  $query
-            ],  200);
-        }else{
-            return response()   ->json([
-                'response'  =>  false,
-                'message'   =>  'there is a missing data',
-                'data'      =>  []
+            
+            ],200);
+            return response() ->json([
+                'success'   => false,
+                'data'      => []
+            
             ],200);
         }
     }
+
+
 }
