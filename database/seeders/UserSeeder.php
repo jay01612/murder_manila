@@ -24,8 +24,16 @@ class UserSeeder extends Seeder
         	'name' => "Murder At The Mansion"
         ]);
 
-        $position = DB::table('access_levels')->insert([
-    		"access_name" => "admin"
+        $position1 = DB::table('access_levels')->insert([
+    		"access_name" => "owners"
+        ]);
+        
+        $position2 = DB::table('access_levels')->insert([
+    		"access_name" => "Event Manager"
+        ]);
+        
+        $position3 = DB::table('access_levels')->insert([
+    		"access_name" => "Operation Supervisor"
     	]);
 
     	$user = DB::table('admin_table')->insert([
@@ -38,8 +46,8 @@ class UserSeeder extends Seeder
         ]);
         
         $user = DB::table('discounts')->insert([
-            "discount_code" => "thesis",
-            "discount_percent"  => 30
+            "discount_code" => "",
+            "discount_percent"  => 0
         ]);
         
     }

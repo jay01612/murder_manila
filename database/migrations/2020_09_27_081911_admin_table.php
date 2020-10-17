@@ -27,6 +27,11 @@ class AdminTable extends Migration
 
             $table->tinyInteger('is_active')->default(1);
 
+            $table->bigInteger('created_by')->nullable();
+            $table->bigInteger('updated_by')->nullable();
+            
+            $table->softDeletes();
+
             $table->timestamps();
         });
 

@@ -52,13 +52,15 @@ class bookingController extends Controller
         
         if($query){
             return response()->json([
-                'success'   => true,
-                'data'      => $query,
+                'success'   =>  true,
+                'message'   =>  "successfully save",
+                
             ],200);
         }else{
             return response()->json([
-                'success'   =>false,
-                'data'      =>[]
+                'success'   =>  false,
+                'message'   =>  "there is something wrong"
+                
             ],200);
         }
 
@@ -89,13 +91,13 @@ class bookingController extends Controller
             return response() ->json([
                 'success'   => true,
                 'message'   => 'Client Save',
-                'data'      =>  $clientSave
+                
                 
             ],200);
             return response() ->json([
                 'success'   => false,
                 'message'   => 'There is something wrong',
-                'data'      => []
+                
                 
             ],200);
         }
@@ -148,6 +150,9 @@ class bookingController extends Controller
             ],200);
         }
     }
+
+
+
 
 
 }

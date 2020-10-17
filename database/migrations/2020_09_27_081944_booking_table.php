@@ -24,7 +24,7 @@ class BookingTable extends Migration
             $table->bigInteger('theme_id')->unsigned();
             $table->foreign('theme_id')->references('id')->on('themes');
 
-            $table->bigInteger('discount_id')->unsigned();
+            $table->bigInteger('discount_id')->unsigned()->default(1);
             $table->foreign('discount_id')->references('id')->on('discounts');
 
             $table->string('maxpax');
@@ -32,6 +32,8 @@ class BookingTable extends Migration
 
             $table->tinyInteger('is_booked')->default(0); 
             $table->tinyInteger('is_cancelled')->default(0);
+
+            $table->bigInteger('updated_by')->nullable();
                 
 
             $table->timestamps();

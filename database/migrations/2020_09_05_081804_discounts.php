@@ -17,6 +17,10 @@ class Discounts extends Migration
             $table->bigIncrements('id');
             $table->string('discount_code');
             $table->string('discount_percent');
+
+            $table->bigInteger('created_by')->nullable();
+
+            $table->timestamps();
             
         });
     }

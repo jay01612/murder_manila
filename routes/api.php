@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\bookingController;
+use App\Http\Controllers\adminControllers;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,5 +25,10 @@ Route::post('SaveClient', [bookingController::class, 'clientInfoSave']);
 Route::post('booking', [ bookingController::class, 'bookingInfoSave']);
 Route::post('Availability', [bookingController::class, 'checkAvailableTime']);
 Route::get('themes', [bookingController::class, 'showTheme']);
-Route::get('bookingSummary', [bookingController::class, 'bookingSummary']);
+Route::get('bookingSummary/{game_id}', [bookingController::class, 'bookingSummary']);
+
+
+//admin side
+Route::get('positions', [adminControllers::class, 'showPositions']);
+
 

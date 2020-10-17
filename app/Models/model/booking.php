@@ -63,26 +63,31 @@ class booking extends Model
         return $query = DB::connection('mysql')
         ->table('booking_table as booking')
         ->select(
-           
+            
+            'client.id as id',
             'client.fname as firstname',
             'client.lname as lastname',
             'client.mobile_number as mobileNumber',
-           // 'client email as e-mail', <-- ayaw lmabas
+            'client.email as e-mail',
            
-
+            'booking.id as id',
             'booking.reference_number as referenceNumber',
             'booking.book_date as date',
             'booking.book_time as time',
-            'booking.theme_id as theme',
+           
+            'theme.name as game',
+
             'booking.discount_id as discount',
             'booking.maxpax as maxpax',
             'booking.venue as venue',  
         )
         ->join('themes as theme', 'booking.theme_id', '=', 'theme.id')
-        ->join('discounts as discount', 'booking.discount_id', '=', 'discount.id')
+        ->leftjoin('discounts as discount', 'booking.discount_id', '=', 'discount.id')
         ->join('client_info as client', 'client.game_id', '=', 'booking.id')
         ->get();
     }
+
+    
 
 
 }
