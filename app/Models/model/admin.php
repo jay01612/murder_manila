@@ -39,8 +39,9 @@ class admin extends Model
         
     }
 
+   
     public static function addAdmin($data){
-        $password = str_random($lenght);
+        $password = str_random();
         return admin::insert([
             'fname'         =>  $data->fname,
             'lname'         =>  $data->lname,

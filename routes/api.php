@@ -25,10 +25,13 @@ Route::post('SaveClient', [bookingController::class, 'clientInfoSave']);
 Route::post('booking', [ bookingController::class, 'bookingInfoSave']);
 Route::post('Availability', [bookingController::class, 'checkAvailableTime']);
 Route::get('themes', [bookingController::class, 'showTheme']);
-Route::get('bookingSummary/{game_id}', [bookingController::class, 'bookingSummary']);
+Route::get('bookingSummary/{id}', [bookingController::class, 'bookingSummary']);
 
 
 //admin side
+//Route::post('login', [adminControllers::class, 'logIn']);
 Route::get('positions', [adminControllers::class, 'showPositions']);
+Route::post('adminRegister', [adminControllers::class, 'registerAdmin']);//->middleware('auth:api');
+
 
 

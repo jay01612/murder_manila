@@ -26,15 +26,6 @@ class booking extends Model
         return booking_table::get();
     }
 
-    // public static function addref($data, $referenceNumber){
-    //      return $query = DB::connection('mysql')
-    //     ->table('booking_table')
-    //     ->insert([
-    //         'reference_number'  =>  $referenceNumber,    
-    //     ]);
-          
-    // }
-
     public static function bookingInfo($data, $referenceNumber){
         return $query = DB::connection('mysql')
         ->table('booking_table')
@@ -60,34 +51,34 @@ class booking extends Model
     }
 
     public static function ClientBookingSummary ($data){
+       
         return $query = DB::connection('mysql')
         ->table('booking_table as booking')
         ->select(
+
             
-            'client.id as id',
+            'booking.reference_number as referenceNumber',
+            
             'client.fname as firstname',
             'client.lname as lastname',
             'client.mobile_number as mobileNumber',
             'client.email as e-mail',
-           
-            'booking.id as id',
-            'booking.reference_number as referenceNumber',
+            
+            
             'booking.book_date as date',
             'booking.book_time as time',
            
             'theme.name as game',
 
-            'booking.discount_id as discount',
+            'discount.discount_code as code',
+
             'booking.maxpax as maxpax',
             'booking.venue as venue',  
         )
         ->join('themes as theme', 'booking.theme_id', '=', 'theme.id')
         ->leftjoin('discounts as discount', 'booking.discount_id', '=', 'discount.id')
         ->join('client_info as client', 'client.game_id', '=', 'booking.id')
+        ->where('client.id', '=', $data->id)
         ->get();
     }
-
-    
-
-
 }
