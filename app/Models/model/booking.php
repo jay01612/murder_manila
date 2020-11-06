@@ -58,15 +58,15 @@ class booking extends Model
 
             
             'booking.reference_number as referenceNumber',
-            
+            'client.game_id as gameId',
             'client.fname as firstname',
             'client.lname as lastname',
             'client.mobile_number as mobileNumber',
             'client.email as e-mail',
             
             
-            'booking.book_date as date',
-            'booking.book_time as time',
+            DB::raw("DATE_FORMAT(booking.book_date, '%M %d %Y') as date"),
+            DB::raw("TIME_FORMAT(booking.book_time, '%h:%i %p') as time"),
            
             'theme.name as game',
 
@@ -77,8 +77,57 @@ class booking extends Model
         )
         ->join('themes as theme', 'booking.theme_id', '=', 'theme.id')
         ->leftjoin('discounts as discount', 'booking.discount_id', '=', 'discount.id')
-        ->join('client_info as client', 'client.game_id', '=', 'booking.id')
+        ->join('client_info as client', 'booking.id', '=', 'client.game_id')
         ->where('client.id', '=', $data->id)
         ->get();
     }
+
+    public static function clientBookingAmount ($data){
+
+        return $query = DB::connection('mysql')
+        ->table('payment_table')
+        ->insertGetId([
+            'reference_id'      => $data->reference_id,
+            'client_id'         => $data->client_id,
+            'is_paid'           => 0,
+            'paid_time'         => $data->paid_time,
+            'paid_date'         => $data->paid_date,
+            'amount'            => $data->amount,
+            'is_emailed'        => 0,
+            'created_at'        => DB::raw("NOW()")
+        ]);
+    }
+
+    public static function bookingSummaryWithAmount($data){
+
+        return $query = DB::connection('mysql')
+        ->table('payment_table as payment')
+        ->select(
+            'payment.id as id',
+
+            'payment.reference_id as booking id',
+
+            DB::raw("CONCAT(client.lname,',',client.fname) as name"),
+            'client.email as email',
+            'client.mobile_number as mobile number',
+
+            'theme.name as game',
+
+            DB::raw("DATE_FORMAT(booking.book_date, '%M %d %Y') as date"),
+            DB::raw("TIME_FORMAT(booking.book_time, '%h:%i %p') as time"),
+            'booking.venue as venue',
+            'booking.maxpax as number of players',
+
+            'payment.amount as total amount'
+        )
+        ->join('client_info as client', 'payment.client_id', '=', 'client.id')
+        ->join('booking_table as booking', 'payment.reference_id', '=', 'booking.id')
+        ->join('themes as theme', 'booking.theme_id', '=', 'theme.id')
+        ->where('payment.id', '=', $data->id)
+        ->get();
+    }
+
+    
+
+    
 }

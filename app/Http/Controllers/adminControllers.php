@@ -3,17 +3,20 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\model\admin;
+use App\Models\User;
+use App\Models\model\booking;
 use Hash;
 use Auth;
-use Validatior;
+use Illuminate\Support\Facades\Validator;
+
 
 
 class adminControllers extends Controller
 {
+
     public function showPositions(Request $request){
 
-        $position = admin::getPositionId($request);
+        $position = User::getPositionId($request);
 
         if(sizeOf($position) > 0){
             return response()->json([
@@ -30,19 +33,32 @@ class adminControllers extends Controller
     }
 
     public function logIn(Request $request){
+        $validation = Validator::make($request->all(), [
+            'username'  =>  'required|string',
+            'password'  =>  'required|string'
+        ]);
+
+        if($validation->fails()){
+            $error = $validation->messages()->first();
+            return response()->json([
+                'response'  =>  false,
+                'message'   =>  $error
+            ]);
+        }
+
         $logIn = Auth::attempt([
             'username'  => $request->username,
             'password'  => $request->password
         ]);
 
         if($logIn){
-            $accessToken = Auth::admin_table()->createToken('authToken')->accessToken;
+            $accessToken = Auth::User()->createToken('authToken')->accessToken;
 
             return response()  ->json([
                 'response'      =>  true,
                 'message'       =>  "success",
                 'token'         =>  $accessToken,
-                'admin'         =>  Auth::admin_table()
+                'admin'         =>  Auth::user()
             ],200);
         }else{
             return response()      ->json([
@@ -56,37 +72,102 @@ class adminControllers extends Controller
 
 
     public function registerAdmin(Request $request){
-        // if(Auth::user()->position_id == 1){
-
+        if(Auth::User()->position_id == 1){   
+            
             // $validation = Validator::make($request->all(), [
-            //     'fname'     =>  'required|string',
-            //     'lname'     =>  'required|string',
-            //     'username'  =>  'required|string',
-            //     'email'     =>  'required|email|unique:admin_table'
+            //     'fname'     => 'required|string',
+            //     'lname'     => 'required|string',
+            //     'username'  => 'required|string',
+            //     'email'     => 'required|email|unique:users'
             // ],200);
-
+          
             // if($validation->fails()){
             //     $error = $validation->messages()->first();
-            //     return response() ->json([
+            //     return response()->json([
             //         'response'  => false,
             //         'message'   => $error
             //     ],200);
             // }
+            
+            $firstname  =   str_shuffle($request->fname);
+            $lastname   =   str_shuffle($request->lname);
+                
+            $password   =   $request->$firstname.$lastname;
 
-            $query = admin::addAdmin($request);
+            $query = User::addAdmin($request, $password);
 
             if($query){
-                return json()->response([
+                return response()->json([
                     'response'  =>  true,
                     'message'   =>  "successfully added an admin"
                 ],200);
             }else{
-                return json()->response([
+                return response()->json([
                     'response'  =>  false,
                     'message'   =>  "there is something wrong"
                 ],200);
             }
-        //}
+        }
     }
 
+    public function deleteAdmin (Request $request){
+        if(Auth::User()->position_id == 1){
+
+            $query = User::DeleteAdmin($request);
+
+            if($query){
+                return response()   ->json([
+                    'response'  =>  true,
+                    'message'   =>  'Admin deleted'
+                ],200);
+            }else{
+                return response()   ->json([
+                    'response'  =>  false,
+                    'message'   =>  'Error'
+                ],200);
+            }
+        }
+    }
+
+    public function getPendBookings(Request $request){
+        if(Auth::User()->position_id == 1 || Auth::User()->position_id == 2 || Auth::User()->position_id == 3){
+
+            $query = User::getPendingBookings($request);
+
+            if($query){
+                return response()   ->json([
+                    'response'  => true,
+                    'data'      => $query
+                ],200);
+            }else{
+                return response()   ->json([
+                    'response'  =>  false,
+                    'data'      =>  []
+                ],200);    
+            }
+        }
+    }
+
+    public function getPaidBooking(Request $request){
+        if(Auth::User()->position_id == 1 || Auth::User()->position_id == 2 || Auth::User()->position_id == 3){
+            
+            $query = User::PaidBookings($request);
+
+            if($query){
+                return response()   ->json([
+                    'response'  => true,
+                    'data'      => $query
+                ],200);
+            }else{
+                return response()   ->json([
+                    'response'  => false,
+                    'data'      => []
+                ],200);
+            }
+        }
+
+    }
+
+    
+   
 }

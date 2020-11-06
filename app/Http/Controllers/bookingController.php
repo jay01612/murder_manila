@@ -91,13 +91,14 @@ class bookingController extends Controller
             return response() ->json([
                 'success'   => true,
                 'message'   => 'Client Save',
+                'data'      =>  $clientSave
                 
                 
             ],200);
             return response() ->json([
                 'success'   => false,
                 'message'   => 'There is something wrong',
-                
+                'data'      =>  []
                 
             ],200);
         }
@@ -151,8 +152,38 @@ class bookingController extends Controller
         }
     }
 
+    public function bookingAmount(Request $request){
 
 
+        $query = booking::clientBookingAmount($request);
 
+        if($query){
+            return response()   ->json([
+                'success'       => true,
+                'message'       => 'Here is the total billing'
+            ],200);
+        }else{
+            return response()   ->json([
+                'success'       => false,
+                'message'       => 'there is an error'
+            ],200);
+        }
+    }
 
+    public function amountBookingSummary(Request $request){
+
+        $query = booking::bookingSummaryWithAmount($request);
+
+        if($query){
+            return response()   ->json([
+                'success'       => true,
+                'data'          => $query
+            ],200);
+        }else{
+            return response()   ->json([
+                'success'       => false,
+                'data'          => []
+            ],200);
+        }
+    }
 }

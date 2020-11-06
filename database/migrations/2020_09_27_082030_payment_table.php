@@ -16,20 +16,21 @@ class PaymentTable extends Migration
         Schema::create('payment_table', function (Blueprint $table) {
             $table->bigIncrements('id');
 
-            $table->bigInteger('reference_id')->unsigned();;
+            $table->bigInteger('reference_id')->unsigned();
             $table->foreign('reference_id')->references('id')->on('booking_table');
 
-            $table->string('mode_of_payment');
+            $table->bigInteger('client_id')->unsigned();
+            $table->foreign('client_id')->references('id')->on('client_info');
 
             $table->tinyInteger('is_paid')->default(0);
 
-            $table->time('paid_time');
-            $table->date('paid_date');
+            $table->time('paid_time')->nullable();
+            $table->date('paid_date')->nullable();
 
             $table->string('amount');
 
-            $table->tinyInteger('is_emailed');
-
+            $table->tinyInteger('is_emailed')->default(0);
+            
             $table->timestamps();
         });
     }

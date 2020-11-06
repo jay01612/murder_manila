@@ -36,10 +36,10 @@ class UserSeeder extends Seeder
     		"access_name" => "Operation Supervisor"
     	]);
 
-    	$user = DB::table('admin_table')->insert([
+    	$user = DB::table('users')->insert([
     		"fname" => "admin",
     		"lname" => "admin",
-            "username" => "admin",
+        "username" => "admin",
     		"password" => bcrypt('password'),
     		"email" => "admin@test.com",
     		"position_id" => 1

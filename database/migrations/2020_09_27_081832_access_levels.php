@@ -19,8 +19,6 @@ class AccessLevels extends Migration
             $table->string('access_name');
             $table->timestamps();
         });
-
-    
     }
 
     /**

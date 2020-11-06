@@ -26,12 +26,16 @@ Route::post('booking', [ bookingController::class, 'bookingInfoSave']);
 Route::post('Availability', [bookingController::class, 'checkAvailableTime']);
 Route::get('themes', [bookingController::class, 'showTheme']);
 Route::get('bookingSummary/{id}', [bookingController::class, 'bookingSummary']);
+Route::post('Billing', [bookingController::class, 'bookingAmount']);
+Route::get('AmountSummary/{id}', [bookingController::class, 'amountBookingSummary']);
 
 
 //admin side
-//Route::post('login', [adminControllers::class, 'logIn']);
+Route::post('login', [adminControllers::class, 'logIn']);
 Route::get('positions', [adminControllers::class, 'showPositions']);
-Route::post('adminRegister', [adminControllers::class, 'registerAdmin']);//->middleware('auth:api');
-
+Route::post('adminRegister', [adminControllers::class, 'registerAdmin'])->middleware('auth:api');
+Route::post('AdminDelete', [adminControllers::class, 'deleteAdmin'])->middleware('auth:api');
+Route::get('Pendings', [adminControllers::class, 'getPendBookings'])->middleware('auth:api');
+Route::get('Booked', [adminControllers::class, 'getPaidBooking'])->middleware('auth:api');
 
 
