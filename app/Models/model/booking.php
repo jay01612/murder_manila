@@ -127,6 +127,14 @@ class booking extends Model
         ->get();
     }
 
+    public static function editBooking($data){
+        return booking::where('id', $data->id)
+        ->update([
+            'is_booked' => 1
+        ]);
+        
+    }
+
     
 
     

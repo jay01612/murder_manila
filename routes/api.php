@@ -37,5 +37,6 @@ Route::post('adminRegister', [adminControllers::class, 'registerAdmin'])->middle
 Route::post('AdminDelete', [adminControllers::class, 'deleteAdmin'])->middleware('auth:api');
 Route::get('Pendings', [adminControllers::class, 'getPendBookings'])->middleware('auth:api');
 Route::get('Booked', [adminControllers::class, 'getPaidBooking'])->middleware('auth:api');
-
+Route::put('editpenging', [adminControllers::class, 'bookingEdit'])->middleware('auth:api');
+Route::put('editpayment', [adminControllers::class, 'paymentEdit'])->middleware('auth:api');
 

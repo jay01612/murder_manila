@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\model\booking;
+use App\Models\model\payment;
 use Hash;
 use Auth;
 use Illuminate\Support\Facades\Validator;
@@ -168,6 +169,44 @@ class adminControllers extends Controller
 
     }
 
-    
+    public function bookingEdit(Request $request){
+        if(Auth::User()->position_id == 1 || Auth::User()->position_id == 2){
+
+            $query = booking::editBooking($request);
+
+            if($query){
+                return response()   ->json([
+                    'response'      => true,
+                    'message'       => 'Successfully Updated'
+                ],200);
+            }else{
+                return response()   ->json([
+                    'response'      =>  false,
+                    'message'       =>  'There is somethingwrong'
+                ],200);
+            }
+        }
+    }
+
+    public function paymentEdit(Request $request){
+        if(Auth::User()->position_id == 1 || Auth::User()->position_id == 2){
+
+            $query = booking::editPayment($request);
+
+            if($query){
+                return response()   ->json([
+                    'response'      => true,
+                    'message'       => 'Successfully Updated'
+                ],200);
+            }else{
+                return response()   ->json([
+                    'response'      =>  false,
+                    'message'       =>  'There is somethingwrong'
+                ],200);
+            }
+        }
+    }
+
+
    
 }
