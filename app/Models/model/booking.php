@@ -133,9 +133,5 @@ class booking extends Model
             'is_booked' => 1
         ]);
         
-    }
-
-    
-
-    
+    } 
 }

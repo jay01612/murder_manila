@@ -23,6 +23,7 @@ class client extends Model
     ];
 
     public static function saveClientInfo ($data){
+        
         $verification = rand();
         return $query = DB::connection('mysql')
         ->table('client_info')
