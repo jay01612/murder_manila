@@ -7,8 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\model\booking;
 use App\Models\model\client;
 use App\Models\model\theme;
+use Illuminate\Support\Facades\Mail;
 use Validator;
 use DB;
+use Nexmo;
 
 class bookingController extends Controller
 {
@@ -186,4 +188,75 @@ class bookingController extends Controller
             ],200);
         }
     }
+
+    public function sendVerificationNumber(Request $request){
+        $query = client::getVerificationCode($request);
+
+        $sendVerification = Nexmo::message()->send([
+                    'to'    =>  '09217215979',
+                    'from'  =>  'Murder Manila',
+                    'text'  =>  "Your verification code is: ". $query->verification_number
+        ]);
+
+        if($sendVerification){
+            return response()   ->json([
+                'response'  =>  true,
+                'message'   =>  'Message sent'
+            ],200);
+        }else{
+            return response()   ->json([
+                'response'  =>  false,
+                'message'   =>  'Sending failed'
+            ],200);
+        }
+    }
+
+    public function updateVerifyClient(Request $request){
+
+        $query = client::verifyClient($request);
+        $verified = client::updateVerified($request);
+
+        if(!blank($query)){
+
+            if($verified){
+                return response()   ->json([
+                    'response'      =>  true,
+                    'message'       =>  'Successfully verified'
+                ],200);
+            }else{
+                return response()   ->json([
+                    'response'      =>  false,
+                    'message'       =>  'there is something wrong'
+                ],200);
+            }
+
+        }else{
+            return response()   ->json([
+                'response'      =>  false,
+                'message'       =>  'error'
+            ],200);
+        }
+    }
+
+    public function sendBilling(Request $request){
+        $name = $request->firstName . " " . $request->lastName;
+        $email = $request->email;
+        $data = array(
+            'name'              =>  $request->firstName.",".$request->lastName,
+            'reference_number'  =>  $request->reference_number,
+            'theme'             =>  $request->themes,
+            'date'              =>  $request->date,
+            'time'              =>  $request->time,
+            'maxpax'            =>  $request->maxpax,
+            'venue'             =>  $request->venue,
+            'amount'            =>  $request->amount,
+        );
+        Mail::send('', $data, function($message) use ($name, $email){
+            $message->to($email, $name)
+                    ->subject('Murder Manila Billing');
+            $message->from('murder.manila.billing123@gmail.com','Murder Manila');
+        });
+    }
+
+    
 }

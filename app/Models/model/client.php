@@ -39,7 +39,33 @@ class client extends Model
             'created_at'            =>  DB::raw("NOW()")
         ]);
     }
+
+    public static function getVerificationCode($data){
+        return $query = DB::connection('mysql')
+        ->table('client_info')
+        ->select('*')
+        ->where('id', $data)
+        ->get();
+    }
    
+    public static function verifyClient($data){
+
+        return $query = DB::connection('mysql')
+        ->table('client_info')
+        ->where('id', $data->id)
+        ->where('verification_number', $data->verification_number)
+        ->where('is_verified', 0)
+        ->get();
+    }
+
+    public static function updateVerified($data){
+        return $query = DB::connectioin('mysql')
+        ->table('client_info')
+        ->where('id', $data->id)
+        ->update([
+            'is_verified' => 1
+        ]);
+    }
 }
 
 

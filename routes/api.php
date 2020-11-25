@@ -28,15 +28,20 @@ Route::get('themes', [bookingController::class, 'showTheme']);
 Route::get('bookingSummary/{id}', [bookingController::class, 'bookingSummary']);
 Route::post('Billing', [bookingController::class, 'bookingAmount']);
 Route::get('AmountSummary/{id}', [bookingController::class, 'amountBookingSummary']);
+Route::get('sendVerification', [bookingController::class, 'sendVerificationNumber']);
+Route::post('updateIsVerified', [bookingController::class, 'updateVerifyClient']);
+Route::post('sendEmailBillling', [bookingController::class, 'sendBilling']);
 
 
-//admin side
+//admin login
 Route::post('login', [adminControllers::class, 'logIn']);
 Route::get('positions', [adminControllers::class, 'showPositions']);
+
+//admin 
 Route::post('adminRegister', [adminControllers::class, 'registerAdmin'])->middleware('auth:api');
 Route::post('AdminDelete', [adminControllers::class, 'deleteAdmin'])->middleware('auth:api');
 Route::get('Pendings', [adminControllers::class, 'getPendBookings'])->middleware('auth:api');
 Route::get('Booked', [adminControllers::class, 'getPaidBooking'])->middleware('auth:api');
-Route::put('editpenging', [adminControllers::class, 'bookingEdit'])->middleware('auth:api');
+Route::put('editpending', [adminControllers::class, 'bookingEdit'])->middleware('auth:api');
 Route::put('editpayment', [adminControllers::class, 'paymentEdit'])->middleware('auth:api');
 
