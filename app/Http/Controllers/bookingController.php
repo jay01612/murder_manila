@@ -128,10 +128,28 @@ class bookingController extends Controller
         $theme = theme::getThemeId($request);
 
         if(sizeOf($theme) > 0){
+            $dataThemes = [];
+            foreach($theme as $out){
+                $dataThemes = $out->id;
+            }
+
+            $getThemes = DB::connection('mysql')
+            ->table('themes')
+            ->select(
+                'themes.id',
+                'themes.name'
+            )
+            ->get();
             return response()   ->json([
                 'response'  => true,
                 'message'   => 'Success',
                 'data'      => $theme
+            ],200);
+        }else {
+            return response()   ->json([
+                'response'  =>  false,
+                'message'   =>  'fails',
+                'data'      =>  []
             ],200);
         }
     }
@@ -146,6 +164,7 @@ class bookingController extends Controller
                 'data'      =>  $query
             
             ],200);
+        }else{
             return response() ->json([
                 'success'   => false,
                 'data'      => []
@@ -257,6 +276,4 @@ class bookingController extends Controller
             $message->from('murder.manila.billing123@gmail.com','Murder Manila');
         });
     }
-
-    
 }

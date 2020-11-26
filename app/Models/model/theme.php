@@ -21,10 +21,7 @@ class theme extends Model
     public static function getThemeId($data){
         return $query = DB::connection('mysql')
         ->table ('themes')
-        ->select(
-            'themes.id',
-            'themes.name'
-        )->get();
+        ->get();
         
     }
 }
