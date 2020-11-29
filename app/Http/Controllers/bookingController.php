@@ -35,7 +35,7 @@ class bookingController extends Controller
         
         $validation = Validator::make($request->all(), [ 
             'book_date'         =>  'required|date_format:Y-m-d',
-            'book_time'         =>  'required|date_format:H:i:s',
+            'book_time'         =>  'required|date_format:H:i',
             'theme_id'          =>  'required|exists:themes,id',
             'maxpax'            =>  'required|int',
             'venue'             =>  'required|string'
@@ -212,9 +212,9 @@ class bookingController extends Controller
         $query = client::getVerificationCode($request);
 
         $sendVerification = Nexmo::message()->send([
-                    'to'    =>  '09217215979',
+                    'to'    =>  '639217215979',
                     'from'  =>  'Murder Manila',
-                    'text'  =>  "Your verification code is: ". $query->verification_number
+                    'text'  =>  "Your verification code is: ". $query[0]->verification_number
         ]);
 
         if($sendVerification){
@@ -270,7 +270,7 @@ class bookingController extends Controller
             'venue'             =>  $request->venue,
             'amount'            =>  $request->amount,
         );
-        Mail::send('', $data, function($message) use ($name, $email){
+        Mail::send('emails.activation', $data, function($message) use ($name, $email){
             $message->to($email, $name)
                     ->subject('Murder Manila Billing');
             $message->from('murder.manila.billing123@gmail.com','Murder Manila');

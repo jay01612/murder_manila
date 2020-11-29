@@ -1,4 +1,4 @@
-composeer<?php
+<?php
 
 return [
 
@@ -36,7 +36,7 @@ return [
     'mailers' => [
         'smtp' => [
             'transport' => 'smtp',
-            'host' => env('MAIL_HOST', 'smtp.mailgun.org'),
+            'host' => env('MAIL_HOST', 'smtp.gmail.com'),
             'port' => env('MAIL_PORT', 587),
             'encryption' => env('MAIL_ENCRYPTION', 'tls'),
             'username' => env('MAIL_USERNAME'),
@@ -45,32 +45,32 @@ return [
             'auth_mode' => null,
         ],
 
-        'ses' => [
-            'transport' => 'ses',
-        ],
+    //     'ses' => [
+    //         'transport' => 'ses',
+    //     ],
 
-        'mailgun' => [
-            'transport' => 'mailgun',
-        ],
+    //     'mailgun' => [
+    //         'transport' => 'mailgun',
+    //     ],
 
-        'postmark' => [
-            'transport' => 'postmark',
-        ],
+    //     'postmark' => [
+    //         'transport' => 'postmark',
+    //     ],
 
-        'sendmail' => [
-            'transport' => 'sendmail',
-            'path' => '/usr/sbin/sendmail -bs',
-        ],
+    //     'sendmail' => [
+    //         'transport' => 'sendmail',
+    //         'path' => '/usr/sbin/sendmail -bs',
+    //     ],
 
-        'log' => [
-            'transport' => 'log',
-            'channel' => env('MAIL_LOG_CHANNEL'),
-        ],
+    //     'log' => [
+    //         'transport' => 'log',
+    //         'channel' => env('MAIL_LOG_CHANNEL'),
+    //     ],
 
-        'array' => [
-            'transport' => 'array',
-        ],
-    ],
+    //     'array' => [
+    //         'transport' => 'array',
+    //     ],
+    // ],
 
     /*
     |--------------------------------------------------------------------------

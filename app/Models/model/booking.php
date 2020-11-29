@@ -62,7 +62,7 @@ class booking extends Model
             'client.fname as firstname',
             'client.lname as lastname',
             'client.mobile_number as mobileNumber',
-            'client.email as e-mail',
+            'client.email as email',
             
             
             DB::raw("DATE_FORMAT(booking.book_date, '%M %d %Y') as date"),

@@ -34,7 +34,7 @@ Route::post('sendEmailBillling', [bookingController::class, 'sendBilling']);
 
 
 //admin login
-Route::post('login', [adminControllers::class, 'logIn']);
+Route::post('logIn', [adminControllers::class, 'logIn']);
 Route::get('positions', [adminControllers::class, 'showPositions']);
 
 //admin 
