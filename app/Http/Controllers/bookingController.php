@@ -208,13 +208,17 @@ class bookingController extends Controller
         }
     }
 
+    public function send(){
+
+    }
+
     public function sendVerificationNumber(Request $request){
-        $query = client::getVerificationCode($request);
+        $query = client::verifyClient($request);
 
         $sendVerification = Nexmo::message()->send([
-                    'to'    =>  '639217215979',
+                    'to'    =>  '09217215979',
                     'from'  =>  'Murder Manila',
-                    'text'  =>  "Your verification code is: ". $query[0]->verification_number
+                    'text'  =>  "Your verification code is: ". $query->verification_number
         ]);
 
         if($sendVerification){
@@ -270,10 +274,10 @@ class bookingController extends Controller
             'venue'             =>  $request->venue,
             'amount'            =>  $request->amount,
         );
-        Mail::send('emails.activation', $data, function($message) use ($name, $email){
+        Mail::send('template', $data, function($message) use ($name, $email){
             $message->to($email, $name)
                     ->subject('Murder Manila Billing');
-            $message->from('murder.manila.billing123@gmail.com','Murder Manila');
+            $message->from('murdermanilabilling@gmail.com','Murder Manila');
         });
     }
 }
