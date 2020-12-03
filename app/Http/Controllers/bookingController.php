@@ -280,7 +280,7 @@ class bookingController extends Controller
         //     $message->from('murdermanilabilling@gmail.com','Murder Manila');
         // });
 
-        Mail::to($email)->send(new Template($data));
+        Mail::to($email)->send(new BillingMain($data));
         return "email Sent";
     }
 }
