@@ -11,16 +11,16 @@ class BillingMain extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $template;
+    public $data;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($template)
+    public function __construct($data)
     {
-        $this->template = $template;
+        $this->data = $data;
     }
 
     /**
