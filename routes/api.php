@@ -30,7 +30,7 @@ Route::post('Billing', [bookingController::class, 'bookingAmount']);
 Route::get('AmountSummary/{id}', [bookingController::class, 'amountBookingSummary']);
 Route::get('sendVerification', [bookingController::class, 'sendVerificationNumber']);
 Route::post('updateIsVerified', [bookingController::class, 'updateVerifyClient']);
-Route::post('sendEmailBillling', [bookingController::class, 'sendBilling']);
+Route::post('sendEmailBillling', [bookingController::class, 'sendBilling']); 
 
 
 //admin login

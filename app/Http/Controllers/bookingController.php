@@ -262,10 +262,10 @@ class bookingController extends Controller
     }
 
     public function sendBilling(Request $request){
-        $name = $request->firstName . " " . $request->lastName;
+        $name = $request->fname . " " . $request->lname;
         $email = $request->email;
         $data = array(
-            'name'              =>  $request->firstName.",".$request->lastName,
+            'name'              =>  $request->fname.",".$request->lname,
             'reference_number'  =>  $request->reference_number,
             'theme'             =>  $request->themes,
             'date'              =>  $request->date,
@@ -274,10 +274,13 @@ class bookingController extends Controller
             'venue'             =>  $request->venue,
             'amount'            =>  $request->amount,
         );
-        Mail::send('template', $data, function($message) use ($name, $email){
-            $message->to($email, $name)
-                    ->subject('Murder Manila Billing');
-            $message->from('murdermanilabilling@gmail.com','Murder Manila');
-        });
+        // Mail::send('template', $data, function($message) use ($name, $email){
+        //     $message->to($email, $name)
+        //             ->subject('Murder Manila Billing');
+        //     $message->from('murdermanilabilling@gmail.com','Murder Manila');
+        // });
+
+        Mail::to($email)->send(new Template($data));
+        return "email Sent";
     }
 }
