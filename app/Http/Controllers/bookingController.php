@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\model\booking;
 use App\Models\model\client;
 use App\Models\model\theme;
+use App\Mail\BillingMain;
 use Illuminate\Support\Facades\Mail;
 use Validator;
 use DB;

@@ -28,8 +28,10 @@ class BillingMain extends Mailable
      *
      * @return $this
      */
-    public function build()
+    public function build(Request $request)
     {
-        return $this->subject('Murder Manila Billing')->view('view.template');
+        return $this->subject('Murder Manila Billing')
+                    ->withRequest($request)
+                    ->view('view.template');
     }
 }
