@@ -264,7 +264,8 @@ class bookingController extends Controller
 
     public function sendBilling(Request $request){
         $name = $request->fname . " " . $request->lname;
-        $email = $request->email;
+        //$email = $request->email;
+        $email = client::where('email', $request->email)->first();
         $data = array(
             'name'              =>  $request->fname.",".$request->lname,
             'reference_number'  =>  $request->reference_number,
