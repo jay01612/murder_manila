@@ -267,7 +267,8 @@ class bookingController extends Controller
         $email = $request->email;
         $data = array(
             'name'              =>  $request->fname.",".$request->lname,
-            'reference_number'  =>  $request->reference_number,
+            'referenceNumber'  =>  $request->referenceNumber,
+            'contactNumber'     =>  $request->contactNumber,
             'theme'             =>  $request->themes,
             'date'              =>  $request->date,
             'time'              =>  $request->time,
@@ -275,13 +276,13 @@ class bookingController extends Controller
             'venue'             =>  $request->venue,
             'amount'            =>  $request->amount,
         );
-        // Mail::send('template', $data, function($message) use ($name, $email){
-        //     $message->to($email, $name)
-        //             ->subject('Murder Manila Billing');
-        //     $message->from('murdermanilabilling@gmail.com','Murder Manila');
-        // });
+        Mail::send('email', $data, function($message) use ($name, $email){
+            $message->to($email, $name)
+                    ->subject('Murder Manila Billing');
+            $message->from('murdermanilabilling@gmail.com','Murder Manila');
+        });
 
-        Mail::to($email)->send(new BillingMain($data));
-        return "email Sent";
+        // Mail::to($email)->send(new BillingMain($data));
+        // return "email Sent";
     }
 }

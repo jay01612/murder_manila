@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<html lang="en">
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,8 +9,6 @@
 		margin: 0;
 		width: 1000%;
 		height: 100vh; 
-            height: 100vh;
-		height: 100vh; 
 	}
 	
 	}
@@ -20,17 +17,17 @@
 </head>
 <body>
 	<div class="email">
-		<!-- <img src="https://i.ibb.co/c3yKXFM/mmlogo.png" width="150" height="150"> -->
+		<img src="https://i.ibb.co/c3yKXFM/mmlogo.png" width="150" height="150">
 		<p><h4>This is an automatic email, please do not reply.</h4></p><br>
 		<h3>Dear {{ $name }}</h3>
 		<p>Thanks again for your booking at <strong>Murder Manila</strong>.</p>
 		<p>Your booking has been finished, this is your booking details:</p>
 		<p>Name: {{ $name }}<br>
-			Reference Number: {{ $reference_number }}<br>
+			Reference Number: {{ $referenceNumber }}<br>
 			Mobile Number: {{ $contactNumber }}<br>
-			Date: {{ $dateStart }}<br>
-			Time: {{ $timeStart }}<br>
-			Head Count: {{ $maxPax }}<br>
+			Date: {{ $date }}<br>
+			Time: {{ $time }}<br>
+			Head Count: {{ $maxpax }}<br>
 			Venue: {{ $venue }}<br/>
 			Amount: {{ $amount }}</p>
 
