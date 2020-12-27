@@ -166,7 +166,7 @@ return [
          * Package Service Providers...
          */
         //\Fruitcake\Cors\HandleCors::class,        
-       //Fruitcake\Cors\ServiceProvider::class,
+       Fruitcake\Cors\ServiceProvider::class,
         /*
          * Application Service Providers...
          */
