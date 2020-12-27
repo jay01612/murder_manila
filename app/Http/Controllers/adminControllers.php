@@ -71,6 +71,17 @@ class adminControllers extends Controller
         }
     }
 
+    public function logout(Request $request){
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return response()       ->json([
+            'response'          =>true,
+            'message'           =>'Successfully Log out'
+        ],200);
+    }
+
 
     public function registerAdmin(Request $request){
         if(Auth::User()->position_id == 1){   

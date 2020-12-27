@@ -36,6 +36,7 @@ Route::post('sendEmailBillling', [bookingController::class, 'sendBilling']);
 //admin login
 Route::post('logIn', [adminControllers::class, 'logIn']);
 Route::get('positions', [adminControllers::class, 'showPositions']);
+Route::get('logout', [admminController::class, 'logout']);
 
 //admin 
 Route::post('adminRegister', [adminControllers::class, 'registerAdmin'])->middleware('auth:api');
