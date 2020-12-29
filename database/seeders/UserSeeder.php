@@ -45,10 +45,10 @@ class UserSeeder extends Seeder
     		"position_id" => 1
         ]);
         
-        $user = DB::table('discounts')->insert([
-            "discount_code" => "",
-            "discount_percent"  => 0
-        ]);
+        // $user = DB::table('discounts')->insert([
+        //     "discount_code" => "",
+        //     "discount_percent"  => 0
+        // ]);
         
     }
 }

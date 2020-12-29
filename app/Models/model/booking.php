@@ -64,10 +64,6 @@ class booking extends Model
             'client.mobile_number as mobileNumber',
             'client.email as email',
             'client.verification_number as verificationNumber',
-<<<<<<< HEAD
-            
-=======
->>>>>>> 76e92ccf920a600720162eb83f9f532a0bb58020
             
             DB::raw("DATE_FORMAT(booking.book_date, '%M %d %Y') as date"),
             DB::raw("TIME_FORMAT(booking.book_time, '%h:%i %p') as time"),

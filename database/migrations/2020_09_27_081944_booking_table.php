@@ -24,9 +24,6 @@ class BookingTable extends Migration
             $table->bigInteger('theme_id')->unsigned();
             $table->foreign('theme_id')->references('id')->on('themes');
 
-            $table->bigInteger('discount_id')->unsigned()->default(1);
-            $table->foreign('discount_id')->references('id')->on('discounts');
-
             $table->string('maxpax');
             $table->string('venue');
 
