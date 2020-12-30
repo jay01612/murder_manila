@@ -112,6 +112,33 @@ class User extends Authenticatable
         ->get();
     }
 
+    public static function cancelBookings($data){
+        return $query = DB::connection('mysql')
+        ->table('payment_table as payment')
+        ->select(
+            'payment.id as id',
+
+            'payment.reference_id as reference id',
+
+            DB::raw("CONCAT(client.lname,',',client.fname) as name"),
+            'client.email as email',
+
+            'theme.name as game',
+          
+            DB::raw("DATE_FORMAT(booking.book_date, '%M %d %Y') as date"),
+            DB::raw("TIME_FORMAT(booking.book_time, '%h:%i %p') as time"),
+            'booking.venue as venue',
+            'booking.maxpax as number of players',
+
+            'payment.amount as total amount'
+        )
+        ->join('client_info as client', 'payment.client_id', '=', 'client.id')
+        ->join('booking_table as booking', 'payment.reference_id', '=', 'booking.id')
+        ->join('themes as theme', 'booking.theme_id', '=', 'theme.id')
+        ->where('is_cancelled', 1)
+        ->get();
+    }
+
    
 
 }

@@ -133,5 +133,12 @@ class booking extends Model
             'is_booked' => 1
         ]);
         
-    } 
+    }
+
+    public static function editToCancelBooking($data){
+        return booking::where('id', $data->id)
+        ->update([
+            'is_cancelled' => 1
+        ]);
+    }
 }

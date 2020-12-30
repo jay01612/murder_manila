@@ -45,4 +45,5 @@ Route::get('Pendings', [adminControllers::class, 'getPendBookings'])->middleware
 Route::get('Booked', [adminControllers::class, 'getPaidBooking'])->middleware('auth:api');
 Route::put('editpending', [adminControllers::class, 'bookingEdit'])->middleware('auth:api');
 Route::put('editpayment', [adminControllers::class, 'paymentEdit'])->middleware('auth:api');
+Route::put('editCancelBooking', [adminControllers::class, 'cancelBookingEdit'])->middleware('auth:api');
 

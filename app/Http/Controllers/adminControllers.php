@@ -218,6 +218,44 @@ class adminControllers extends Controller
         }
     }
 
+    public function cancelBookingEdit(Request $request){
+        if(Auth::User()->position_id == 1 || Auth::user()->position_id == 2){
+
+            $query = booking::cancelBookingEdit($request);
+
+            if($query){
+                return response()   ->json([
+                    'response'      => true,
+                    'message'       => 'Booking is cancelled'
+                ],200);
+            }else{
+                return response()   ->json([
+                    'response'      => false,
+                    'message'       => 'error'
+                ],200);
+            }
+        }
+    }
+
+    public function getCanceledBookings(Request $request){
+        if(Auth::User()->position_id == 1 || Auth::user()->position_id == 2 || Auth::user()-> position_id ==3){
+            $query = booking::cancelBookings($request);
+
+            if($query){
+                return rersponse()  ->json([
+                    'response'      =>  true,
+                    'data'          =>  $query
+                ],200);
+            }else{
+                return response()   ->json([
+                    'response'      => false,
+                    'data'          => []
+                ],200);
+            }
+            
+        }
+    }
+
 
 
 
