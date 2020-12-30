@@ -50,6 +50,23 @@ class User extends Authenticatable
         ]);
     }
 
+    public static function getAdmins($data){
+        return $query = DB::connection('mysql')
+        ->table('users')
+        ->select(
+            'users.id',
+            'users.fname',
+            'users.lname',
+            'users.username',
+            'users.password',
+            'users.email',
+
+            'access.name'
+        )
+        ->join('access_levels as access', 'users.position_id', '=', 'access.id')
+        ->get();
+    }
+
     public static function DeleteAdmin($data){
         return User::where('id', $data->id)
         ->update([

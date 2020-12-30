@@ -73,8 +73,8 @@ class adminControllers extends Controller
 
     public function logout(Request $request){
         Auth::logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+        // $request->session()->invalidate();
+        // $request->session()->regenerateToken();
 
         return response()       ->json([
             'response'          =>true,
@@ -253,6 +253,24 @@ class adminControllers extends Controller
                 ],200);
             }
             
+        }
+    }
+
+    public function adminList(Request $request){
+        if(Auth::User()->position == 1){
+            $query = User::getAdmins($request);
+
+            if($query){
+                return rersponse()  ->json([
+                    'response'      =>  true,
+                    'data'          =>  $query
+                ],200);
+            }else{
+                return response()   ->json([
+                    'response'      => false,
+                    'data'          => []
+                ],200);
+            }
         }
     }
 
