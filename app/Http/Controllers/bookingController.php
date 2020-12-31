@@ -268,7 +268,7 @@ class bookingController extends Controller
         $email = client::where('email', $request->email)->first();
         $data = array(
             'name'              =>  $request->fname.",".$request->lname,
-            'referenceNumber'  =>  $request->referenceNumber,
+            'referenceNumber'   =>  $request->referenceNumber,
             'contactNumber'     =>  $request->contactNumber,
             'theme'             =>  $request->themes,
             'date'              =>  $request->date,

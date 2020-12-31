@@ -273,9 +273,4 @@ class adminControllers extends Controller
             }
         }
     }
-
-
-
-
-   
 }

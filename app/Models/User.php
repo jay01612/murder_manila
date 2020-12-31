@@ -28,6 +28,11 @@ class User extends Authenticatable
         'updated_by',  
     ];
 
+    protected $hidden = [
+        'password',
+        'remember_token'
+    ];
+
     public static function getPositionId($data){
         return $query = DB::connection('mysql')
         ->table ('access_levels')

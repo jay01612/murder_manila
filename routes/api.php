@@ -38,6 +38,10 @@ Route::post('logIn', [adminControllers::class, 'logIn']);
 Route::get('positions', [adminControllers::class, 'showPositions']);
 Route::get('logout', [adminControllers::class, 'logout']);
 
+Route::middleware('auth:api')->get('user', function (Request $request){
+    return $request->user();
+});
+
 //admin 
 Route::post('adminRegister', [adminControllers::class, 'registerAdmin'])->middleware('auth:api');
 Route::post('AdminDelete', [adminControllers::class, 'deleteAdmin'])->middleware('auth:api');
