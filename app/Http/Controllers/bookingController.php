@@ -214,11 +214,11 @@ class bookingController extends Controller
     }
 
     public function sendVerificationNumber(Request $request){
-        $query = client::verifyClient($request);
+        $query = client::getVerificationCode($request->id);
 
         $sendVerification = Nexmo::message()->send([
-                    'to'    =>  '09217215979',
-                    'from'  =>  'Murder Manila',
+                    'to'    =>  '+63 921 721 5979',
+                    'from'  =>  '+63 921 721 5979',
                     'text'  =>  "Your verification code is: ". $query->verification_number
         ]);
 
@@ -282,8 +282,6 @@ class bookingController extends Controller
                     ->subject('Murder Manila Billing');
             $message->from('murdermanilabilling@gmail.com','Murder Manila');
         });
-
-        // Mail::to($email)->send(new BillingMain($data));
-        // return "email Sent";
     }
+ 
 }

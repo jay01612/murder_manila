@@ -26,10 +26,9 @@ class PaymentTable extends Migration
 
             $table->time('paid_time')->nullable();
             $table->date('paid_date')->nullable();
-
+            
+            $table->string('initial_payment');
             $table->string('amount');
-
-            $table->tinyInteger('is_emailed')->default(0);
             
             $table->timestamps();
         });

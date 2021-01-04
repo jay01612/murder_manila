@@ -166,7 +166,7 @@ return [
          * Package Service Providers...
          */
         //\Fruitcake\Cors\HandleCors::class,        
-       Fruitcake\Cors\ServiceProvider::class,
+       //Fruitcake\Cors\ServiceProvider::class,
         /*
          * Application Service Providers...
          */
@@ -175,6 +175,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        // /App\Laravel\NexmoServiceProvider::class,
 
     ],
 

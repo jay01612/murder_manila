@@ -28,7 +28,7 @@ Route::get('themes', [bookingController::class, 'showTheme']);
 Route::get('bookingSummary/{id}', [bookingController::class, 'bookingSummary']);
 Route::post('Billing', [bookingController::class, 'bookingAmount']);
 Route::get('AmountSummary/{id}', [bookingController::class, 'amountBookingSummary']);
-Route::get('sendVerification', [bookingController::class, 'sendVerificationNumber']);
+Route::get('sendVerification/{id}', [bookingController::class, 'sendVerificationNumber']);
 Route::post('updateIsVerified', [bookingController::class, 'updateVerifyClient']);
 Route::post('sendEmailBillling', [bookingController::class, 'sendBilling']); 
 
@@ -52,4 +52,7 @@ Route::put('editpayment', [adminControllers::class, 'paymentEdit'])->middleware(
 Route::put('editCancelBooking', [adminControllers::class, 'cancelBookingEdit'])->middleware('auth:api');
 Route::get('CancelledBookings', [adminControllers::class, 'getCanceledBookings'])->middleware('auth:api');
 Route::get('AdminList', [adminControllers::class, 'adminList'])->middleware('auth:api');
+Route::post('initialPaymentEmail', [adminControllers::class, 'sendRecievedHalfPaymentEmail'])->middleware('auth:api');
+Route::post('fullPaymentEmail', [adminControllers::class, 'sendRecievedFullPaymentEmail'])->middleware('auth:api');
+Route::post('cancelBookingEmail', [adminControllers::class, 'cancelledBookingEmail'])->middleware('auth:api');
 

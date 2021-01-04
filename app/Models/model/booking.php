@@ -17,7 +17,6 @@ class booking extends Model
         'book_date',
         'book_time',
         'theme_id',
-        'discount_id',
         'pax',
         'venue'
     ];
@@ -34,7 +33,6 @@ class booking extends Model
             'book_date'         =>  $data->book_date,
             'book_time'         =>  $data->book_time,
             'theme_id'          =>  $data->theme_id,
-            'discount_id'       =>  $data->discount_id,
             'maxpax'            =>  $data->maxpax,
             'venue'             =>  $data->venue    
         ]);  
@@ -70,13 +68,10 @@ class booking extends Model
            
             'theme.name as game',
 
-            'discount.discount_code as code',
-
             'booking.maxpax as maxpax',
             'booking.venue as venue',  
         )
         ->join('themes as theme', 'booking.theme_id', '=', 'theme.id')
-        ->leftjoin('discounts as discount', 'booking.discount_id', '=', 'discount.id')
         ->join('client_info as client', 'booking.id', '=', 'client.game_id')
         ->where('client.id', '=', $data->id)
         ->get();

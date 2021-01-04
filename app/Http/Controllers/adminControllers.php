@@ -273,4 +273,83 @@ class adminControllers extends Controller
             }
         }
     }
+
+    
+    public function sendRecievedHalfPaymentEmail (Request $request){
+        if(Auth::User()->position_id == 1 || Auth::User()->position_id == 2){
+
+            $name = $request->fname." ". $request->lname;
+            $email = client::where('email', $request->email)->first();
+            $data =array(
+                'name'              =>  $request->fname." ".$request->lname,
+                'referenceNumber'   =>  $request->referenceNumber,
+                'initital_payment'  =>  $request->initial_payment,
+                'date'              =>  $request->date,
+                'time'              =>  $request->time,
+                'theme'             =>  $request->theme,
+                'maxpax'            =>  $request->maxpax,
+                'venue'             =>  $request->venue,
+                
+
+            );
+            Mail::send('initialpaymentemail', function($message) use ($name, $email){
+                $message->to($email, $name)
+                        ->subject('Booking Confirmation');
+                $message->from('murdermanilabilling@gmail.com', 'Murder Manila');
+
+            });
+        }
+    }
+
+    public function sendRecievedFullPaymentEmail (Request $request){
+        if(Auth::User()->position_id == 1 || Auth::User()->position_id == 2){
+            
+            $name = $request->fname." ". $request->lname;
+            $email = client::where('email', $request->email)->first();
+            $data =array(
+                'name'              =>  $request->fname." ".$request->lname,
+                'referenceNumber'   =>  $request->referenceNumber,
+                'amount'            =>  $request->amount,
+                'date'              =>  $request->date,
+                'time'              =>  $request->time,
+                'theme'             =>  $request->theme,
+                'maxpax'            =>  $request->maxpax,
+                'venue'             =>  $request->venue,
+                
+
+            );
+            Mail::send('fullpaymentemail', function($message) use ($name, $email){
+                $message->to($email, $name)
+                        ->subject('Booking Confirmation');
+                $message->from('murdermanilabilling@gmail.com', 'Murder Manila');
+
+            });
+        }
+    }
+
+    public function cancelledBookingEmail (Request $request){
+        if(Auth::User()->position_id == 1 || Auth::User()->position_id == 2){
+            
+            $name = $request->fname." ". $request->lname;
+            $email = client::where('email', $request->email)->first();
+            $data =array(
+                'name'              =>  $request->fname." ".$request->lname,
+                'referenceNumber'   =>  $request->referenceNumber,
+                'amount'            =>  $request->amount,
+                'date'              =>  $request->date,
+                'time'              =>  $request->time,
+                'theme'             =>  $request->theme,
+                'maxpax'            =>  $request->maxpax,
+                'venue'             =>  $request->venue,
+                
+
+            );
+            Mail::send('cancelbookingemail', function($message) use ($name, $email){
+                $message->to($email, $name)
+                        ->subject('Cancel Booking');
+                $message->from('murdermanilabilling@gmail.com', 'Murder Manila');
+
+            });
+        }
+    }
 }

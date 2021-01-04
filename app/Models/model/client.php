@@ -24,7 +24,7 @@ class client extends Model
 
     public static function saveClientInfo ($data){
         
-        $verification = rand();
+        $verification = rand(1000, 9999);
         return $query = DB::connection('mysql')
         ->table('client_info')
         ->insertGetId([
@@ -45,7 +45,7 @@ class client extends Model
         ->table('client_info')
         ->select('*')
         ->where('id', $data)
-        ->get();
+        ->get()->first();
     }
    
     public static function verifyClient($data){
