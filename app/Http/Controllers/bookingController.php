@@ -220,7 +220,7 @@ class bookingController extends Controller
         $sendVerification = Nexmo::message()->send([
                     'to'    =>  '+63 921 721 5979',
                     'from'  =>  '+63 921 721 5979',
-                    'text'  =>  "Your verification code is: ". $query->verification_number
+                    'text'  =>  "Your verification code is: ". $query[0]->verification_number
         ]);
 
         if($sendVerification){

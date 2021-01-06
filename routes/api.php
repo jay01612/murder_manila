@@ -28,8 +28,8 @@ Route::get('themes', [bookingController::class, 'showTheme']);
 Route::get('bookingSummary/{id}', [bookingController::class, 'bookingSummary']);
 Route::post('Billing', [bookingController::class, 'bookingAmount']);
 Route::get('AmountSummary/{id}', [bookingController::class, 'amountBookingSummary']);
-Route::get('sendVerification/{game_id}', [bookingController::class, 'sendVerificationNumber']);
-Route::post('saveInitialBookingInfo', [bookingController::class, 'saveInitialPaymentInfo']);
+Route::get('sendVerification/{id}', [bookingController::class, 'sendVerificationNumber']);
+Route::post('saveInitialBookingInfo', [bookingController::class, 'saveInitialPaymentInfo']); //dinagdag ko pra nasasave ung amount and initial amount 
 Route::post('updateIsVerified', [bookingController::class, 'updateVerifyClient']);
 Route::post('sendEmailBillling', [bookingController::class, 'sendBilling']); 
 

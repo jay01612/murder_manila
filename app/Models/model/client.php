@@ -45,7 +45,7 @@ class client extends Model
         ->table('client_info')
         ->select('*')
         ->where('id', $data)
-        ->get()->first();
+        ->get();
     }
    
     public static function verifyClient($data){
