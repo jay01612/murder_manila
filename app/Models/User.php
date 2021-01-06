@@ -66,7 +66,7 @@ class User extends Authenticatable
             'users.password',
             'users.email',
 
-            'access.name'
+            'access.access_name'
         )
         ->join('access_levels as access', 'users.position_id', '=', 'access.id')
         ->get();

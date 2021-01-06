@@ -257,11 +257,11 @@ class adminControllers extends Controller
     }
 
     public function adminList(Request $request){
-        if(Auth::User()->position == 1){
+       if(Auth::User()->position == 1){
             $query = User::getAdmins($request);
 
             if($query){
-                return rersponse()  ->json([
+                return response()  ->json([
                     'response'      =>  true,
                     'data'          =>  $query
                 ],200);
@@ -271,7 +271,7 @@ class adminControllers extends Controller
                     'data'          => []
                 ],200);
             }
-        }
+       }
     }
 
     

@@ -25,10 +25,10 @@ Route::post('SaveClient', [bookingController::class, 'clientInfoSave']);
 Route::post('booking', [ bookingController::class, 'bookingInfoSave']);
 Route::post('Availability', [bookingController::class, 'checkAvailableTime']);
 Route::get('themes', [bookingController::class, 'showTheme']);
-Route::get('bookingSummary/{id}', [bookingController::class, 'bookingSummary']);
+Route::get('bookingSummary/{game_id}', [bookingController::class, 'bookingSummary']);
 Route::post('Billing', [bookingController::class, 'bookingAmount']);
-Route::get('AmountSummary/{id}', [bookingController::class, 'amountBookingSummary']);
-Route::get('sendVerification/{id}', [bookingController::class, 'sendVerificationNumber']);
+Route::get('AmountSummary/{game_id}', [bookingController::class, 'amountBookingSummary']);
+Route::get('sendVerification/{game_id}', [bookingController::class, 'sendVerificationNumber']);
 Route::post('updateIsVerified', [bookingController::class, 'updateVerifyClient']);
 Route::post('sendEmailBillling', [bookingController::class, 'sendBilling']); 
 
