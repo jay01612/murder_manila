@@ -28,7 +28,7 @@ class payment extends Model
         return payment_table::get();
     }
 
-    public static function InitialPayment($data){
+    public static function InitialPaymentInfo($data){
         return $query = DB::connection ('mysql')
         ->table('payment_table')
         ->insertGetId([
@@ -37,14 +37,14 @@ class payment extends Model
             'paid_time'             =>DB::raw("NOW()"),
             'paid_date'             =>DB::raw("NOW()"),
             'initial_payment'       =>$data->initial_payment,
-            'amount'                =>$data->$amount,
+            'amount'                =>$data->amount
         ]);
     }
 
-    public function editPayment($data){
-        return payment::where('id', $data->id)
-        ->update([
-            'is_paid' => 1
-        ]);
-    }
+    // public function editPayment($data){
+    //     return payment::where('id', $data->id)
+    //     ->update([
+    //         'is_paid' => 1
+    //     ]);
+    // }
 }

@@ -53,9 +53,9 @@ class booking extends Model
         return $query = DB::connection('mysql')
         ->table('booking_table as booking')
         ->select(
-
             
             'booking.reference_number as referenceNumber',
+
             'client.game_id as gameId',
             'client.fname as firstname',
             'client.lname as lastname',
@@ -98,6 +98,7 @@ class booking extends Model
         return $query = DB::connection('mysql')
         ->table('payment_table as payment')
         ->select(
+
             'payment.id as id',
 
             'payment.reference_id as booking id',
@@ -113,12 +114,14 @@ class booking extends Model
             'booking.venue as venue',
             'booking.maxpax as number of players',
 
+            'payment.initial_payment as initial payment',
             'payment.amount as total amount'
         )
-        ->join('client_info as client', 'payment.client_id', '=', 'client.id')
-        ->join('booking_table as booking', 'payment.reference_id', '=', 'booking.id')
-        ->join('themes as theme', 'booking.theme_id', '=', 'theme.id')
-        ->where('payment.id', '=', $data->id)
+       
+        ->leftjoin('booking_table as booking', 'payment.reference_id', '=', 'booking.id')
+        ->leftjoin('themes as theme', 'booking.theme_id', '=', 'theme.id')
+        ->leftjoin('client_info as client', 'payment.client_id', '=', 'client.id')
+        ->where('client.id', '=', $data->id)
         ->get();
     }
 

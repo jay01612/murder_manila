@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\model\booking;
 use App\Models\model\client;
 use App\Models\model\theme;
+use App\Models\model\payment;
 use App\Mail\BillingMain;
 use Illuminate\Support\Facades\Mail;
 use Validator;
@@ -282,6 +283,39 @@ class bookingController extends Controller
                     ->subject('Murder Manila Billing');
             $message->from('murdermanilabilling@gmail.com','Murder Manila');
         });
+    }
+
+    public function saveInitialPaymentInfo(Request $request){
+
+        // $validation = Validator::make($request->all(), [ 
+        //     'amount'         =>  'required|int',
+            
+        // ]);
+            
+        // if($validation->fails()){
+        //     $error = $validation->messages()->first();
+        //     return response() -> json([
+        //         'response'  => 'false',
+        //         'message'   =>  $error
+        //     ],200);
+        // }
+
+        $query = payment::InitialPaymentInfo($request);
+
+        if($query){
+            return response()       ->json([
+                'response'          =>  true,
+                'message'           =>  'successfully save'
+            ],200);
+        }else{
+            return response()       ->json([
+                'response'          =>  false,
+                'message'           =>  'error'
+            ],200);
+        }
+
+
+
     }
  
 }

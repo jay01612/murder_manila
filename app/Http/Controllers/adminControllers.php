@@ -142,7 +142,7 @@ class adminControllers extends Controller
     }
 
     public function getPendBookings(Request $request){
-        if(Auth::User()->position_id == 1 || Auth::User()->position_id == 2 || Auth::User()->position_id == 3){
+       if(Auth::User()->position_id == 1 || Auth::User()->position_id == 2 || Auth::User()->position_id == 3){
 
             $query = User::getPendingBookings($request);
 
@@ -239,10 +239,10 @@ class adminControllers extends Controller
 
     public function getCanceledBookings(Request $request){
         if(Auth::User()->position_id == 1 || Auth::user()->position_id == 2 || Auth::user()-> position_id ==3){
-            $query = booking::cancelBookings($request);
+            $query = User::cancelBookings($request);
 
             if($query){
-                return rersponse()  ->json([
+                return response()  ->json([
                     'response'      =>  true,
                     'data'          =>  $query
                 ],200);

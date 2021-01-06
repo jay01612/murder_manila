@@ -97,12 +97,13 @@ class User extends Authenticatable
             'booking.venue as venue',
             'booking.maxpax as number of players',
 
+            'payment.initial_payment as initial amount',
             'payment.amount as total amount'
         )
-        ->join('client_info as client', 'payment.client_id', '=', 'client.id')
-        ->join('booking_table as booking', 'payment.reference_id', '=', 'booking.id')
-        ->join('themes as theme', 'booking.theme_id', '=', 'theme.id')
-        ->where('is_paid', 0)
+        ->leftjoin('client_info as client', 'payment.client_id', '=', 'client.id')
+        ->leftjoin('booking_table as booking', 'payment.reference_id', '=', 'booking.id')
+        ->leftjoin('themes as theme', 'booking.theme_id', '=', 'theme.id')
+        ->where('booking.is_booked', '=', 0)
         ->get();
 
     }
@@ -130,7 +131,7 @@ class User extends Authenticatable
         ->join('client_info as client', 'payment.client_id', '=', 'client.id')
         ->join('booking_table as booking', 'payment.reference_id', '=', 'booking.id')
         ->join('themes as theme', 'booking.theme_id', '=', 'theme.id')
-        ->where('is_paid', 1)
+        ->where('booking.is_booked', 1)
         ->get();
     }
 
@@ -160,7 +161,4 @@ class User extends Authenticatable
         ->where('is_cancelled', 1)
         ->get();
     }
-
-   
-
 }
