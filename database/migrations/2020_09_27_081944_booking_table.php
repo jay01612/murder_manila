@@ -20,6 +20,7 @@ class BookingTable extends Migration
 
             $table->date('book_date');
             $table->time('book_time');
+            $table->time ('end_time');
 
             $table->bigInteger('theme_id')->unsigned();
             $table->foreign('theme_id')->references('id')->on('themes');

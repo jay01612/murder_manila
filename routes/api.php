@@ -23,7 +23,7 @@ use App\Http\Controllers\adminControllers;
 //booking
 Route::post('SaveClient', [bookingController::class, 'clientInfoSave']);
 Route::post('booking', [ bookingController::class, 'bookingInfoSave']);
-Route::post('Availability', [bookingController::class, 'checkAvailableTime']);
+Route::post('Availability', [bookingController::class, 'checkAvailability']);
 Route::get('themes', [bookingController::class, 'showTheme']);
 Route::get('bookingSummary/{id}', [bookingController::class, 'bookingSummary']);
 Route::post('Billing', [bookingController::class, 'bookingAmount']);

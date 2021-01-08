@@ -10,6 +10,7 @@ use App\Models\model\theme;
 use App\Models\model\payment;
 use App\Mail\BillingMain;
 use Illuminate\Support\Facades\Mail;
+use Carbon\Carbon;
 use Validator;
 use DB;
 use Nexmo;
@@ -32,9 +33,8 @@ class bookingController extends Controller
     }
 
     public function bookingInfoSave(Request $request){
-        //return $request;
+
         $referenceNumber = $this->generaterefnumber(date('Y-m-d H:i:s'));
-        
         $validation = Validator::make($request->all(), [ 
             'book_date'         =>  'required|date_format:Y-m-d',
             'book_time'         =>  'required|date_format:H:i',
@@ -67,9 +67,85 @@ class bookingController extends Controller
                 
             ],200);
         }
-
     }
 
+    public function checkAvailability(Request $request){
+
+        $sched1 = ["00:00:00", "05:59:59"];
+        $sched2 = ["06:00:00", "11:59:59"];
+        $sched3 = ["12:00:00", "17:59:59"];
+        $sched4 = ["18:00:00", "23:59:59"];
+
+        $checkBooking;
+
+        if(($request->book_time > "00:00:00") && ( $request->book_time < "05:59:59")){
+            $checkBooking = booking::where('book_date', $request->book_date)
+                            ->orderBy('book_time', 'asc')
+                            ->get('book_time');      
+                            $data = [];
+                            foreach($checkBooking as $out){
+                                $data = $out->book_time;
+                            }
+
+                            if(sizeOf($checkBooking)>0){
+                                return response()      ->json([
+                                    'response'          =>  true,
+                                    'message'           =>  "time is taken"
+                                ],200);
+                            }                
+        }else if(($request->book_time > "06:00:00") && ($request->book_time < "11:59:59")){
+            $checkBooking = booking::where('book_date', $request->book_date)
+                            ->orderBy('book_time', 'asc')
+                            ->get('book_time');
+                            $data = [];
+                            foreach($checkBooking as $out){
+                                $data = $out->book_time;
+                            }
+
+                            if(sizeOf($checkBooking)>0){
+                                return response()      ->json([
+                                    'response'          =>  true,
+                                    'message'           =>  "time is taken"
+                                ],200);
+                            }
+        }else if(($request->book_time > "12:00:00") && ($request->book_time < "15:59:59")){
+            $checkBooking = booking::where('book_date', $request->book_date)
+                            ->orderBy('book_time', 'asc')
+                            ->get('book_time');
+                            $data = [];
+                            foreach($checkBooking as $out){
+                                $data = $out->book_time;
+                            }
+
+                            if(sizeOf($checkBooking)>0){
+                                return response()      ->json([
+                                    'response'          =>  true,
+                                    'message'           =>  "time is taken"
+                                ],200);
+                            }
+        }else if(($request->book_time > "16:00:00") && ($request->book_time < "23:59:59")){
+            $checkBooking = booking::where('book_date', $request->book_date)
+                            ->orderBy('book_time', 'asc')
+                            ->get('book_time');
+                            $data = [];
+                            foreach($checkBooking as $out){
+                                $data = $out->book_time;
+                            }
+
+                            if(sizeOf($checkBooking)>0){
+                                return response()      ->json([
+                                    'response'          =>  true,
+                                    'message'           =>  "time is taken"
+                                ],200);
+                            }
+        }else{
+            return response()       ->json([
+                'response'          => false,
+                'message'           =>  "time  available"
+            ],200);
+        }
+    }
+    
     public function clientInfoSave(Request $request){
         
         $validation = Validator::make($request->all(), [
@@ -108,7 +184,7 @@ class bookingController extends Controller
         }
     }
 
-    public function checkAvailableTime(Request $request){
+    public function checkAvailableTime(Request$request){
         $query = booking::checkAvailableBooking($request);
 
         if(!$query){

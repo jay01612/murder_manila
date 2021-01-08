@@ -4,6 +4,7 @@ namespace App\Models\model;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 use DB;
 
 class booking extends Model
@@ -26,26 +27,33 @@ class booking extends Model
     }
 
     public static function bookingInfo($data, $referenceNumber){
+        
         return $query = DB::connection('mysql')
         ->table('booking_table')
         ->insertGetId([
             'reference_number'  =>  $referenceNumber,
             'book_date'         =>  $data->book_date,
             'book_time'         =>  $data->book_time,
+            'end_time'          =>  Carbon::parse($data->book_time)->addHours(5),
             'theme_id'          =>  $data->theme_id,
             'maxpax'            =>  $data->maxpax,
-            'venue'             =>  $data->venue    
+            'venue'             =>  $data->venue,
+            'created_at'        =>  DB::raw("NOW()")
         ]);  
     }
     
 
     public static function checkAvailableBooking($data){
+        
         return $query = DB::connection('mysql')
         ->table('booking_table')
         ->select('*')
         ->where('book_date', $data->book_date)
         ->where('book_time', $data->book_time)
+        ->where('end_time', $data->end_time)
         ->get()->first();
+        
+       
     }
 
     public static function ClientBookingSummary ($data){
