@@ -70,81 +70,108 @@ class bookingController extends Controller
     }
 
     public function checkAvailability(Request $request){
+        
+        
 
-        $sched1 = ["00:00:00", "05:59:59"];
-        $sched2 = ["06:00:00", "11:59:59"];
-        $sched3 = ["12:00:00", "17:59:59"];
-        $sched4 = ["18:00:00", "23:59:59"];
+        // $sched1 = ["00:00:00", "05:59:59"];
+        // $sched2 = ["06:00:00", "11:59:59"];
+        // $sched3 = ["12:00:00", "17:59:59"];
+        // $sched4 = ["18:00:00", "23:59:59"];
 
         $checkBooking;
 
-        if(($request->book_time > "00:00:00") && ( $request->book_time < "05:59:59")){
+        // if(($request->book_time > "00:00:00") && ( $request->book_time < "05:59:59")){
             $checkBooking = booking::where('book_date', $request->book_date)
                             ->orderBy('book_time', 'asc')
-                            ->get('book_time');      
+                            ->get(['book_time']);      
                             $data = [];
                             foreach($checkBooking as $out){
-                                $data = $out->book_time;
+                                $data[] = $out->book_time;
                             }
+                            
+                        //    $bookedDates = count($data);
 
-                            if(sizeOf($checkBooking)>0){
+                            if(sizeOf($checkBooking) > 3){
                                 return response()      ->json([
                                     'response'          =>  true,
-                                    'message'           =>  "time is taken"
+                                    'message'           =>  " date and time is taken"
                                 ],200);
-                            }                
-        }else if(($request->book_time > "06:00:00") && ($request->book_time < "11:59:59")){
-            $checkBooking = booking::where('book_date', $request->book_date)
-                            ->orderBy('book_time', 'asc')
-                            ->get('book_time');
-                            $data = [];
-                            foreach($checkBooking as $out){
-                                $data = $out->book_time;
-                            }
+                            }else    {
+                                return response()       ->json([
+                                    'response'          => false,
+                                    'message'           =>  "date and time is available"
+                                ],200);
+                            }          
+    }      
+    //     }else if(($request->book_time > "06:00:00") && ($request->book_time < "11:59:59")){
+    //         $checkBooking = booking::where('book_date', $request->book_date)
+    //                         ->orderBy('book_time', 'asc')
+    //                         ->get(['book_time']);
+    //                         $data = [];
+    //                         foreach($checkBooking as $out){
+    //                             $data[] = $out->book_time;
 
-                            if(sizeOf($checkBooking)>0){
-                                return response()      ->json([
-                                    'response'          =>  true,
-                                    'message'           =>  "time is taken"
-                                ],200);
-                            }
-        }else if(($request->book_time > "12:00:00") && ($request->book_time < "15:59:59")){
-            $checkBooking = booking::where('book_date', $request->book_date)
-                            ->orderBy('book_time', 'asc')
-                            ->get('book_time');
-                            $data = [];
-                            foreach($checkBooking as $out){
-                                $data = $out->book_time;
-                            }
+    //                         }
 
-                            if(sizeOf($checkBooking)>0){
-                                return response()      ->json([
-                                    'response'          =>  true,
-                                    'message'           =>  "time is taken"
-                                ],200);
-                            }
-        }else if(($request->book_time > "16:00:00") && ($request->book_time < "23:59:59")){
-            $checkBooking = booking::where('book_date', $request->book_date)
-                            ->orderBy('book_time', 'asc')
-                            ->get('book_time');
-                            $data = [];
-                            foreach($checkBooking as $out){
-                                $data = $out->book_time;
-                            }
+    //                         $bookedDates = array($data);
+    //                         if(sizeOf($bookedDates)>0){
+    //                             return response()      ->json([
+    //                                 'response'          =>  true,
+    //                                 'message'           =>  "time is taken"
+    //                             ],200);
+    //                         }else{
+    //                             return response()       ->json([
+    //                                 'response'          => false,
+    //                                 'message'           =>  "time  available"
+    //                             ],200);
+    //                         }
+    //     }else if(($request->book_time > "12:00:00") && ($request->book_time < "15:59:59")){
+    //         $checkBooking = booking::where('book_date', $request->book_date)
+    //                         ->orderBy('book_time', 'asc')
+    //                         ->get(['book_time']);
+    //                         $data = [];
+    //                         foreach($checkBooking as $out){
+    //                             $data[] = $out->book_time;
+    //                         }
 
-                            if(sizeOf($checkBooking)>0){
-                                return response()      ->json([
-                                    'response'          =>  true,
-                                    'message'           =>  "time is taken"
-                                ],200);
-                            }
-        }else{
-            return response()       ->json([
-                'response'          => false,
-                'message'           =>  "time  available"
-            ],200);
-        }
-    }
+    //                         if(!sizeOf($checkBooking) != $sched3){
+    //                             return response()      ->json([
+    //                                 'response'          =>  true,
+    //                                 'message'           =>  "time is taken"
+    //                             ],200);
+    //                         }else{
+    //                             return response()       ->json([
+    //                                 'response'          => false,
+    //                                 'message'           =>  "time  available"
+    //                             ],200);
+    //                         }
+    //     }else if(($request->book_time > "16:00:00") && ($request->book_time < "23:59:59")){
+    //         $checkBooking = booking::where('book_date', $request->book_date)
+    //                         ->orderBy('book_time', 'asc')
+    //                         ->get(['book_time']);
+    //                         $data = [];
+    //                         foreach($checkBooking as $out){
+    //                             $data[] = $out->book_time;
+    //                         }
+
+    //                         if(!sizeOf($checkBooking)>0){
+    //                             return response()      ->json([
+    //                                 'response'          =>  true,
+    //                                 'message'           =>  "time is taken"
+    //                             ],200);
+    //                         }else{
+    //                             return response()       ->json([
+    //                                 'response'          => false,
+    //                                 'message'           =>  "time  available"
+    //                             ],200);
+    //                         }
+    //     }else{
+    //         return response()       ->json([
+    //             'response'          => false,
+    //             'message'           =>  "time  available"
+    //         ],200);
+    //     }
+    // }
     
     public function clientInfoSave(Request $request){
         
