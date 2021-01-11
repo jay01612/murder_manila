@@ -67,11 +67,11 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'Asia/Singapore',
 
     /*
     |--------------------------------------------------------------------------
-    | Application Locale Configuration
+    | Application Locale Conf7iguration
     |--------------------------------------------------------------------------
     |
     | The application locale determines the default locale that will be used

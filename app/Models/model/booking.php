@@ -16,60 +16,36 @@ class booking extends Model
     protected $fillable =[
         'reference_number',
         'book_date',
+        'end_date',
         'book_time',
         'theme_id',
-        'pax',
-        'venue'
+        'maxpax',
+        'venue',
+        'fname',
+        'lname',
+        'mobile_number',
+        'email',
+        'verification_number',
+        'initial_payment',
+        'total_amount'
     ];
 
     public static function getBooking(){
         return booking_table::get();
     }
 
-    public static function bookingInfo($data, $referenceNumber){
-        
-        return $query = DB::connection('mysql')
-        ->table('booking_table')
-        ->insertGetId([
-            'reference_number'  =>  $referenceNumber,
-            'book_date'         =>  $data->book_date,
-            'book_time'         =>  $data->book_time,
-            'end_time'          =>  Carbon::parse($data->book_time)->addHours(5),
-            'theme_id'          =>  $data->theme_id,
-            'maxpax'            =>  $data->maxpax,
-            'venue'             =>  $data->venue,
-            'created_at'        =>  DB::raw("NOW()")
-        ]);  
-    }
-    
-
-    public static function checkAvailableBooking($data){
-        
-        return $query = DB::connection('mysql')
-        ->table('booking_table')
-        ->select('*')
-        ->where('book_date', $data->book_date)
-        ->where('book_time', $data->book_time)
-        ->where('end_time', $data->end_time)
-        ->get()->first();
-        
-       
-    }
-
-    public static function ClientBookingSummary ($data){
+    public static function getVerificationCode ($data){
        
         return $query = DB::connection('mysql')
         ->table('booking_table as booking')
         ->select(
             
-            'booking.reference_number as referenceNumber',
-
-            'client.game_id as gameId',
-            'client.fname as firstname',
-            'client.lname as lastname',
-            'client.mobile_number as mobileNumber',
-            'client.email as email',
-            'client.verification_number as verificationNumber',
+            'booking.reference_number as reference number',
+            'booking.fname as firstname',
+            'booking.lname as lastname',
+            'booking.mobile_number as mobile number',
+            'booking.email as email',
+            'booking.verification_number as verification number',
             
             DB::raw("DATE_FORMAT(booking.book_date, '%M %d %Y') as date"),
             DB::raw("TIME_FORMAT(booking.book_time, '%h:%i %p') as time"),
@@ -79,9 +55,8 @@ class booking extends Model
             'booking.maxpax as maxpax',
             'booking.venue as venue',  
         )
-        ->join('themes as theme', 'booking.theme_id', '=', 'theme.id')
-        ->join('client_info as client', 'booking.id', '=', 'client.game_id')
-        ->where('client.id', '=', $data->id)
+        ->leftjoin('themes as theme', 'booking.theme_id', '=', 'theme.id')
+        //->where('booking.id', '=', $data->id)
         ->get();
     }
 

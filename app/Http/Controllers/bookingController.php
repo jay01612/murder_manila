@@ -35,15 +35,26 @@ class bookingController extends Controller
     public function bookingInfoSave(Request $request){
 
         $referenceNumber = $this->generaterefnumber(date('Y-m-d H:i:s'));
-        $validation = Validator::make($request->all(), [ 
-            'book_date'         =>  'required|date_format:Y-m-d',
-            'book_time'         =>  'required|date_format:H:i',
-            'theme_id'          =>  'required|exists:themes,id',
-            'maxpax'            =>  'required|int',
-            'venue'             =>  'required|string'
-            
-        ]);
-            
+
+            $bookDate = Carbon::parse($request->end_date);
+            $dateValidation = $bookDate->addDays(6);
+
+            $validation = Validator::make($request->all(), [ 
+                
+                'book_date'             =>  'required|date_format:Y-m-d|after:today|after:' . $dateValidation,
+                'book_time'             =>  'required|date_format:H:i',
+                'theme_id'              =>  'required|exists:themes,id',
+                'maxpax'                =>  'required|int',
+                'venue'                 =>  'required|string',
+                'fname'                 =>  'required|string',
+                'lname'                 =>  'required|string',
+                'mobile_number'         =>  'required|string',
+                'email'                 =>  'required|string',
+                
+
+            ]);
+        
+                        
         if($validation->fails()){
             $error = $validation->messages()->first();
             return response() -> json([
@@ -51,8 +62,34 @@ class bookingController extends Controller
                 'message'   =>  $error
             ],200);
         }
+     
 
-        $query = booking::bookingInfo($request, $referenceNumber);
+        $exceedingPlayer = ($request->maxpax)-8;
+        $exceedingAmount = $exceedingPlayer * 500;
+        $vatComputation = ($exceedingAmount + 8000) * .12;
+        $totalAmount = $vatComputation + $exceedingAmount + 8000;
+        $initialComputation = ($totalAmount) / 2; 
+
+        $verification = rand(1000, 9999);
+        $referenceNumber = $this->generaterefnumber(date('Y-m-d H:i:s'));
+
+        $query = booking::create([
+                    'reference_number'          =>  $referenceNumber,
+                    'book_date'                 =>  $request->book_date,
+                    'end_date'                  =>  Carbon::parse($request->book_date)->addDays(7),
+                    'book_time'                 =>  $request->book_time,
+                    'theme_id'                  =>  $request->theme_id,
+                    'maxpax'                    =>  $request->maxpax,
+                    'venue'                     =>  $request->venue,
+                    'fname'                     =>  $request->fname,
+                    'lname'                     =>  $request->lname,
+                    'mobile_number'             =>  $request->mobile_number,
+                    'email'                     =>  $request->email,
+                    'verification_number'       =>  $verification,
+                    'initial_payment'           =>  $initialComputation,
+                    'total_amount'              =>  $totalAmount
+        
+        ]);
         
         if($query){
             return response()->json([
@@ -70,163 +107,26 @@ class bookingController extends Controller
     }
 
     public function checkAvailability(Request $request){
-        
-        
 
-        // $sched1 = ["00:00:00", "05:59:59"];
-        // $sched2 = ["06:00:00", "11:59:59"];
-        // $sched3 = ["12:00:00", "17:59:59"];
-        // $sched4 = ["18:00:00", "23:59:59"];
+        $checkBooking = booking::where('book_date', $request->book_date)
+                        ->orderBy('book_time', 'asc')
+                        ->get(['book_time']);      
+                        $data = [];  
+                      
 
-        $checkBooking;
-
-        // if(($request->book_time > "00:00:00") && ( $request->book_time < "05:59:59")){
-            $checkBooking = booking::where('book_date', $request->book_date)
-                            ->orderBy('book_time', 'asc')
-                            ->get(['book_time']);      
-                            $data = [];
-                            foreach($checkBooking as $out){
-                                $data[] = $out->book_time;
-                            }
-                            
-                        //    $bookedDates = count($data);
-
-                            if(sizeOf($checkBooking) > 3){
-                                return response()      ->json([
-                                    'response'          =>  true,
-                                    'message'           =>  " date and time is taken"
-                                ],200);
-                            }else    {
-                                return response()       ->json([
-                                    'response'          => false,
-                                    'message'           =>  "date and time is available"
-                                ],200);
-                            }          
-    }      
-    //     }else if(($request->book_time > "06:00:00") && ($request->book_time < "11:59:59")){
-    //         $checkBooking = booking::where('book_date', $request->book_date)
-    //                         ->orderBy('book_time', 'asc')
-    //                         ->get(['book_time']);
-    //                         $data = [];
-    //                         foreach($checkBooking as $out){
-    //                             $data[] = $out->book_time;
-
-    //                         }
-
-    //                         $bookedDates = array($data);
-    //                         if(sizeOf($bookedDates)>0){
-    //                             return response()      ->json([
-    //                                 'response'          =>  true,
-    //                                 'message'           =>  "time is taken"
-    //                             ],200);
-    //                         }else{
-    //                             return response()       ->json([
-    //                                 'response'          => false,
-    //                                 'message'           =>  "time  available"
-    //                             ],200);
-    //                         }
-    //     }else if(($request->book_time > "12:00:00") && ($request->book_time < "15:59:59")){
-    //         $checkBooking = booking::where('book_date', $request->book_date)
-    //                         ->orderBy('book_time', 'asc')
-    //                         ->get(['book_time']);
-    //                         $data = [];
-    //                         foreach($checkBooking as $out){
-    //                             $data[] = $out->book_time;
-    //                         }
-
-    //                         if(!sizeOf($checkBooking) != $sched3){
-    //                             return response()      ->json([
-    //                                 'response'          =>  true,
-    //                                 'message'           =>  "time is taken"
-    //                             ],200);
-    //                         }else{
-    //                             return response()       ->json([
-    //                                 'response'          => false,
-    //                                 'message'           =>  "time  available"
-    //                             ],200);
-    //                         }
-    //     }else if(($request->book_time > "16:00:00") && ($request->book_time < "23:59:59")){
-    //         $checkBooking = booking::where('book_date', $request->book_date)
-    //                         ->orderBy('book_time', 'asc')
-    //                         ->get(['book_time']);
-    //                         $data = [];
-    //                         foreach($checkBooking as $out){
-    //                             $data[] = $out->book_time;
-    //                         }
-
-    //                         if(!sizeOf($checkBooking)>0){
-    //                             return response()      ->json([
-    //                                 'response'          =>  true,
-    //                                 'message'           =>  "time is taken"
-    //                             ],200);
-    //                         }else{
-    //                             return response()       ->json([
-    //                                 'response'          => false,
-    //                                 'message'           =>  "time  available"
-    //                             ],200);
-    //                         }
-    //     }else{
-    //         return response()       ->json([
-    //             'response'          => false,
-    //             'message'           =>  "time  available"
-    //         ],200);
-    //     }
-    // }
-    
-    public function clientInfoSave(Request $request){
-        
-        $validation = Validator::make($request->all(), [
-            'fname'                 =>  'required|string',
-            'lname'                 =>  'required|string',
-            'mobile_number'         =>  'required|int',
-            'email'                 =>  'required|string'
-            
-        ]);
-
-        if($validation->fails()){
-            $error = $validation->messages()->first();
-            return response()   ->json([
-                'response'  => false,
-                'message'   => $error
-        
+        if(sizeOf($checkBooking) > 3){
+            return response()      ->json([
+                'response'          =>  true,
+                'message'           =>  " date and time is taken"
             ],200);
-        }
-
-        $clientSave = client::saveClientInfo($request);
-
-        if($clientSave){
-            return response() ->json([
-                'success'   => true,
-                'message'   => 'Client Save',
-                'data'      =>  $clientSave
-                
-                
+        }else    {
+            return response()       ->json([
+                'response'          => false,
+                'message'           =>  "date and time is available"
             ],200);
-            return response() ->json([
-                'success'   => false,
-                'message'   => 'There is something wrong',
-                'data'      =>  []
-                
-            ],200);
-        }
-    }
+        }         
+    }                
 
-    public function checkAvailableTime(Request$request){
-        $query = booking::checkAvailableBooking($request);
-
-        if(!$query){
-            return response()   ->json([
-                'success'   =>  true,
-                'message'   =>  'date and time is available'
-
-            ],200);
-        }else{
-            return response()   ->json([
-                'success'   =>  false,
-                'message'   =>  'Pls choose another date amd time'
-            ],200);
-        }    
-    }
 
     public function showTheme(Request $request){
         
@@ -259,9 +159,9 @@ class bookingController extends Controller
         }
     }
 
-    public function bookingSummary (Request $request){
+    public function getVerifCode (Request $request){
 
-        $query = booking::ClientBookingSummary($request);
+        $query = booking::getVerificationCode($request);
 
         if($query){
             return response() ->json([
@@ -311,10 +211,6 @@ class bookingController extends Controller
                 'data'          => []
             ],200);
         }
-    }
-
-    public function send(){
-
     }
 
     public function sendVerificationNumber(Request $request){
@@ -386,39 +282,5 @@ class bookingController extends Controller
                     ->subject('Murder Manila Billing');
             $message->from('murdermanilabilling@gmail.com','Murder Manila');
         });
-    }
-
-    public function saveInitialPaymentInfo(Request $request){
-
-        // $validation = Validator::make($request->all(), [ 
-        //     'amount'         =>  'required|int',
-            
-        // ]);
-            
-        // if($validation->fails()){
-        //     $error = $validation->messages()->first();
-        //     return response() -> json([
-        //         'response'  => 'false',
-        //         'message'   =>  $error
-        //     ],200);
-        // }
-
-        $query = payment::InitialPaymentInfo($request);
-
-        if($query){
-            return response()       ->json([
-                'response'          =>  true,
-                'message'           =>  'successfully save'
-            ],200);
-        }else{
-            return response()       ->json([
-                'response'          =>  false,
-                'message'           =>  'error'
-            ],200);
-        }
-
-
-
-    }
- 
+    } 
 }

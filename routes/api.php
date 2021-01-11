@@ -21,16 +21,12 @@ use App\Http\Controllers\adminControllers;
 // });
 
 //booking
-Route::post('SaveClient', [bookingController::class, 'clientInfoSave']);
+
 Route::post('booking', [ bookingController::class, 'bookingInfoSave']);
 Route::post('Availability', [bookingController::class, 'checkAvailability']);
 Route::get('themes', [bookingController::class, 'showTheme']);
-Route::get('bookingSummary/{id}', [bookingController::class, 'bookingSummary']);
-Route::post('Billing', [bookingController::class, 'bookingAmount']);
-Route::get('AmountSummary/{id}', [bookingController::class, 'amountBookingSummary']);
+Route::get('getVerificationCode', [bookingController::class, 'getVerifCode']);
 Route::get('sendVerification/{id}', [bookingController::class, 'sendVerificationNumber']);
-Route::post('saveInitialBookingInfo', [bookingController::class, 'saveInitialPaymentInfo']); //dinagdag ko pra nasasave ung amount and initial amount 
-Route::post('updateIsVerified', [bookingController::class, 'updateVerifyClient']);
 Route::post('sendEmailBillling', [bookingController::class, 'sendBilling']); 
 
 
