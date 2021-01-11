@@ -108,21 +108,25 @@ class bookingController extends Controller
 
     public function checkAvailability(Request $request){
 
+       // $dayTime = ["00:00:00", "11:59:59"];
+
         $checkBooking = booking::where('book_date', $request->book_date)
                         ->orderBy('book_time', 'asc')
-                        ->get(['book_time']);      
-                        $data = [];  
+                        ->get(['book_time']);
                       
-
+        
+        $checkDates = Carbon::now();
+        $availableDate = $checkDates->addDays(6)->toFormattedDateString();
+                                   
         if(sizeOf($checkBooking) > 3){
             return response()      ->json([
                 'response'          =>  true,
-                'message'           =>  " date and time is taken"
+                'message'           =>  "Sorry this date is already Fully booked please choose another date from " . $availableDate . " onwards"
             ],200);
         }else    {
             return response()       ->json([
                 'response'          => false,
-                'message'           =>  "date and time is available"
+                'message'           =>  "date is available"
             ],200);
         }         
     }                
