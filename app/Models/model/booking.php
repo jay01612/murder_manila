@@ -56,62 +56,23 @@ class booking extends Model
             'booking.venue as venue',  
         )
         ->leftjoin('themes as theme', 'booking.theme_id', '=', 'theme.id')
-        //->where('booking.id', '=', $data->id)
         ->get();
     }
 
-    public static function clientBookingAmount ($data){
-
+    public static function sendVerificationCode($data){
         return $query = DB::connection('mysql')
-        ->table('payment_table')
-        ->insertGetId([
-            'reference_id'      => $data->reference_id,
-            'client_id'         => $data->client_id,
-            'is_paid'           => 0,
-            'paid_time'         => $data->paid_time,
-            'paid_date'         => $data->paid_date,
-            'amount'            => $data->amount,
-            'is_emailed'        => 0,
-            'created_at'        => DB::raw("NOW()")
-        ]);
-    }
-
-    public static function bookingSummaryWithAmount($data){
-
-        return $query = DB::connection('mysql')
-        ->table('payment_table as payment')
-        ->select(
-
-            'payment.id as id',
-
-            'payment.reference_id as booking id',
-
-            DB::raw("CONCAT(client.lname,',',client.fname) as name"),
-            'client.email as email',
-            'client.mobile_number as mobile number',
-
-            'theme.name as game',
-
-            DB::raw("DATE_FORMAT(booking.book_date, '%M %d %Y') as date"),
-            DB::raw("TIME_FORMAT(booking.book_time, '%h:%i %p') as time"),
-            'booking.venue as venue',
-            'booking.maxpax as number of players',
-
-            'payment.initial_payment as initial payment',
-            'payment.amount as total amount'
-        )
-       
-        ->leftjoin('booking_table as booking', 'payment.reference_id', '=', 'booking.id')
-        ->leftjoin('themes as theme', 'booking.theme_id', '=', 'theme.id')
-        ->leftjoin('client_info as client', 'payment.client_id', '=', 'client.id')
-        ->where('client.id', '=', $data->id)
+        ->table('booking_table')
+        ->select('*')
+        ->where('id', $data)
         ->get();
     }
+
 
     public static function editBooking($data){
         return booking::where('id', $data->id)
         ->update([
-            'is_booked' => 1
+            'is_booked'     =>  1,
+            'updated_by'    =>  Auth::user()->position_id()
         ]);
         
     }
@@ -119,7 +80,8 @@ class booking extends Model
     public static function editToCancelBooking($data){
         return booking::where('id', $data->id)
         ->update([
-            'is_cancelled' => 1
+            'is_cancelled' => 1,
+            'updated_by'    =>  Auth::user()->position_id()
         ]);
     }
 }

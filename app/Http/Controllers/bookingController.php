@@ -5,9 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\model\booking;
-use App\Models\model\client;
 use App\Models\model\theme;
-use App\Models\model\payment;
 use App\Mail\BillingMain;
 use Illuminate\Support\Facades\Mail;
 use Carbon\Carbon;
@@ -200,25 +198,8 @@ class bookingController extends Controller
         }
     }
 
-    public function amountBookingSummary(Request $request){
-
-        $query = booking::bookingSummaryWithAmount($request);
-
-        if($query){
-            return response()   ->json([
-                'success'       => true,
-                'data'          => $query
-            ],200);
-        }else{
-            return response()   ->json([
-                'success'       => false,
-                'data'          => []
-            ],200);
-        }
-    }
-
     public function sendVerificationNumber(Request $request){
-        $query = client::getVerificationCode($request->id);
+        $query = booking::sendVerificationCode($request->id);
 
         $sendVerification = Nexmo::message()->send([
                     'to'    =>  '+63 921 721 5979',
@@ -235,33 +216,6 @@ class bookingController extends Controller
             return response()   ->json([
                 'response'  =>  false,
                 'message'   =>  'Sending failed'
-            ],200);
-        }
-    }
-
-    public function updateVerifyClient(Request $request){
-
-        $query = client::verifyClient($request);
-        $verified = client::updateVerified($request);
-
-        if(!blank($query)){
-
-            if($verified){
-                return response()   ->json([
-                    'response'      =>  true,
-                    'message'       =>  'Successfully verified'
-                ],200);
-            }else{
-                return response()   ->json([
-                    'response'      =>  false,
-                    'message'       =>  'there is something wrong'
-                ],200);
-            }
-
-        }else{
-            return response()   ->json([
-                'response'      =>  false,
-                'message'       =>  'error'
             ],200);
         }
     }

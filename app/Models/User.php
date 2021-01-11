@@ -75,20 +75,22 @@ class User extends Authenticatable
     public static function DeleteAdmin($data){
         return User::where('id', $data->id)
         ->update([
-            'is_active' =>  0
+            'is_active'     =>  0,
+            'updated by'    =>  Auth::user()->position_id()
+
         ]);
     }
 
     public static function getPendingBookings($data){
         return $query = DB::connection('mysql')
-        ->table('payment_table as payment')
+        ->table('booking_table as booking')
         ->select(
-            'payment.id as id',
+            'booking.id as id',
 
-            'payment.reference_id as reference id',
+            'booking.reference_number as Reference Number',
 
-            DB::raw("CONCAT(client.lname,',',client.fname) as name"),
-            'client.email as email',
+            DB::raw("CONCAT(booking.lname,',',booking.fname) as Name"),
+            'booking.email as email',
 
             'theme.name as game',
           
@@ -97,11 +99,10 @@ class User extends Authenticatable
             'booking.venue as venue',
             'booking.maxpax as number of players',
 
-            'payment.initial_payment as initial amount',
-            'payment.amount as total amount'
+            'booking.initial_payment as Downpayment',
+            'booking.total_amount as Total Amount',
+
         )
-        ->leftjoin('client_info as client', 'payment.client_id', '=', 'client.id')
-        ->leftjoin('booking_table as booking', 'payment.reference_id', '=', 'booking.id')
         ->leftjoin('themes as theme', 'booking.theme_id', '=', 'theme.id')
         ->where('booking.is_booked', '=', 0)
         ->get();
@@ -110,14 +111,14 @@ class User extends Authenticatable
 
     public static function PaidBookings($data){
         return $query = DB::connection('mysql')
-        ->table('payment_table as payment')
+        ->table('booking_table as booking')
         ->select(
-            'payment.id as id',
+            'booking.id as id',
 
-            'payment.reference_id as reference id',
+            'booking.reference_number as Reference Number',
 
-            DB::raw("CONCAT(client.lname,',',client.fname) as name"),
-            'client.email as email',
+            DB::raw("CONCAT(booking.lname,',',booking.fname) as Name"),
+            'booking.email as email',
 
             'theme.name as game',
           
@@ -126,25 +127,26 @@ class User extends Authenticatable
             'booking.venue as venue',
             'booking.maxpax as number of players',
 
-            'payment.amount as total amount'
+            'booking.initial_payment as Downpayment',
+            'booking.total_amount as Total Amount',
+
         )
-        ->join('client_info as client', 'payment.client_id', '=', 'client.id')
-        ->join('booking_table as booking', 'payment.reference_id', '=', 'booking.id')
-        ->join('themes as theme', 'booking.theme_id', '=', 'theme.id')
-        ->where('booking.is_booked', 1)
+        ->leftjoin('themes as theme', 'booking.theme_id', '=', 'theme.id')
+        ->where('booking.is_booked', '=', 1)
         ->get();
     }
 
     public static function cancelBookings($data){
         return $query = DB::connection('mysql')
-        ->table('payment_table as payment')
+        
+        ->table('booking_table as booking')
         ->select(
-            'payment.id as id',
+            'booking.id as id',
 
-            'payment.reference_id as reference id',
+            'booking.reference_number as Reference Number',
 
-            DB::raw("CONCAT(client.lname,',',client.fname) as name"),
-            'client.email as email',
+            DB::raw("CONCAT(booking.lname,',',booking.fname) as Name"),
+            'booking.email as email',
 
             'theme.name as game',
           
@@ -153,12 +155,12 @@ class User extends Authenticatable
             'booking.venue as venue',
             'booking.maxpax as number of players',
 
-            'payment.amount as total amount'
+            'booking.initial_payment as Downpayment',
+            'booking.total_amount as Total Amount',
+
         )
-        ->join('client_info as client', 'payment.client_id', '=', 'client.id')
-        ->join('booking_table as booking', 'payment.reference_id', '=', 'booking.id')
-        ->join('themes as theme', 'booking.theme_id', '=', 'theme.id')
-        ->where('is_cancelled', 1)
+        ->leftjoin('themes as theme', 'booking.theme_id', '=', 'theme.id')
+        ->where('booking.is_cancelled', '=', 0)
         ->get();
     }
 }

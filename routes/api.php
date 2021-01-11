@@ -42,7 +42,7 @@ Route::middleware('auth:api')->get('user', function (Request $request){
 //admin 
 Route::post('adminRegister', [adminControllers::class, 'registerAdmin'])->middleware('auth:api');
 Route::post('AdminDelete', [adminControllers::class, 'deleteAdmin'])->middleware('auth:api');
-Route::get('Pendings', [adminControllers::class, 'getPendBookings'])->middleware('auth:api');
+Route::get('Pendings', [adminControllers::class, 'getPendBookings']);//->middleware('auth:api');
 Route::get('Booked', [adminControllers::class, 'getPaidBooking'])->middleware('auth:api');
 Route::put('editpending/{id}', [adminControllers::class, 'bookingEdit'])->middleware('auth:api');
 Route::put('editpayment/{id}', [adminControllers::class, 'paymentEdit'])->middleware('auth:api');

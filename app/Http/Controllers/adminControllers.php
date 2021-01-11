@@ -142,7 +142,7 @@ class adminControllers extends Controller
     }
 
     public function getPendBookings(Request $request){
-       if(Auth::User()->position_id == 1 || Auth::User()->position_id == 2 || Auth::User()->position_id == 3){
+        if(Auth::User()->position_id == 1 || Auth::User()->position_id == 2 || Auth::User()->position_id == 3){
 
             $query = User::getPendingBookings($request);
 
