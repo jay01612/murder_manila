@@ -37,7 +37,7 @@ class bookingController extends Controller
         $referenceNumber = $this->generaterefnumber(date('Y-m-d H:i:s'));
 
             $bookDate = Carbon::parse($request->end_date);
-            $dateValidation = $bookDate->addDays(6);
+            $dateValidation = $bookDate->addDays(6)->toFormattedDateString('Y-m-d');
 
             $validation = Validator::make($request->all(), [ 
                 
