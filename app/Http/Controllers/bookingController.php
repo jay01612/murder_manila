@@ -92,13 +92,13 @@ class bookingController extends Controller
         if($query){
             return response()->json([
                 'success'   =>  true,
-                'message'   =>  "successfully save",
+                'message'   =>  "Successfully reserve your booking",
                 
             ],200);
         }else{
             return response()->json([
                 'success'   =>  false,
-                'message'   =>  "there is something wrong"
+                'message'   =>  "There is something wrong with your booking, Please check your details"
                 
             ],200);
         }
@@ -119,12 +119,12 @@ class bookingController extends Controller
         if(sizeOf($checkBooking) > 3){
             return response()      ->json([
                 'response'          =>  true,
-                'message'           =>  "Sorry this date is already Fully booked please choose another date from " . $availableDate . " onwards"
+                'message'           =>  "Sorry this date is already Fully booked, Please choose another date from " . $availableDate . " onwards"
             ],200);
         }else    {
             return response()       ->json([
                 'response'          => false,
-                'message'           =>  "date is available"
+                'message'           =>  "Date is available"
             ],200);
         }         
     }                
@@ -176,24 +176,6 @@ class bookingController extends Controller
                 'success'   => false,
                 'data'      => []
             
-            ],200);
-        }
-    }
-
-    public function bookingAmount(Request $request){
-
-
-        $query = booking::clientBookingAmount($request);
-
-        if($query){
-            return response()   ->json([
-                'success'       => true,
-                'message'       => 'Here is the total billing'
-            ],200);
-        }else{
-            return response()   ->json([
-                'success'       => false,
-                'message'       => 'there is an error'
             ],200);
         }
     }

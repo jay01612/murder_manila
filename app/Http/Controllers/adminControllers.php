@@ -116,7 +116,7 @@ class adminControllers extends Controller
             }else{
                 return response()->json([
                     'response'  =>  false,
-                    'message'   =>  "there is something wrong"
+                    'message'   =>  "there is something wrong, Please check the details carefully"
                 ],200);
             }
         }
@@ -188,31 +188,12 @@ class adminControllers extends Controller
             if($query){
                 return response()   ->json([
                     'response'      => true,
-                    'message'       => 'Successfully Updated'
+                    'message'       => 'Booking successfully updated'
                 ],200);
             }else{
                 return response()   ->json([
                     'response'      =>  false,
-                    'message'       =>  'There is somethingwrong'
-                ],200);
-            }
-        }
-    }
-
-    public function paymentEdit(Request $request){
-        if(Auth::User()->position_id == 1 || Auth::User()->position_id == 2){
-
-            $query = booking::editPayment($request);
-
-            if($query){
-                return response()   ->json([
-                    'response'      => true,
-                    'message'       => 'Successfully Updated'
-                ],200);
-            }else{
-                return response()   ->json([
-                    'response'      =>  false,
-                    'message'       =>  'There is somethingwrong'
+                    'message'       =>  'There is something wrong'
                 ],200);
             }
         }
@@ -226,12 +207,12 @@ class adminControllers extends Controller
             if($query){
                 return response()   ->json([
                     'response'      => true,
-                    'message'       => 'Booking is cancelled'
+                    'message'       => 'Successfully cancelled the bookng'
                 ],200);
             }else{
                 return response()   ->json([
                     'response'      => false,
-                    'message'       => 'error'
+                    'message'       => 'There is something wrong'
                 ],200);
             }
         }

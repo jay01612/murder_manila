@@ -42,13 +42,15 @@ Route::middleware('auth:api')->get('user', function (Request $request){
 //admin 
 Route::post('adminRegister', [adminControllers::class, 'registerAdmin'])->middleware('auth:api');
 Route::post('AdminDelete', [adminControllers::class, 'deleteAdmin'])->middleware('auth:api');
-Route::get('Pendings', [adminControllers::class, 'getPendBookings']);//->middleware('auth:api');
-Route::get('Booked', [adminControllers::class, 'getPaidBooking'])->middleware('auth:api');
-Route::put('editpending/{id}', [adminControllers::class, 'bookingEdit'])->middleware('auth:api');
-Route::put('editpayment/{id}', [adminControllers::class, 'paymentEdit'])->middleware('auth:api');
-Route::put('editCancelBooking/{id}', [adminControllers::class, 'cancelBookingEdit'])->middleware('auth:api');
-Route::get('CancelledBookings', [adminControllers::class, 'getCanceledBookings'])->middleware('auth:api');
 Route::get('AdminList', [adminControllers::class, 'adminList'])->middleware('auth:api');
+
+Route::get('Pendings', [adminControllers::class, 'getPendBookings'])->middleware('auth:api');
+Route::get('Booked', [adminControllers::class, 'getPaidBooking'])->middleware('auth:api');
+Route::get('CancelledBookings', [adminControllers::class, 'getCanceledBookings'])->middleware('auth:api');
+
+Route::put('editpending/{id}', [adminControllers::class, 'bookingEdit'])->middleware('auth:api');
+Route::put('editCancelBooking/{id}', [adminControllers::class, 'cancelBookingEdit'])->middleware('auth:api');
+
 Route::post('initialPaymentEmail', [adminControllers::class, 'sendRecievedHalfPaymentEmail'])->middleware('auth:api');
 Route::post('fullPaymentEmail', [adminControllers::class, 'sendRecievedFullPaymentEmail'])->middleware('auth:api');
 Route::post('cancelBookingEmail', [adminControllers::class, 'cancelledBookingEmail'])->middleware('auth:api');

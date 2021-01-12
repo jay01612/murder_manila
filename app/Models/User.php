@@ -160,7 +160,7 @@ class User extends Authenticatable
 
         )
         ->leftjoin('themes as theme', 'booking.theme_id', '=', 'theme.id')
-        ->where('booking.is_cancelled', '=', 0)
+        ->where('booking.is_cancelled', '=', 1)
         ->get();
     }
 }
