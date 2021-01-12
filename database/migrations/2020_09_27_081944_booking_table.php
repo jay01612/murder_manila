@@ -33,8 +33,6 @@ class BookingTable extends Migration
             $table->string('mobile_number');
             $table->string('email');
 
-            $table->string('verification_number');
-
             $table->string('initial_payment');
             $table->string('total_amount');
 

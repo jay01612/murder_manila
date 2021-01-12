@@ -25,7 +25,6 @@ class booking extends Model
         'lname',
         'mobile_number',
         'email',
-        'verification_number',
         'initial_payment',
         'total_amount'
     ];

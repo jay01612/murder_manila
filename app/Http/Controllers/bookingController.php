@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\model\booking;
 use App\Models\model\theme;
+use App\Models\model\verificationCode;
 use App\Mail\BillingMain;
 use Illuminate\Support\Facades\Mail;
 use Carbon\Carbon;
@@ -15,6 +16,73 @@ use Nexmo;
 
 class bookingController extends Controller
 {
+    public  function createCode(Request $request){
+
+        $validation = Validator::make($request->all(), [ 
+
+            'mobile_number'         =>  'required|numeric',
+        ]);
+    
+                    
+    if($validation->fails()){
+        $error = $validation->messages()->first();
+        return response() -> json([
+            'response'  => 'false',
+            'message'   =>  $error
+        ],200);
+    }
+
+        $code = rand(1000, 9999);
+
+        $query = verificationCode::create([
+                    'mobileNumber'          =>  $request->mobileNumber,
+                    'verificationCode'      =>  $code,
+                    'expiry_date'           =>  Carbon::now()->addHours(2)
+        ]);
+
+        if($query){
+            return response()   ->json([
+                'response'      =>  true,
+                'message'       =>  'Generating verification code',      
+            ],200);
+        }else{
+            return response()   ->json([
+                'response'      =>  false,
+                'message'       =>  'error'
+            ],200);
+        }
+    }
+
+    public function verifyClient(Request $request){
+        
+        $codeExist = DB::table('verification_codes')
+                     ->where('VerificationCode', '=', $request->VerificationCode)
+                     ->where('is_active', '=',1)
+                     ->get(['verificationCode']);
+        
+        if($codeExist){
+            $activeCode = DB::table('verification_codes')
+                          ->where('verificationCode', '=', $request->verificationCode)
+                          ->update(['is_active' => 0]);
+            if($activeCode){
+                return response()       ->json([
+                    'response'          =>  true,
+                    'message'           =>  "Verification Confirmed"
+                ],200);
+            }else{
+                return response()       ->json([
+                    'response'          =>  false,
+                    'message'           =>  "Please Check your Verification Code"
+                ],200);
+            }
+        }else{
+            return response()       ->json([
+                'response'          =>  false,
+                'message'           =>  "Verification Code doesn't Exists"
+            ],200);
+        }
+    }
+
     public function generaterefnumber($date){
    
         $dataDate;
@@ -46,8 +114,8 @@ class bookingController extends Controller
                 'venue'                 =>  'required|string',
                 'fname'                 =>  'required|string',
                 'lname'                 =>  'required|string',
-                'mobile_number'         =>  'required|string',
-                'email'                 =>  'required|string',
+                'mobile_number'         =>  'required|numeric',
+                'email'                 =>  'required|email',
                 
 
             ]);
@@ -71,7 +139,7 @@ class bookingController extends Controller
         $verification = rand(1000, 9999);
         $referenceNumber = $this->generaterefnumber(date('Y-m-d H:i:s'));
 
-        $query = booking::create([
+        $query = booking::insertGetId([
                     'reference_number'          =>  $referenceNumber,
                     'book_date'                 =>  $request->book_date,
                     'end_date'                  =>  Carbon::parse($request->book_date)->addDays(7),
@@ -83,7 +151,6 @@ class bookingController extends Controller
                     'lname'                     =>  $request->lname,
                     'mobile_number'             =>  $request->mobile_number,
                     'email'                     =>  $request->email,
-                    'verification_number'       =>  $verification,
                     'initial_payment'           =>  $initialComputation,
                     'total_amount'              =>  $totalAmount
         
@@ -105,8 +172,6 @@ class bookingController extends Controller
     }
 
     public function checkAvailability(Request $request){
-
-       // $dayTime = ["00:00:00", "11:59:59"];
 
         $checkBooking = booking::where('book_date', $request->book_date)
                         ->orderBy('book_time', 'asc')
@@ -181,12 +246,19 @@ class bookingController extends Controller
     }
 
     public function sendVerificationNumber(Request $request){
-        $query = booking::sendVerificationCode($request->id);
 
+        $codelist = DB::connection('mysql')
+                    ->table('verification_codes as a')
+                    ->Select([
+                        'a.verificationCode'
+                    ])
+                    ->where('is_active', 1)
+                    ->get()->last();
+                    
         $sendVerification = Nexmo::message()->send([
                     'to'    =>  '+63 921 721 5979',
                     'from'  =>  '+63 921 721 5979',
-                    'text'  =>  "Your verification code is: ". $query[0]->verification_number
+                    'text'  =>  "Your verification code is: ". $codelist->verificationCode
         ]);
 
         if($sendVerification){

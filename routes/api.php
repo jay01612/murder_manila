@@ -25,8 +25,11 @@ use App\Http\Controllers\adminControllers;
 Route::post('booking', [ bookingController::class, 'bookingInfoSave']);
 Route::post('Availability', [bookingController::class, 'checkAvailability']);
 Route::get('themes', [bookingController::class, 'showTheme']);
+
+Route::post('generateCode', [bookingController::class, 'createCode']);
+Route::get('codes', [bookingController::class, 'verifyClient']);
 Route::get('getVerificationCode', [bookingController::class, 'getVerifCode']);
-Route::get('sendVerification/{id}', [bookingController::class, 'sendVerificationNumber']);
+Route::get('sendVerification', [bookingController::class, 'sendVerificationNumber']);
 Route::post('sendEmailBillling', [bookingController::class, 'sendBilling']); 
 
 

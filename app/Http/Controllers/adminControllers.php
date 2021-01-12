@@ -84,23 +84,22 @@ class adminControllers extends Controller
 
 
     public function registerAdmin(Request $request){
-        if(Auth::User()->position_id == 1){   
-            
-            // $validation = Validator::make($request->all(), [
-            //     'fname'     => 'required|string',
-            //     'lname'     => 'required|string',
-            //     'username'  => 'required|string',
-            //     'email'     => 'required|email|unique:users'
-            // ],200);
+        $validation = Validator::make($request->all(), [
+                'fname'     => 'required|string',
+                'lname'     => 'required|string',
+                'username'  => 'required|string',
+                'email'     => 'required|email|unique:users'
+            ],200);
           
-            // if($validation->fails()){
-            //     $error = $validation->messages()->first();
-            //     return response()->json([
-            //         'response'  => false,
-            //         'message'   => $error
-            //     ],200);
-            // }
+            if($validation->fails()){
+                $error = $validation->messages()->first();
+                return response()->json([
+                    'response'  => false,
+                    'message'   => $error
+                ],200);
+            }
             
+        if(Auth::User()->position_id == 1){   
             $firstname  =   str_shuffle($request->fname);
             $lastname   =   str_shuffle($request->lname);
                 
