@@ -18,24 +18,10 @@ class bookingController extends Controller
 {
     public  function createCode(Request $request){
 
-        $validation = Validator::make($request->all(), [ 
-
-            'mobile_number'         =>  'required|numeric',
-        ]);
-    
-                    
-    if($validation->fails()){
-        $error = $validation->messages()->first();
-        return response() -> json([
-            'response'  => 'false',
-            'message'   =>  $error
-        ],200);
-    }
-
         $code = rand(1000, 9999);
 
         $query = verificationCode::create([
-                    'mobileNumber'          =>  $request->mobileNumber,
+                   
                     'verificationCode'      =>  $code,
                     'expiry_date'           =>  Carbon::now()->addHours(2)
         ]);

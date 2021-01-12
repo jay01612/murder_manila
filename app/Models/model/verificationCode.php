@@ -13,7 +13,6 @@ class verificationCode extends Model
 
     protected $fillable = [
         'id',
-        'mobileNumber',
         'verificationCode',
         'is_active',
         'expiry_date',

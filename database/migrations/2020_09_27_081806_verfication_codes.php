@@ -16,7 +16,7 @@ class VerficationCodes extends Migration
         Schema::create('verification_codes', function(Blueprint $table){
             $table->bigIncrements('id');
 
-            $table->string('mobileNumber');
+           
             $table->string('verificationCode')->nullable();
 
             $table->tinyInteger('is_active')->default(1);
