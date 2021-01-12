@@ -7,7 +7,9 @@ use App\Models\User;
 use App\Models\model\booking;
 use App\Models\model\payment;
 use Hash;
+use Carbon\Carbon;
 use Auth;
+use DB;
 use Illuminate\Support\Facades\Validator;
 
 
@@ -177,6 +179,47 @@ class adminControllers extends Controller
             }
         }
 
+    }
+
+    public function getDailyBookings(Request $request){
+        if(Auth::User()->position_id == 1 || Auth::User()->position_id == 2 || Auth::User()->position_id ==3){
+
+            $query = DB::connection('mysql')
+                     ->table('booking_table')
+                     ->Select([
+                        'reference_number',
+                        'book_date',
+                        'end_date',
+                        'book_time',
+                        'theme_id',
+                        'maxpax',
+                        'venue',
+                        'fname',
+                        'lname',
+                        'mobile_number',
+                        'email',
+                        'initial_payment',
+                        'total_amount'
+                     ])
+                     ->where('book_date', $request->book_date)
+                     ->orderBy('book_time', 'asc')
+                     ->get();
+
+
+                  $dateToday = Carbon::parse($request->book_date)->toFormattedDateString('m-d-Y');
+
+                     if(sizeOf($query) > 0){
+                         return response()      ->json([
+                             'response'         => true,
+                             'data'             => $query
+                         ],200);
+                     }else{
+                         return response()      ->json([
+                             'response'         =>  false,
+                             'message'          =>  "there is no booking for " .  $dateToday,
+                         ],200);
+                     }    
+        }
     }
 
     public function bookingEdit(Request $request){
