@@ -43,13 +43,12 @@ class bookingController extends Controller
         
         $codeExist = DB::table('verification_codes')
                      ->where('VerificationCode', '=', $request->VerificationCode)
-                     ->where('is_active', '=',1)
-                     ->get(['verificationCode']);
+                     ->exists();
         
         if($codeExist){
             $activeCode = DB::table('verification_codes')
                           ->where('verificationCode', '=', $request->verificationCode)
-                          ->update(['is_active' => 0]);
+                          ->update(['is_active' => 0, 'verificationCode' => null]);
             if($activeCode){
                 return response()       ->json([
                     'response'          =>  true,
