@@ -29,6 +29,7 @@
 			Time: {{ $time }}<br>
 			Head Count: {{ $maxpax }}<br>
 			Venue: {{ $venue }}<br/>
+			Downpayment: {{ $downpayment}}<br/>
 			Amount: {{ $amount }}</p>
 
 			<p>You can pay half or full amount to this bank information:<br>

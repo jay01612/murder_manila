@@ -28,7 +28,7 @@ Route::get('themes', [bookingController::class, 'showTheme']);
 Route::get('themeValue', [bookingController::class, 'getThemeValue']);
 
 Route::post('generateCode', [bookingController::class, 'createCode']);
-Route::get('codes', [bookingController::class, 'verifyClient']);
+Route::post('codes', [bookingController::class, 'verifyClient']);
 Route::get('getVerificationCode', [bookingController::class, 'getVerifCode']);
 Route::get('sendVerification', [bookingController::class, 'sendVerificationNumber']);
 Route::post('sendEmailBillling', [bookingController::class, 'sendBilling']); 

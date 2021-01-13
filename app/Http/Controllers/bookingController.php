@@ -233,7 +233,7 @@ class bookingController extends Controller
 
     public function getVerifCode (Request $request){
 
-        $query = booking::getVerificationCode($request);
+        $query = verificationCode::where('is_active', 1)->get(['verificationCode']);
 
         if($query){
             return response() ->json([
@@ -288,12 +288,12 @@ class bookingController extends Controller
         if($sendVerification){
             return response()   ->json([
                 'response'  =>  true,
-                'message'   =>  'Message sent'
+                'message'   =>  'SMS Verification code sent'
             ],200);
         }else{
             return response()   ->json([
                 'response'  =>  false,
-                'message'   =>  'Sending failed'
+                'message'   =>  'Verificaiton Code Sending failed'
             ],200);
         }
     }
@@ -301,7 +301,8 @@ class bookingController extends Controller
     public function sendBilling(Request $request){
         $name = $request->fname . " " . $request->lname;
         //$email = $request->email;
-        $email = client::where('email', $request->email)->first();
+        $email = booking::where('email', $request->email)->first();
+
         $data = array(
             'name'              =>  $request->fname.",".$request->lname,
             'referenceNumber'   =>  $request->referenceNumber,
@@ -311,7 +312,9 @@ class bookingController extends Controller
             'time'              =>  $request->time,
             'maxpax'            =>  $request->maxpax,
             'venue'             =>  $request->venue,
+            'downpayment'       =>  $request->downpayment,
             'amount'            =>  $request->amount,
+            
         );
         Mail::send('email', $data, function($message) use ($name, $email){
             $message->to($email, $name)

@@ -61,7 +61,7 @@ class booking extends Model
     public static function getInfo($data){
         return $query = DB::connection('mysql')
         ->table('booking_table as booking')
-        ->select(
+        ->select([
             'booking.id as id',
 
             'booking.reference_number as Reference Number',
@@ -79,11 +79,12 @@ class booking extends Model
             'booking.initial_payment as Downpayment',
             'booking.total_amount as Total Amount',
 
-        )
+        ])
         ->leftjoin('themes as theme', 'booking.theme_id', '=', 'theme.id')
         ->where('booking.is_booked', '=', 0)
         ->get();
     }
+
 
     public static function sendVerificationCode($data){
         return $query = DB::connection('mysql')
