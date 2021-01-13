@@ -42,10 +42,11 @@ class bookingController extends Controller
     public function verifyClient(Request $request){
         
         $codeExist = DB::table('verification_codes')
-                     ->where('VerificationCode', '=', $request->VerificationCode)
-                     ->exists();
+                     //->where('VerificationCode', '=', $request->VerificationCode)
+                     ->where('is_active', '=',1)
+                     ->get(['verificationCode']);
         
-        if($codeExist){
+        if(sizeOf($codeExist)>0) {
             $activeCode = DB::table('verification_codes')
                           ->where('verificationCode', '=', $request->verificationCode)
                           ->update(['is_active' => 0, 'verificationCode' => null]);
