@@ -32,6 +32,7 @@ Route::get('codes', [bookingController::class, 'verifyClient']);
 Route::get('getVerificationCode', [bookingController::class, 'getVerifCode']);
 Route::get('sendVerification', [bookingController::class, 'sendVerificationNumber']);
 Route::post('sendEmailBillling', [bookingController::class, 'sendBilling']); 
+Route::get('reciept', [bookingController::class, 'showReciept']);
 
 
 //admin login

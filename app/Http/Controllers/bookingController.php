@@ -249,6 +249,25 @@ class bookingController extends Controller
             ],200);
         }
     }
+    public static function showReciept(Request $request){
+        
+    //    $query = booking::getInfo($request);
+
+    $query = booking::where('is_booked', 0)->get()->last();
+
+
+        if($query){
+            return response()       ->json([
+                'response'      =>  true,
+                'data'          =>  $query
+            ],200);
+        }else{
+            return response()      ->json([
+                'response'      =>  false,
+                'data'          =>  []
+            ],200);
+        }
+    }
 
     public function sendVerificationNumber(Request $request){
 
