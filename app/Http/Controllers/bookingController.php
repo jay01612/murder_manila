@@ -212,6 +212,25 @@ class bookingController extends Controller
         }
     }
 
+    public function getThemeValue(Request $request){
+
+        $query = theme::where('id', $request->id)->get();
+
+        if($query){
+            return response()       ->json([
+                'response'          =>  true,
+                'data'              =>  $query
+            ],200);
+        }else{
+            return response()       ->json([
+                'response'          =>  false,
+                'data'              =>  []
+            ],200);
+        }
+        
+        
+    }
+
     public function getVerifCode (Request $request){
 
         $query = booking::getVerificationCode($request);

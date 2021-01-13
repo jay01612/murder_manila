@@ -25,6 +25,7 @@ use App\Http\Controllers\adminControllers;
 Route::post('booking', [ bookingController::class, 'bookingInfoSave']);
 Route::post('Availability', [bookingController::class, 'checkAvailability']);
 Route::get('themes', [bookingController::class, 'showTheme']);
+Route::get('themeValue', [bookingController::class, 'getThemeValue']);
 
 Route::post('generateCode', [bookingController::class, 'createCode']);
 Route::get('codes', [bookingController::class, 'verifyClient']);
