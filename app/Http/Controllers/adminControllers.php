@@ -90,6 +90,7 @@ class adminControllers extends Controller
                 'fname'     => 'required|string',
                 'lname'     => 'required|string',
                 'username'  => 'required|string',
+                'password'  => 'required|string',
                 'email'     => 'required|email'
             ]);
           
