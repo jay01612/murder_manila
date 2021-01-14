@@ -164,8 +164,8 @@ class bookingController extends Controller
                         ->get(['book_time']);
                       
         
-        $checkDates = Carbon::now();
-        $availableDate = $checkDates->addDays(6)->toFormattedDateString();
+        $checkDates = Carbon::parse($request->book_date);
+        $availableDate = $checkDates->addDays(7)->toFormattedDateString();
                                    
         if(sizeOf($checkBooking) > 3){
             return response()      ->json([
