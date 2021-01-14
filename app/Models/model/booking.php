@@ -99,7 +99,7 @@ class booking extends Model
         return booking::where('id', $data->id)
         ->update([
             'is_booked'     =>  1,
-            'updated_by'    =>  Auth::user()->position_id()
+           
         ]);
         
     }
@@ -108,7 +108,7 @@ class booking extends Model
         return booking::where('id', $data->id)
         ->update([
             'is_cancelled' => 1,
-            'updated_by'    =>  Auth::user()->position_id()
+          
         ]);
     }
 }

@@ -43,12 +43,12 @@ class User extends Authenticatable
         
     }
 
-    public static function addAdmin($data, $password){
+    public static function addAdmin($data){
         return User::insert([
             'fname'         =>  $data->fname,
             'lname'         =>  $data->lname,
             'username'      =>  $data->username,
-            'password'      =>  $password,
+            'password'      =>  'bycrypt'($data->password),
             'email'         =>  $data->email,
             'position_id'   =>  $data->position_id,
             'created_at'    =>  DB::raw("NOW()")
@@ -76,8 +76,6 @@ class User extends Authenticatable
         return User::where('id', $data->id)
         ->update([
             'is_active'     =>  0,
-            'updated by'    =>  Auth::user()->position_id()
-
         ]);
     }
 

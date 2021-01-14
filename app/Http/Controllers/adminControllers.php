@@ -61,7 +61,7 @@ class adminControllers extends Controller
                 'response'      =>  true,
                 'message'       =>  "success",
                 'token'         =>  $accessToken,
-                'admin'         =>  Auth::user()
+                'admin'         =>  Auth::User()
             ],200);
         }else{
             return response()      ->json([
@@ -90,8 +90,8 @@ class adminControllers extends Controller
                 'fname'     => 'required|string',
                 'lname'     => 'required|string',
                 'username'  => 'required|string',
-                'email'     => 'required|email|unique:users'
-            ],200);
+                'email'     => 'required|email'
+            ]);
           
             if($validation->fails()){
                 $error = $validation->messages()->first();
@@ -101,13 +101,18 @@ class adminControllers extends Controller
                 ],200);
             }
             
-        if(Auth::User()->position_id == 1){   
-            $firstname  =   str_shuffle($request->fname);
-            $lastname   =   str_shuffle($request->lname);
-                
-            $password   =   $request->$firstname.$lastname;
-
-            $query = User::addAdmin($request, $password);
+        if(Auth::User()->position_id == 1){
+            $query = DB::connection('mysql')
+                     ->table('users')
+                     ->insertGetId([
+                        'fname'         =>  $request->fname,
+                        'lname'         =>  $request->lname,
+                        'username'      =>  $request->username,
+                        'password'      =>  Hash::make($request->password),
+                        'email'         =>  $request->email,
+                        'position_id'   =>  $request->position_id,
+                        'created_at'    =>  DB::raw("NOW()")
+                     ]);
 
             if($query){
                 return response()->json([
@@ -120,7 +125,7 @@ class adminControllers extends Controller
                     'message'   =>  "there is something wrong, Please check the details carefully"
                 ],200);
             }
-        }
+       }
     }
 
     public function deleteAdmin (Request $request){

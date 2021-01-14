@@ -18,7 +18,8 @@
         "laravel/passport": "^10.0",
         "laravel/tinker": "^2.0",
         "nexmo/client": "^2.4",
-        "nexmo/laravel": "^2.3"
+        "nexmo/laravel": "^2.3",
+        "lcobucci/jwt": "3.3.3" 
     },
     "require-dev": {
         "facade/ignition": "^2.3.6",

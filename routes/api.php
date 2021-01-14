@@ -49,7 +49,7 @@ Route::post('adminRegister', [adminControllers::class, 'registerAdmin'])->middle
 Route::post('AdminDelete', [adminControllers::class, 'deleteAdmin'])->middleware('auth:api');
 Route::get('AdminList', [adminControllers::class, 'adminList'])->middleware('auth:api');
 
-Route::get('dailyBookings', [adminControllers::class, 'getDailyBookings']);//->middleware('auth:api');
+Route::get('dailyBookings', [adminControllers::class, 'getDailyBookings'])->middleware('auth:api');
 Route::get('Pendings', [adminControllers::class, 'getPendBookings'])->middleware('auth:api');
 Route::get('Booked', [adminControllers::class, 'getPaidBooking'])->middleware('auth:api');
 Route::get('CancelledBookings', [adminControllers::class, 'getCanceledBookings'])->middleware('auth:api');
