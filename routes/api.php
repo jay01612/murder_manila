@@ -54,6 +54,7 @@ Route::post('dailyBookings', [adminControllers::class, 'getDailyBookings']);
 Route::get('Pendings', [adminControllers::class, 'getPendBookings']);
 Route::get('Booked', [adminControllers::class, 'getPaidBooking']);
 Route::get('CancelledBookings', [adminControllers::class, 'getCanceledBookings']);//->middleware('auth:api');
+Route::get('expiredBookings', [adminControllers::class], 'getExpiryBookings']);//-middlware('auth:api');
 
 Route::put('editpending/{id}', [adminControllers::class, 'bookingEdit']);
 Route::put('editCancelBooking/{id}', [adminControllers::class, 'cancelBookingEdit']);

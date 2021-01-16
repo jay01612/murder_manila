@@ -38,7 +38,12 @@ class BookingTable extends Migration
 
             $table->tinyInteger('is_booked')->default(0); 
             $table->tinyInteger('is_cancelled')->default(0);
+            $table->tinyInteger('is_expired')->default(0);
+            $table->tinyInteger('is_done')->default(0);
+            
 
+
+            $table->date('expiry_date');
             $table->bigInteger('updated_by')->nullable();
                 
 

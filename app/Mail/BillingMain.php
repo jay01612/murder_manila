@@ -20,7 +20,7 @@ class BillingMain extends Mailable
      */
     public function __construct($data)
     {
-        $this->data = $data;
+        $this->booking = $bookig;
     }
 
     /**
@@ -30,8 +30,9 @@ class BillingMain extends Mailable
      */
     public function build(Request $request)
     {
-        return $this->subject('Murder Manila Billing')
+        return $this->from('murdermanilabilling@gmail.com')
+                    ->subject('Murder Manila Billing')
                     ->withRequest($request)
-                    ->view('view.template');
+                    ->view('email');
     }
 }

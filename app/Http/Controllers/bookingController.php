@@ -13,6 +13,7 @@ use Carbon\Carbon;
 use Validator;
 use DB;
 use Nexmo;
+ 
 
 class bookingController extends Controller
 {
@@ -300,28 +301,72 @@ class bookingController extends Controller
         }
     }
 
-    public function sendBilling(Request $request){
-        $name = $request->fname . " " . $request->lname;
-        //$email = $request->email;
-        $email = booking::where('email', $request->email)->first();
+    
 
-        $data = array(
-            'name'              =>  $request->fname.",".$request->lname,
-            'referenceNumber'   =>  $request->referenceNumber,
-            'contactNumber'     =>  $request->contactNumber,
-            'theme'             =>  $request->themes,
-            'date'              =>  $request->date,
-            'time'              =>  $request->time,
-            'maxpax'            =>  $request->maxpax,
-            'venue'             =>  $request->venue,
-            'downpayment'       =>  $request->downpayment,
-            'amount'            =>  $request->amount,
-            
-        );
-        Mail::send('email', $data, function($message) use ($name, $email){
-            $message->to($email, $name)
-                    ->subject('Murder Manila Billing');
-            $message->from('murdermanilabilling@gmail.com','Murder Manila');
+    public function sendBilling(Request $request){
+        $send_name = $request->fname . " " . $request->lname;
+
+        $send_email = booking::where('email', $request->email)->first();
+
+        $query = DB::connection('mysql')
+                 ->table('booking_table as a')
+                 ->select(
+                        'a.email as email',
+
+                         DB::raw("CONCAT(a.lname,',',a.fname) as name"),
+                        'a.reference_number as referenceNumber',
+                        'a.mobile_number as contactNumber',
+                        'a.book_date as date',
+                        'a.book_time as time',
+                        
+                        'a.maxpax as maxpax',
+                        'a.venue as venue',
+                       
+                        //'lname',
+                        
+                        
+                        'a.initial_payment as downpayment',
+                        'a.total_amount as amount'
+                 )
+                 ->where('email', '=', $request->id)->get();
+                 
+                 
+
+                 $data = [];
+                 foreach($query as $out){
+                    $data[] = [
+                        'email'                 =>$out->email,
+                        'name'                  =>$out->name,
+                        'referenceNumber'       =>$out->referenceNumber,
+                        'contactNumber'         =>$out->contactNumber,
+                        'date'                  =>$out->date,
+                        'time'                  =>$out->time,
+                        'maxpax'                =>$out->maxpax,
+                        'venue'                 =>$out->venue,
+                        'downpayment'           =>$out->downpayment,
+                        'amount'                =>$out->amount, 
+
+                    ];
+
+                 }
+
+                 
+        // $data = array(
+        //     'name'          =>$request->fname . " " . $request->lname,
+        //     'referenceNumber'=> $request->referenceNumber,
+        //     'contactNumber' =>$request->contactNumber,
+        //     //'themes'        =>$request->themes,
+        //     'date'          =>$request->date,
+        //     'time'          =>$request->time,
+        //     'maxpax'        =>$request->maxpax,
+        //     'venue'         =>$request->venue,
+        //     'downpayment'   =>$request->downpayment,
+        //     'amount'        =>$request->amount, 
+        //);
+        Mail::send('email', $data, function($message) use ($send_email, $send_name){
+            $message->to($send_email, $send_name)
+                    ->subject('MurderManilaBilling');
+            $message->from('murdermanilabilling@gmail.com');
         });
     } 
 }

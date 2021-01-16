@@ -26,7 +26,8 @@ class booking extends Model
         'mobile_number',
         'email',
         'initial_payment',
-        'total_amount'
+        'total_amount',
+        'expiry_date'
     ];
 
     public static function getBooking(){
