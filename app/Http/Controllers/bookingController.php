@@ -363,10 +363,30 @@ class bookingController extends Controller
         //     'downpayment'   =>$request->downpayment,
         //     'amount'        =>$request->amount, 
         //);
-        Mail::send('email', $data, function($message) use ($send_email, $send_name){
-            $message->to($send_email, $send_name)
-                    ->subject('MurderManilaBilling');
-            $message->from('murdermanilabilling@gmail.com');
+        // Mail::send('email', $data, function($message) use ($send_email, $send_name){
+        //     $message->to($send_email, $send_name)
+        //             ->subject('MurderManilaBilling');
+        //     $message->from('murdermanilabilling@gmail.com');
+        // });
+
+        $to_name = $request->fname;
+        $to_email = $request->email;
+            $data = array(
+                "contactNumber"     => $request->contactNumber, 
+                "date"              => $request->date, 
+                "time"              => $request->time,
+                "referenceNumber"   => $request->referenceNumber,
+                "maxpax"            => $request->maxpax,
+                "venue"             => $request->venue,
+                "downpayment"       => $request->downpayment,
+                "amount"            => $request->amount,
+                "name"              => $request->fname . " " . $request->lname
+            );
+        Mail::send("email", $data, function($message) use ($to_name, $to_email) {
+        $message->to($to_email, $to_name)
+        ->subject("Online Order Payment Required");
+        $message->from("murdermanilabilling@gmail.com","Online Order Payment Required");
         });
+
     } 
 }

@@ -262,7 +262,7 @@ class adminControllers extends Controller
                      }    
     }
 
-    pulic function getExpiryBookings(Request $request){
+    public function getExpiryBookings(Request $request){
          // if(Auth::User()->position_id == 1 || Auth::User()->position_id == 2 || Auth::User()->position_id ==3){
 
             $query = DB::connection('mysql')
@@ -280,7 +280,7 @@ class adminControllers extends Controller
                             'a.email as email',
                     ])
                      ->where('is_booked', '=', 0)
-                     ->where('is_expired' '=' 1)
+                     ->where('is_expired', '=', 1)
                      ->get();
 
             if($query){
