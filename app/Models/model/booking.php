@@ -30,6 +30,8 @@ class booking extends Model
         'initial_payment',
         'total_amount',
         'is_expired',
+        'is_initial_paid',
+        'is_fully_paid'
 
     ];
 
@@ -103,7 +105,7 @@ class booking extends Model
         return booking::where('id', $data->id)
         ->update([
             'is_booked'     =>  1,
-           
+            
         ]);
         
     }
@@ -112,6 +114,14 @@ class booking extends Model
         return booking::where('id', $data->id)
         ->update([
             'is_cancelled' => 1,
+          
+        ]);
+    }
+
+    public static function editInitialPaid($data){
+        return booking::where('id', $data->id)
+        ->update([
+            'is_initial_paid' => 1,
           
         ]);
     }

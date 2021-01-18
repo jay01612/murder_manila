@@ -316,7 +316,8 @@ class adminControllers extends Controller
                            'a.email as email',
                    ])
                     ->where('is_booked', '=', 1)
-                    ->where('is_expired', '=', 1)
+                    ->where('is_done', '=', 1)
+                    ->where('is_expired', '=', 0)
                     ->get();
 
            if($query){

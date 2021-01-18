@@ -86,9 +86,7 @@ class bookingController extends Controller
     }
 
     public function bookingInfoSave(Request $request){
-
-        $referenceNumber = $this->generaterefnumber(date('Y-m-d H:i:s'));
-
+        
             $bookDate = Carbon::parse($request->end_date);
             $dateValidation = $bookDate->addDays(6)->toFormattedDateString('Y-m-d');
 
@@ -129,7 +127,7 @@ class bookingController extends Controller
         $referenceNumber = $this->generaterefnumber(date('Y-m-d H:i:s'));
 
         $query = booking::create([
-                    'reference_number'          =>  $referenceNumber,
+                    'reference_number'          =>  $request->reference_number,
                     'book_date'                 =>  $request->book_date,
                     'end_date'                  =>  Carbon::parse($request->book_date)->addDays(6),
                     'book_time'                 =>  $request->book_time,
@@ -376,9 +374,6 @@ class bookingController extends Controller
                         
                         'a.maxpax as maxpax',
                         'a.venue as venue',
-                       
-                        //'lname',
-                        
                         
                         'a.initial_payment as downpayment',
                         'a.total_amount as amount'
