@@ -118,10 +118,18 @@ class booking extends Model
         ]);
     }
 
-    public static function editInitialPaid($data){
+    public static function editPartialPaid($data){
         return booking::where('id', $data->id)
         ->update([
             'is_initial_paid' => 1,
+          
+        ]);
+    }
+
+    public static function editFullPaid($data){
+        return booking::where('id', $data->id)
+        ->update([
+            'is_fully_paid' => 1,
           
         ]);
     }
