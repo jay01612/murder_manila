@@ -298,6 +298,42 @@ class adminControllers extends Controller
 
     }
 
+    public function getDoneBookings(Request $request){
+        // if(Auth::User()->position_id == 1 || Auth::User()->position_id == 2 || Auth::User()->position_id ==3){
+
+           $query = DB::connection('mysql')
+                    ->table('booking_table as a')
+                    ->select([
+                           'a.reference_number as reference_number',
+                           'a.book_date as start',
+                           'a.end_date as end',
+                           'a.book_time as time',
+                           'a.theme_id as theme',
+                           'a.maxpax as maxpax',
+                           'a.venue as venue',
+                           DB::raw("CONCAT(a.lname,',',a.fname) as name"),
+                           'a.mobile_number as mobile_number',
+                           'a.email as email',
+                   ])
+                    ->where('is_booked', '=', 1)
+                    ->where('is_expired', '=', 1)
+                    ->get();
+
+           if($query){
+               return response()   ->json([
+                   'response'      =>  true,
+                   'data'          =>  $query
+               ],200);
+           }else{
+               return response()   ->json([
+                   'rseponse'      =>  true,
+                   'data'          => []
+               ],200);
+           }
+      // }
+
+   }
+
     
 
     public function bookingEdit(Request $request){
@@ -453,5 +489,4 @@ class adminControllers extends Controller
         }
     }
 
-    
 }
