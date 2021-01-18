@@ -134,7 +134,7 @@ class bookingController extends Controller
                     'end_date'                  =>  Carbon::parse($request->book_date)->addDays(6),
                     'book_time'                 =>  $request->book_time,
                     'end_time'                  =>  Carbon::parse($request->book_time)->addHours(4),
-                    'expiration_date'           =>  Carbon::parse($request->created_at)->addMinutes(2),
+                    'expiration_date'           =>  Carbon::parse($request->created_at)->addDays(3),
                     'theme_id'                  =>  $request->theme_id,
                     'maxpax'                    =>  $request->maxpax,
                     'venue'                     =>  $request->venue,
@@ -147,9 +147,7 @@ class bookingController extends Controller
         
         ]);
 
-        $expiry = Carbon::parse($request->created_at)->addMinutes(2);
-        
-        $getData = booking::where('expiration_date', $request->expiration_date)->get();
+     
         
         if($query){
             return response()->json([
@@ -157,20 +155,6 @@ class bookingController extends Controller
                 'message'   =>  "Successfully reserve your booking",
                 
             ],200);
-
-            if($getData == $expiry){
-                $expired = booking::where('id', $request->id)
-                            ->update([
-                                'is_expired' => 0
-                            ]);
-                return response()   ->json([
-                    'response'      =>true,
-                ],200);
-            }else{
-                return response()   ->json([
-                    'response'      =>false
-                ],200);
-            }
             
         }else{
             return response()->json([
@@ -182,7 +166,52 @@ class bookingController extends Controller
     }
 
     public function updateBookingExpired(Request $request){
+        
+        $expiry = Carbon::now()->format('Y-m-d');
 
+        $expirationData = booking::where('is_booked', 0)
+                          ->get('expiration_date');
+
+        if($expirationData == $expiry){
+
+            $DataExpired = booking::where('is_booked', 0)
+                            ->update(['is_expired' => 1]);
+
+            if($DataExpired){
+                return response()       ->json([
+                    'response'          =>  true
+                    
+                ],200);
+            }else{
+                return response()       ->json([
+                    'rersponse'         =>  false
+                ],200);
+            }
+        }
+    }
+
+    public function updateBookingDone(Request $request){
+        
+        $checkDone = Carbon::now()->format('h:i:s');
+
+        $doneBooking = booking::where('is_booked', 1)
+                       ->get('end_time');
+
+        if($doneBooking == $checkDone){
+            $updateBooking = booking::where('is_booked', 1)
+                             ->update([
+                                 'is_done'  => 1,
+                             ]);
+            if($updateBooking){
+                return response()   ->json([
+                    'response'      =>  true,
+                ],200);
+            }else{
+                return response()   ->json([
+                    'response'      =>  false
+                ],200);
+            }
+        }
        
     }
 
