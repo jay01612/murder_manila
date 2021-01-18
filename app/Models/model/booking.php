@@ -18,6 +18,8 @@ class booking extends Model
         'book_date',
         'end_date',
         'book_time',
+        'end_time',
+        'expiration_date',
         'theme_id',
         'maxpax',
         'venue',
@@ -27,7 +29,8 @@ class booking extends Model
         'email',
         'initial_payment',
         'total_amount',
-        'expiry_date'
+        'is_expired',
+
     ];
 
     public static function getBooking(){

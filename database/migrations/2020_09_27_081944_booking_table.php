@@ -21,6 +21,8 @@ class BookingTable extends Migration
             $table->date('book_date');
             $table->date('end_date');
             $table->time('book_time');
+            $table->time('end_time');
+            $table->date('expiration_date');
            
             $table->bigInteger('theme_id')->unsigned();
             $table->foreign('theme_id')->references('id')->on('themes');
@@ -41,12 +43,9 @@ class BookingTable extends Migration
             $table->tinyInteger('is_expired')->default(0);
             $table->tinyInteger('is_done')->default(0);
             
-
-
-            $table->date('expiry_date');
             $table->bigInteger('updated_by')->nullable();
                 
-
+            
             $table->timestamps();
         });
     }

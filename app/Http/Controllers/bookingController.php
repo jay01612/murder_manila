@@ -128,11 +128,13 @@ class bookingController extends Controller
         $verification = rand(1000, 9999);
         $referenceNumber = $this->generaterefnumber(date('Y-m-d H:i:s'));
 
-        $query = booking::insertGetId([
+        $query = booking::create([
                     'reference_number'          =>  $referenceNumber,
                     'book_date'                 =>  $request->book_date,
                     'end_date'                  =>  Carbon::parse($request->book_date)->addDays(6),
                     'book_time'                 =>  $request->book_time,
+                    'end_time'                  =>  Carbon::parse($request->book_time)->addHours(4),
+                    'expiration_date'           =>  Carbon::parse($request->created_at)->addMinutes(2),
                     'theme_id'                  =>  $request->theme_id,
                     'maxpax'                    =>  $request->maxpax,
                     'venue'                     =>  $request->venue,
@@ -144,6 +146,10 @@ class bookingController extends Controller
                     'total_amount'              =>  $totalAmount
         
         ]);
+
+        $expiry = Carbon::parse($request->created_at)->addMinutes(2);
+        
+        $getData = booking::where('expiration_date', $request->expiration_date)->get();
         
         if($query){
             return response()->json([
@@ -151,6 +157,21 @@ class bookingController extends Controller
                 'message'   =>  "Successfully reserve your booking",
                 
             ],200);
+
+            if($getData == $expiry){
+                $expired = booking::where('id', $request->id)
+                            ->update([
+                                'is_expired' => 0
+                            ]);
+                return response()   ->json([
+                    'response'      =>true,
+                ],200);
+            }else{
+                return response()   ->json([
+                    'response'      =>false
+                ],200);
+            }
+            
         }else{
             return response()->json([
                 'success'   =>  false,
@@ -158,6 +179,11 @@ class bookingController extends Controller
                 
             ],200);
         }
+    }
+
+    public function updateBookingExpired(Request $request){
+
+       
     }
 
     public function checkAvailability(Request $request){
@@ -350,25 +376,6 @@ class bookingController extends Controller
 
                  }
 
-                 
-        // $data = array(
-        //     'name'          =>$request->fname . " " . $request->lname,
-        //     'referenceNumber'=> $request->referenceNumber,
-        //     'contactNumber' =>$request->contactNumber,
-        //     //'themes'        =>$request->themes,
-        //     'date'          =>$request->date,
-        //     'time'          =>$request->time,
-        //     'maxpax'        =>$request->maxpax,
-        //     'venue'         =>$request->venue,
-        //     'downpayment'   =>$request->downpayment,
-        //     'amount'        =>$request->amount, 
-        //);
-        // Mail::send('email', $data, function($message) use ($send_email, $send_name){
-        //     $message->to($send_email, $send_name)
-        //             ->subject('MurderManilaBilling');
-        //     $message->from('murdermanilabilling@gmail.com');
-        // });
-
         $to_name = $request->fname;
         $to_email = $request->email;
             $data = array(
@@ -384,7 +391,7 @@ class bookingController extends Controller
             );
         Mail::send("email", $data, function($message) use ($to_name, $to_email) {
         $message->to($to_email, $to_name)
-        ->subject("Online Order Payment Required");
+        ->subject("Online Billing Payment Required");
         $message->from("murdermanilabilling@gmail.com","Online Order Payment Required");
         });
 

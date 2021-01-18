@@ -323,9 +323,6 @@ class adminControllers extends Controller
         // if(Auth::User()->position_id == 1 || Auth::user()->position_id == 2){
 
             $query = booking::editToCancelBooking($request);
-
-
-
             if($query){
                 return response()   ->json([
                     'response'      => true,
@@ -455,4 +452,6 @@ class adminControllers extends Controller
             });
         }
     }
+
+    
 }
