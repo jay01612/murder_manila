@@ -31,7 +31,8 @@ class booking extends Model
         'total_amount',
         'is_expired',
         'is_initial_paid',
-        'is_fully_paid'
+        'is_fully_paid',
+        'is_paid'
 
     ];
 

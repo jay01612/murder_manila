@@ -420,7 +420,7 @@ class bookingController extends Controller
         Mail::send("email", $data, function($message) use ($to_name, $to_email) {
         $message->to($to_email, $to_name)
         ->subject("Online Billing Payment Required");
-        $message->from("murdermanilabilling@gmail.com","Online Order Payment Required");
+        $message->from("murdermanilabilling@gmail.com","Online Billing Payment Required");
         });
 
     } 

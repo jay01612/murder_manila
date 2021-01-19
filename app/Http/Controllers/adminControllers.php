@@ -484,10 +484,10 @@ class adminControllers extends Controller
                     "venue"             => $out->venue,
                     "downpayment"       => $out->downpayment
                 );
-                Mail::send('initialpaymentemail', function($message) use ($to_name, $to_email){
+                Mail::send("initialpaymentemail", function($message) use ($to_name, $to_email){
                     $message->to($to_email, $to_name)
-                            ->subject('Booking Confirmation');
-                    $message->from('murdermanilabilling@gmail.com', 'Murder Manila');
+                            ->subject("Booking Confirmation");
+                    $message->from("murdermanilabilling@gmail.com", "Murder Manila");
 
                 });
             }
@@ -529,10 +529,10 @@ class adminControllers extends Controller
                             "venue"             => $out->venue,
                             "total_amount"      => $out->total_amount
                         );
-                        Mail::send('fullpaymentemail', function($message) use ($to_name, $to_email){
+                        Mail::send("fullpaymentemail", function($message) use ($to_name, $to_email){
                             $message->to($to_email, $to_name)
-                                    ->subject('Booking Confirmation');
-                            $message->from('murdermanilabilling@gmail.com', 'Murder Manila');
+                                    ->subject("Booking Confirmation");
+                            $message->from("murdermanilabilling@gmail.com", "Murder Manila");
 
                         });
                     }
@@ -577,10 +577,10 @@ class adminControllers extends Controller
                     "downpayment"       => $out->downpayment,
                     "total_amount"      => $out->total_amount
                 );
-                Mail::send('cancelbookingemail', function($message) use ($to_name, $to_email){
+                Mail::send("cancelbookingemail", function($message) use ($to_name, $to_email){
                     $message->to($to_email, $to_name)
-                            ->subject('Booking Confirmation');
-                    $message->from('murdermanilabilling@gmail.com', 'Murder Manila');
+                            ->subject("Booking Confirmation");
+                    $message->from("murdermanilabilling@gmail.com", "Murder Manila");
 
                 });
             }
@@ -626,10 +626,10 @@ class adminControllers extends Controller
                     "total_amount"      => $out->total_amount
                 );
                 
-                Mail::send('expiredEmail', function($message) use ($to_name, $to_email){
+                Mail::send("expiredEmail", function($message) use ($to_name, $to_email){
                     $message->to($to_email, $to_name)
-                            ->subject('Booking Confirmation');
-                    $message->from('murdermanilabilling@gmail.com', 'Murder Manila');
+                            ->subject("Booking Confirmation");
+                    $message->from("murdermanilabilling@gmail.com", "Murder Manila");
 
                 });
         }
