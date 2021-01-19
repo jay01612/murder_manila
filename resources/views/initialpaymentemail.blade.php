@@ -25,7 +25,7 @@
         <p>this is your booking details:</p>
 		<p> Name: {{ $name }}<br>
 			Reference Number: {{ $referenceNumber }}<br>
-			Initial Payment: {{$initial_payment}}<br>
+			Initial Payment: {{$downpayment}}<br>
 			Date: {{ $date }}<br>
 			Time: {{ $time }}<br>
             Theme: {{ $theme}}<br>
