@@ -580,7 +580,7 @@ class adminControllers extends Controller
                 );
                 Mail::send("cancelbookingemail", $data, function($message) use ($to_name, $to_email){
                     $message->to($to_email, $to_name)
-                            ->subject("Booking Confirmation");
+                            ->subject("Booking Cancellation");
                     $message->from("murdermanilabilling@gmail.com", "Murder Manila");
 
                 });
@@ -627,9 +627,9 @@ class adminControllers extends Controller
                     "total_amount"      => $out->total_amount
                 );
                 
-                Mail::send("expiredEmail", $data, function($message) use ($to_name, $to_email){
+                Mail::send("expiredemail", $data, function($message) use ($to_name, $to_email){
                     $message->to($to_email, $to_name)
-                            ->subject("Booking Confirmation");
+                            ->subject("Booking expired");
                     $message->from("murdermanilabilling@gmail.com", "Murder Manila");
 
                 });
