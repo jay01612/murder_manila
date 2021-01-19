@@ -224,7 +224,7 @@ class adminControllers extends Controller
                         'a.theme_id as theme',
                         'a.maxpax as maxpax',
                         'a.venue as venue',
-                        DB::raw("CONCAT(a.lname,',',a.fname) as name"),
+                        DB::raw("CONCAT(a.fname,',',a.lname) as name"),
                         'a.mobile_number as mobile_number',
                         'a.email as email',
                         
