@@ -213,18 +213,18 @@ class adminControllers extends Controller
     public function getDailyBookings(Request $request){
         // if(Auth::User()->position_id == 1 || Auth::User()->position_id == 2 || Auth::User()->position_id ==3){
 
-            $query = DB::connection('mysql')
+           $query = DB::connection('mysql')
                      ->table('booking_table as a')
                      ->Select([
                         'a.reference_number as reference_number',
                         'a.book_date as start',
-                        'a.end_date as end',
+                        'a.end_date as end_date',
                         'a.book_time as time',
+                        'a.end_time as end',
                         'a.theme_id as theme',
                         'a.maxpax as maxpax',
                         'a.venue as venue',
                         DB::raw("CONCAT(a.lname,',',a.fname) as name"),
-                        //'lname',
                         'a.mobile_number as mobile_number',
                         'a.email as email',
                      ])
@@ -244,22 +244,20 @@ class adminControllers extends Controller
                             'mobile_number'         => $out->mobile_number,
                             'email'                 => $out->email
                         ];
+
+                        if(sizeOf($data) > 0){
+                            return response()      ->json([
+                                'response'         => true,
+                                'data'             => $data
+                            ],200);
+                        }else{
+                            return response()      ->json([
+                                'response'         =>  false,
+                                //'message'          =>  "there is no booking for " .  $dateToday,
+                            ],200);
+                        }    
                      }
-
-
-                  //$dateToday = Carbon::parse($request->book_date)->toFormattedDateString('Y-m-d');
-
-                     if(sizeOf($data) > 0){
-                         return response()      ->json([
-                             'response'         => true,
-                             'data'             => $data
-                         ],200);
-                     }else{
-                         return response()      ->json([
-                             'response'         =>  false,
-                             //'message'          =>  "there is no booking for " .  $dateToday,
-                         ],200);
-                     }    
+                    
     }
 
     public function getExpiryBookings(Request $request){
