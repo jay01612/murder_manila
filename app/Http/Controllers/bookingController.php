@@ -168,7 +168,7 @@ class bookingController extends Controller
         $expirationData = booking::where('is_booked', 0)
                           ->get('expiration_date');
 
-        if($expirationData == $expiry){
+        if($expiry = $expirationData){
 
             $DataExpired = booking::where('is_booked', 0)
                             ->update(['is_expired' => 1]);
@@ -180,9 +180,15 @@ class bookingController extends Controller
                 ],200);
             }else{
                 return response()       ->json([
-                    'rersponse'         =>  false
+                    'rersponse'         =>  false,
+                    'message'           =>  'no expire booking'
                 ],200);
             }
+        }else{
+            return response()       ->json([
+                'rersponse'         =>  false,
+                'message'           =>  'no expired booking'
+            ],200); 
         }
     }
 
