@@ -88,7 +88,7 @@ class User extends Authenticatable
 
             'booking.reference_number as Reference_Number',
 
-            DB::raw("CONCAT(booking.fname,',',booking.lname) as Name"),
+            DB::raw("CONCAT(booking.fname,' ',booking.lname) as Name"),
             'booking.email as email',
 
             'theme.name as game',
@@ -119,7 +119,7 @@ class User extends Authenticatable
 
             'booking.reference_number as Reference_Number',
 
-            DB::raw("CONCAT(booking.fname,',',booking.lname) as Name"),
+            DB::raw("CONCAT(booking.fname,' ',booking.lname) as Name"),
             'booking.email as email',
 
             'theme.name as game',
@@ -148,7 +148,7 @@ class User extends Authenticatable
 
             'booking.reference_number as Reference_Number',
 
-            DB::raw("CONCAT(booking.fname,',',booking.lname) as Name"),
+            DB::raw("CONCAT(booking.fname,' ',booking.lname) as Name"),
             'booking.email as email',
 
             'theme.name as game',

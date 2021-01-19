@@ -607,6 +607,7 @@ class adminControllers extends Controller
                     
                 )
                 ->leftjoin('themes as b', 'b.id', '=', 'a.theme_id')
+                ->where('a.is_booked', '=', 0)
                 ->where('a.is_expired', '=', 1)
                 ->get();
                     
@@ -618,7 +619,7 @@ class adminControllers extends Controller
                     "name"              => $out->name,
                     "theme"             => $out->theme,
                     "date"              => $out->date,
-                    "time"              => $out->time,
+                    "time"              => $out-> time,
                     "maxpax"            => $out->maxpax,
                     "venue"             => $out->venue,
                     "downpayment"       => $out->downpayment,
