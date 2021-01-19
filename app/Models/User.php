@@ -95,7 +95,7 @@ class User extends Authenticatable
           
             DB::raw("DATE_FORMAT(booking.book_date, '%M %d %Y') as date"),
             DB::raw("TIME_FORMAT(booking.book_time, '%h:%i %p') as time"),
-            'booking.expiration_date as expiration_date',
+            DB::raw("DATE_FORMAT(booking.expiration_date, '%M %d %Y') as expiration_date"),
             'booking.venue as venue',
             'booking.maxpax as maxpax',
 
@@ -126,6 +126,7 @@ class User extends Authenticatable
           
             DB::raw("DATE_FORMAT(booking.book_date, '%M %d %Y') as date"),
             DB::raw("TIME_FORMAT(booking.book_time, '%h:%i %p') as time"),
+            DB::raw("DATE_FORMAT(booking.expiration_date, '%M %d %Y') as expiration_date"),
             'booking.venue as venue',
             'booking.maxpax as maxpax',
 
@@ -155,6 +156,7 @@ class User extends Authenticatable
           
             DB::raw("DATE_FORMAT(booking.book_date, '%M %d %Y') as date"),
             DB::raw("TIME_FORMAT(booking.book_time, '%h:%i %p') as time"),
+            DB::raw("DATE_FORMAT(booking.expiration_date, '%M %d %Y') as expiration_date"),
             'booking.venue as venue',
             'booking.maxpax as maxpax',
 

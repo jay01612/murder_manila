@@ -124,7 +124,7 @@ class bookingController extends Controller
         $verification = rand(1000, 9999);
         $referenceNumber = $this->generaterefnumber(date('Y-m-d H:i:s'));
 
-        $query = booking::create([
+        $query = booking::InsertGetId([
                     'reference_number'          =>  $request->reference_number,
                     'book_date'                 =>  $request->book_date,
                     'end_date'                  =>  Carbon::parse($request->book_date)->addDays(6),
