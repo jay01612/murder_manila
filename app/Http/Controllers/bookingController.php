@@ -163,7 +163,7 @@ class bookingController extends Controller
 
     public function updateBookingExpired(Request $request){
         
-        $expiry = Carbon::now()->format('Y-m-d');
+        return $expiry = Carbon::now()->toFormattedDateString('%M %d %Y');
 
         $expirationData = booking::where('is_booked', 0)
                           ->get('expiration_date');
