@@ -474,7 +474,7 @@ class adminControllers extends Controller
             foreach($query as $out){
                 $to_name = $out->name;
                 $to_email = $out->email;
-                return $data =array(
+                $data =array(
                     "referenceNumber"   => $out->referenceNumber,
                     "name"              => $out->name,
                     "theme"             => $out->theme,
@@ -519,7 +519,7 @@ class adminControllers extends Controller
                     foreach($query as $out){
                         $to_name = $out->name;
                         $to_email = $out->email;
-                        return $data =array(
+                        $data =array(
                             "referenceNumber"   => $out->referenceNumber,
                             "name"              => $out->name,
                             "theme"             => $out->theme,
@@ -566,7 +566,7 @@ class adminControllers extends Controller
             foreach($query as $out){
                 $to_name = $out->name;
                 $to_email = $out->email;
-                return $data =array(
+                $data =array(
                     "referenceNumber"   => $out->referenceNumber,
                     "name"              => $out->name,
                     "theme"             => $out->theme,
@@ -614,7 +614,7 @@ class adminControllers extends Controller
         foreach($query as $out){
                 $to_name = $out->name;
                 $to_email = $out->email;
-                return $data =array(
+                $data =array(
                     "referenceNumber"   => $out->referenceNumber,
                     "name"              => $out->name,
                     "theme"             => $out->theme,
