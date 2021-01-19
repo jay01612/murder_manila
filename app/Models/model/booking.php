@@ -122,6 +122,7 @@ class booking extends Model
         return booking::where('id', $data->id)
         ->update([
             'is_initial_paid' => 1,
+            'is_paid' => 1
           
         ]);
     }
@@ -130,7 +131,7 @@ class booking extends Model
         return booking::where('id', $data->id)
         ->update([
             'is_fully_paid' => 1,
-          
+            'is_paid' => 1
         ]);
     }
 }

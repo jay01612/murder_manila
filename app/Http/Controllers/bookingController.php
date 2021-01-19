@@ -90,8 +90,6 @@ class bookingController extends Controller
             $bookDate = Carbon::parse($request->end_date);
             $dateValidation = $bookDate->addDays(6)->toFormattedDateString('Y-m-d');
 
-            
-
             $validation = Validator::make($request->all(), [ 
                 
                 'book_date'             =>  'required|date_format:Y-m-d|after:today|after:' . $dateValidation,

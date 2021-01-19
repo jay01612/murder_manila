@@ -45,6 +45,7 @@ class BookingTable extends Migration
 
             $table->tinyInteger('is_initial_paid')->default(0);
             $table->tinyInteger('is_fully_paid')->default(0);
+            $table->tinyInteger('is_paid')->default(0);
             
             $table->bigInteger('updated_by')->nullable();
                 

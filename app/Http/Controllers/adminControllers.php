@@ -227,6 +227,7 @@ class adminControllers extends Controller
                         DB::raw("CONCAT(a.lname,',',a.fname) as name"),
                         'a.mobile_number as mobile_number',
                         'a.email as email',
+                        
                      ])
                      ->where('book_date', $request->book_date)
                      ->orderBy('book_time', 'asc')
@@ -242,7 +243,8 @@ class adminControllers extends Controller
                             'maxpax'                => $out->maxpax,
                             'name'                  => $out->name,
                             'mobile_number'         => $out->mobile_number,
-                            'email'                 => $out->email
+                            'email'                 => $out->email,
+                            
                         ];
 
                         if(sizeOf($data) > 0){
