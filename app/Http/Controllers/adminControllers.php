@@ -222,7 +222,7 @@ class adminControllers extends Controller
                         'a.end_date as end_date',
                         'a.book_time as time',
                         'a.end_time as end',
-                        'b.name as theme',
+                        'a.theme_id as theme',
                         'a.maxpax as maxpax',
                         'a.venue as venue',
                         DB::raw("CONCAT(a.fname,',',a.lname) as name"),
@@ -230,7 +230,6 @@ class adminControllers extends Controller
                         'a.email as email',
                         
                      ])
-                     ->leftjoin('themes as b', 'a.theme_id', '=', 'b.name')
                      ->where('book_date', $request->book_date)
                      ->orderBy('book_time', 'asc')
                      ->get();
@@ -248,19 +247,18 @@ class adminControllers extends Controller
                             'email'                 => $out->email,
                             
                         ];  
-                    }
-
-        if(sizeOf($data) > 0){
-            return response()      ->json([
-                'response'         => true,
-                'data'             => $data
-            ],200);
-        }else{
-            return response()      ->json([
-                'response'         =>  false,
-                //'message'          =>  "there is no booking for " .  $dateToday,
-            ],200);
-        }  
+                     }
+                if(sizeOf($data) > 0){
+                    return response()      ->json([
+                        'response'         => true,
+                        'data'             => $data
+                    ],200);
+                }else{
+                    return response()      ->json([
+                        'response'         =>  false,
+                        //'message'          =>  "there is no booking for " .  $dateToday,
+                    ],200);
+                }  
                     
     }
 
@@ -274,14 +272,13 @@ class adminControllers extends Controller
                             'a.book_date as start',
                             'a.end_date as end',
                             'a.book_time as time',
-                            'b.name as theme',
+                            'a.theme_id as theme',
                             'a.maxpax as maxpax',
                             'a.venue as venue',
                             DB::raw("CONCAT(a.lname,',',a.fname) as name"),
                             'a.mobile_number as mobile_number',
                             'a.email as email',
                     ])
-                    ->leftjoin('themes as b', 'a.theme_id', '=', 'b.name')
                      ->where('is_booked', '=', 0)
                      ->where('is_expired', '=', 1)
                      ->get();
