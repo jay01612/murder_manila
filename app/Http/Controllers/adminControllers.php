@@ -246,20 +246,20 @@ class adminControllers extends Controller
                             'mobile_number'         => $out->mobile_number,
                             'email'                 => $out->email,
                             
-                        ];
+                        ];  
+                    }
 
-                        if(sizeOf($data) > 0){
-                            return response()      ->json([
-                                'response'         => true,
-                                'data'             => $data
-                            ],200);
-                        }else{
-                            return response()      ->json([
-                                'response'         =>  false,
-                                //'message'          =>  "there is no booking for " .  $dateToday,
-                            ],200);
-                        }    
-                     }
+        if(sizeOf($data) > 0){
+            return response()      ->json([
+                'response'         => true,
+                'data'             => $data
+            ],200);
+        }else{
+            return response()      ->json([
+                'response'         =>  false,
+                //'message'          =>  "there is no booking for " .  $dateToday,
+            ],200);
+        }  
                     
     }
 
