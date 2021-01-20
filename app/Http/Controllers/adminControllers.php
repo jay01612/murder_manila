@@ -222,7 +222,7 @@ class adminControllers extends Controller
                         'a.end_date as end_date',
                         'a.book_time as time',
                         'a.end_time as end',
-                        'a.theme_id as theme',
+                        'b.name as theme',
                         'a.maxpax as maxpax',
                         'a.venue as venue',
                         DB::raw("CONCAT(a.fname,',',a.lname) as name"),
@@ -230,6 +230,7 @@ class adminControllers extends Controller
                         'a.email as email',
                         
                      ])
+                     ->leftjoin('themes as b', 'a.theme_id', '=', 'b.id')
                      ->where('book_date', $request->book_date)
                      ->orderBy('book_time', 'asc')
                      ->get();
@@ -256,7 +257,7 @@ class adminControllers extends Controller
                 }else{
                     return response()      ->json([
                         'response'         =>  false,
-                        //'message'          =>  "there is no booking for " .  $dateToday,
+                        // 'message'          =>  "there is no booking for " .  $dateToday,
                     ],200);
                 }  
                     
@@ -272,13 +273,14 @@ class adminControllers extends Controller
                             'a.book_date as start',
                             'a.end_date as end',
                             'a.book_time as time',
-                            'a.theme_id as theme',
+                            'b.name as theme',
                             'a.maxpax as maxpax',
                             'a.venue as venue',
                             DB::raw("CONCAT(a.lname,',',a.fname) as name"),
                             'a.mobile_number as mobile_number',
                             'a.email as email',
                     ])
+                    ->leftjoin('themes as b', 'a.theme_id', '=', 'b.id')
                      ->where('is_booked', '=', 0)
                      ->where('is_expired', '=', 1)
                      ->get();
