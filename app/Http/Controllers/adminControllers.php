@@ -214,7 +214,7 @@ class adminControllers extends Controller
     public function getDailyBookings(Request $request){
         // if(Auth::User()->position_id == 1 || Auth::User()->position_id == 2 || Auth::User()->position_id ==3){
 
-           return $query = DB::connection('mysql')
+           $query = DB::connection('mysql')
                      ->table('booking_table as booking')
                      ->Select([
                         'booking.id as id',
