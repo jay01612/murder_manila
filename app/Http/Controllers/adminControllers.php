@@ -610,10 +610,18 @@ class adminControllers extends Controller
                 )
                 ->leftjoin('themes as b', 'b.id', '=', 'a.theme_id')
                 ->where('a.is_booked', '=', 0)
-                ->where('a.is_expired', '=', 1)
                 ->get();
                     
         foreach($query as $out){
+            $expiry = Carbon::now()->toFormattedDateString('%M %d %Y');
+
+            $expirationData = booking::where('is_booked', 0)
+                                ->get('expiration_date');
+
+            if($expiry == $expirationData){
+                $DataExpired = booking::where('is_booked', 0)
+                ->update(['is_expired' => 1]);
+
                 $to_name = $out->name;
                 $to_email = $out->email;
                 $data =array(
@@ -632,8 +640,25 @@ class adminControllers extends Controller
                     $message->to($to_email, $to_name)
                             ->subject("Booking expired");
                     $message->from("murdermanilabilling@gmail.com", "Murder Manila");
-
                 });
+
+                if($DataExpired){
+                    return response()       ->json([
+                        'response'          =>  true    
+                    ],200);
+                }else{
+                    return response()       ->json([
+                        'rersponse'         =>  false,
+                        'message'           =>  'no expire booking'
+                    ],200);
+                }
+            }else{
+                return response()       ->json([
+                    'rersponse'         =>  false,
+                    'message'           =>  'no expired booking'
+                ],200); 
+            }
+                               
         }
 
     }
