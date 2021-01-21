@@ -221,7 +221,7 @@ class adminControllers extends Controller
 
                         'booking.reference_number as Reference_Number',
             
-                        DB::raw("CONCAT(booking.fname,' ',booking.lname) as Name"),
+                        DB::raw("CONCAT(booking.fname,' ',booking.lname) as name"),
                         'booking.email as email',
             
                         'theme.name as game',
@@ -281,7 +281,7 @@ class adminControllers extends Controller
 
                         'booking.reference_number as Reference_Number',
             
-                        DB::raw("CONCAT(booking.fname,' ',booking.lname) as Name"),
+                        DB::raw("CONCAT(booking.fname,' ',booking.lname) as name"),
                         'booking.email as email',
             
                         'theme.name as game',
@@ -327,7 +327,7 @@ class adminControllers extends Controller
 
                         'booking.reference_number as Reference_Number',
             
-                        DB::raw("CONCAT(booking.fname,' ',booking.lname) as Name"),
+                        DB::raw("CONCAT(booking.fname,' ',booking.lname) as name"),
                         'booking.email as email',
             
                         'theme.name as game',
@@ -617,28 +617,34 @@ class adminControllers extends Controller
     }
 
     public function expiredBookingEmail (Request $request){
-        $query = DB::connection('mysql')
-                ->table('booking_table as a')
-                ->select(
-                    'a.email as email',
+        // $query = DB::connection('mysql')
+        //         ->table('booking_table as a')
+        //         ->select(
+        //             'a.email as email',
 
-                    DB::raw("CONCAT(a.lname,',',a.fname) as name"),
-                    'a.reference_number as referenceNumber',
-                    'a.mobile_number as contactNumber',
-                    'a.book_date as date',
-                    'a.book_time as time',
+        //             DB::raw("CONCAT(a.lname,',',a.fname) as name"),
+        //             'a.reference_number as referenceNumber',
+        //             'a.mobile_number as contactNumber',
+        //             'a.book_date as date',
+        //             'a.book_time as time',
                     
-                    'a.maxpax as maxpax',
-                    'a.venue as venue',
-                    'b.name as theme',
-                    'a.initial_payment as downpayment',
-                    'a.total_amount as total_amount'
+        //             'a.maxpax as maxpax',
+        //             'a.venue as venue',
+        //             'b.name as theme',
+        //             'a.initial_payment as downpayment',
+        //             'a.total_amount as total_amount'
                     
-                )
-                ->leftjoin('themes as b', 'b.id', '=', 'a.theme_id')
-                ->where('a.is_booked', '=', 0)
-                ->get();
-                    
+        //         )
+        //         ->leftjoin('themes as b', 'b.id', '=', 'a.theme_id')
+        //         ->where('a.is_booked', '=', 0)
+        //         ->get();
+        return $query = booking::where('created_at', '<', Carbon::now())
+                        ->where('is_booked',0)
+                        ->where('is_cancelled', 0)
+                        ->where('is_initial_paid', 0)
+                        ->where('is_fully_paid', 0)
+                        ->where('is_paid',0)
+                        ->get();
         foreach($query as $out){
             
             $to_name = $out->name;
@@ -662,31 +668,31 @@ class adminControllers extends Controller
             });                
         }
 
-        $expiry = Carbon::now()->toFormattedDateString('%M %d %Y');
+        // $expiry = Carbon::now()->toFormattedDateString('%M %d %Y');
 
-        $expirationData = booking::where('is_booked', 0)
-                            ->get('expiration_date');
+        // $expirationData = booking::where('is_booked', 0)
+        //                     ->get('expiration_date');
 
-        if($expiry == $expirationData){
-            $DataExpired = booking::where('is_booked', 0)
-            ->update(['is_expired' => 1])->delete();
+        // if($expiry == $expirationData){
+        //     $DataExpired = booking::where('is_booked', 0)
+        //     ->update(['is_expired' => 1])->delete();
 
-            if($DataExpired){
-                return response()       ->json([
-                    'response'          =>  true    
-                ],200);
-            }else{
-                return response()       ->json([
-                    'rersponse'         =>  false,
-                    'message'           =>  'no expire booking'
-                ],200);
-            }
-        }else{
-            return response()       ->json([
-                'rersponse'         =>  false,
-                'message'           =>  'no expired booking'
-            ],200); 
-        }
+        //     if($DataExpired){
+        //         return response()       ->json([
+        //             'response'          =>  true    
+        //         ],200);
+        //     }else{
+        //         return response()       ->json([
+        //             'rersponse'         =>  false,
+        //             'message'           =>  'no expire booking'
+        //         ],200);
+        //     }
+        // }else{
+        //     return response()       ->json([
+        //         'rersponse'         =>  false,
+        //         'message'           =>  'no expired booking'
+        //     ],200); 
+        // }
 
     }
 

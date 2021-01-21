@@ -18,11 +18,13 @@ class BookingTable extends Migration
 
             $table->string('reference_number');
            
+            $table->date('reserved_date');
             $table->date('book_date');
             $table->date('end_date');
             $table->time('book_time');
             $table->time('end_time');
             $table->date('expiration_date');
+            
            
             $table->bigInteger('theme_id')->unsigned();
             $table->foreign('theme_id')->references('id')->on('themes');

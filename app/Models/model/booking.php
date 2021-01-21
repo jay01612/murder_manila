@@ -17,6 +17,7 @@ class booking extends Model
 
     protected $fillable =[
         'reference_number',
+        'reserved_date',
         'book_date',
         'end_date',
         'book_time',
