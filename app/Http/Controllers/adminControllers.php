@@ -757,6 +757,9 @@ class adminControllers extends Controller
                 $message->from("murdermanilabilling@gmail.com", "Murder Manila");
             });
         }
+        return response()   ->json([
+            'response'      =>  true,
+        ],200);
     }
         // $checkDone = Carbon::now()->format('h:i:s');
         // $doneBooking = booking::where('book_date', $request->book_date)
