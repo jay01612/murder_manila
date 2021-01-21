@@ -613,10 +613,7 @@ class adminControllers extends Controller
                 ->get();
                     
         foreach($query as $out){
-            $expiry = Carbon::now()->toFormattedDateString('%M %d %Y');
-
-            $expirationData = booking::where('is_booked', 0)
-                                ->get('expiration_date');
+            
             $to_name = $out->name;
             $to_email = $out->email;
             $data =array(
@@ -635,28 +632,33 @@ class adminControllers extends Controller
                 $message->to($to_email, $to_name)
                         ->subject("Booking expired");
                 $message->from("murdermanilabilling@gmail.com", "Murder Manila");
-            });
-            if($expiry == $expirationData){
-                $DataExpired = booking::where('is_booked', 0)
-                ->update(['is_expired' => 1])->delete();
+            });                
+        }
 
-                if($DataExpired){
-                    return response()       ->json([
-                        'response'          =>  true    
-                    ],200);
-                }else{
-                    return response()       ->json([
-                        'rersponse'         =>  false,
-                        'message'           =>  'no expire booking'
-                    ],200);
-                }
+        $expiry = Carbon::now()->toFormattedDateString('%M %d %Y');
+
+            $expirationData = booking::where('is_booked', 0)
+                                ->get('expiration_date');
+                                
+        if($expiry == $expirationData){
+            $DataExpired = booking::where('is_booked', 0)
+            ->update(['is_expired' => 1])->delete();
+
+            if($DataExpired){
+                return response()       ->json([
+                    'response'          =>  true    
+                ],200);
             }else{
                 return response()       ->json([
                     'rersponse'         =>  false,
-                    'message'           =>  'no expired booking'
-                ],200); 
+                    'message'           =>  'no expire booking'
+                ],200);
             }
-                               
+        }else{
+            return response()       ->json([
+                'rersponse'         =>  false,
+                'message'           =>  'no expired booking'
+            ],200); 
         }
 
     }
@@ -686,9 +688,7 @@ class adminControllers extends Controller
                 ->get();
                     
         foreach($query as $out){
-            $checkDone = Carbon::now()->format('h:i:s');
-            $doneBooking = booking::where('is_booked', 1)
-                           ->get('end_time');
+           
             $to_name = $out->name;
             $to_email = $out->email;
             $data =array(
@@ -708,29 +708,32 @@ class adminControllers extends Controller
                         ->subject("Finish booking");
                 $message->from("murdermanilabilling@gmail.com", "Murder Manila");
             });
-           
-            if($checkDone == $doneBooking){
-                $DataDone = booking::where('is_booked', 1)
-                ->update(['is_done' => 1])->delete();
-                if($DataDone){
-                    return response()       ->json([
-                        'response'          =>  true    
-                    ],200);
-                }else{
-                    return response()       ->json([
-                        'rersponse'         =>  false,
-                        'message'           =>  'no booking done'
-                    ],200);
-                }
+        }
+
+        $checkDone = Carbon::now()->format('h:i:s');
+        $doneBooking = booking::where('is_booked', 1)
+                       ->get('end_time');
+
+    
+        if($checkDone == $doneBooking){
+            $DataDone = booking::where('is_booked', 1)
+            ->update(['is_done' => 1])->delete();
+            if($DataDone){
+                return response()       ->json([
+                    'response'          =>  true    
+                ],200);
             }else{
                 return response()       ->json([
                     'rersponse'         =>  false,
                     'message'           =>  'no booking done'
-                ],200); 
+                ],200);
             }
-                               
-        }
-
+        }else{
+            return response()       ->json([
+                'rersponse'         =>  false,
+                'message'           =>  'no booking done'
+            ],200); 
+        }                              
     }
 
 }
