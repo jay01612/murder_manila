@@ -173,7 +173,9 @@ class adminControllers extends Controller
         // if(Auth::User()->position_id == 1 || Auth::User()->position_id == 2 || Auth::User()->position_id == 3){
 
             $query = User::getPendingBookings($request);
-           
+            //$query = booking::where('is_booked', '=', 0)->where('is_cancelled', '=', 0 )->get();
+
+
             if($query){
 
                 return response()   ->json([
@@ -226,7 +228,7 @@ class adminControllers extends Controller
                       
                         DB::raw("DATE_FORMAT(booking.book_date, '%M %d %Y') as date"),
                         DB::raw("TIME_FORMAT(booking.book_time, '%h:%i %p') as time"),
-                        DB::raw("TIME_FORMAT(booking.end_time, '%h:%i %p') as end"),
+                        DB::raw("TIME_FORMAT(booking.end_time, '%h:%i %p') as end_time"),
                         DB::raw("DATE_FORMAT(booking.expiration_date, '%M %d %Y') as expiration_date"),
                         'booking.venue as venue',
                         'booking.maxpax as maxpax',
@@ -286,7 +288,7 @@ class adminControllers extends Controller
                       
                         DB::raw("DATE_FORMAT(booking.book_date, '%M %d %Y') as date"),
                         DB::raw("TIME_FORMAT(booking.book_time, '%h:%i %p') as time"),
-                        DB::raw("TIME_FORMAT(booking.end_time, '%h:%i %p') as end"),
+                        DB::raw("TIME_FORMAT(booking.end_time, '%h:%i %p') as end_time"),
                         DB::raw("DATE_FORMAT(booking.expiration_date, '%M %d %Y') as expiration_date"),
                         'booking.venue as venue',
                         'booking.maxpax as maxpax',
@@ -323,7 +325,7 @@ class adminControllers extends Controller
                     ->select([
                         'booking.id as id',
 
-                        'booking.reference_number as reference_number',
+                        'booking.reference_number as Reference_Number',
             
                         DB::raw("CONCAT(booking.fname,' ',booking.lname) as name"),
                         'booking.email as email',
@@ -332,7 +334,7 @@ class adminControllers extends Controller
                       
                         DB::raw("DATE_FORMAT(booking.book_date, '%M %d %Y') as date"),
                         DB::raw("TIME_FORMAT(booking.book_time, '%h:%i %p') as time"),
-                        DB::raw("TIME_FORMAT(booking.end_time, '%h:%i %p') as end"),
+                        DB::raw("TIME_FORMAT(booking.end_time, '%h:%i %p') as end_time"),
                         DB::raw("DATE_FORMAT(booking.expiration_date, '%M %d %Y') as expiration_date"),
                         'booking.venue as venue',
                         'booking.maxpax as maxpax',
@@ -701,52 +703,59 @@ class adminControllers extends Controller
     
 
     public function doneBookingEmail (Request $request){
-        // $query = DB::connection('mysql')
-        //         ->table('booking_table as a')
-        //         ->select(
-        //             'a.email as email',
+        return $query = DB::connection('mysql')
+                ->table('booking_table as a')
+                ->select(
+                    'a.email as email',
 
-        //             DB::raw("CONCAT(a.lname,',',a.fname) as name"),
-        //             'a.reference_number as referenceNumber',
-        //             'a.mobile_number as contactNumber',
-        //             'a.book_date as date',
-        //             'a.book_time as time',
+                    DB::raw("CONCAT(a.lname,',',a.fname) as name"),
+                    'a.reference_number as referenceNumber',
+                    'a.mobile_number as contactNumber',
+                    'a.book_date as date',
+                    'a.book_time as time',
                     
-        //             'a.maxpax as maxpax',
-        //             'a.venue as venue',
-        //             'b.name as theme',
-        //             'a.initial_payment as downpayment',
-        //             'a.total_amount as total_amount'
+                    'a.maxpax as maxpax',
+                    'a.venue as venue',
+                    'b.name as theme',
+                    'a.initial_payment as downpayment',
+                    'a.total_amount as total_amount'
                     
-        //         )
-        //         ->leftjoin('themes as b', 'b.id', '=', 'a.theme_id')
-        //         ->where('a.is_booked', '=', 1)
-        //         ->where('a.deleted_at', '=', null)
-        //         ->get();
-        $query = booking::where('book_date', '=', Carbon::now()->format('Y-m-d'))
-                 ->where('end_time', '=', Carbon::now()->format('H:i:s'))
-                 ->where('is_booked',1)
-                 ->where('is_cancelled', 0)
-                 ->where('is_initial_paid', 1)
-                 ->where('is_fully_paid', 1)
-                 ->where('is_paid',0)
-                 ->get();           
+                )
+                ->leftjoin('themes as b', 'b.id', '=', 'a.theme_id')
+                ->where('book_date', '=', Carbon::now()->format('Y-m-d'))
+                ->where('end_time', '=', Carbon::now()->format('H:i:s'))
+                ->where('a.is_booked', '=', 1)
+                ->where('is_cancelled', 0)
+                ->where('is_initial_paid', 1)
+                ->where('is_fully_paid', 1)
+                ->where('is_paid',0)
+                ->where('a.deleted_at', '=', null)
+                ->get();
+            $updateData = booking::where('id', $out->id)
+            ->update(['is_done' => 1]);
+        // $query = booking::where('book_date', '=', Carbon::now()->format('Y-m-d'))
+        //          ->where('end_time', '=', Carbon::now()->format('H:i:s'))
+        //          ->where('is_booked',1)
+        //          ->where('is_cancelled', 0)
+        //          ->where('is_initial_paid', 1)
+        //          ->where('is_fully_paid', 1)
+        //          ->where('is_paid',0)
+        //          ->get();           
         foreach($query as $out){
             $deleteData = booking::where('id', $out->id)->delete();
-            $updateData = booking::where('id', $out->id)
-                          ->update(['is_done' => 1]);
-            $to_name = $out->fname." ".$out->lname;
+            
+            $to_name = $out->name;
             $to_email = $out->email;
             $data =array(
-                "reference_number"   => $out->reference_number,
-                "name"               => $out->fname." ".$out->lname,
-                "theme_id"           => $out->theme_id,
-                "book_date"          => $out->book_date,
-                "book_time"          => $out->book_time,
-                "maxpax"             => $out->maxpax,
-                "venue"              => $out->venue,
-                "initial_payment"    => $out->initial_payment,
-                "total_amount"       => $out->total_amount
+                "referenceNumber"   => $out->referenceNumber,
+                "name"              => $out->name,
+                "theme"             => $out->theme,
+                "date"              => $out->date,
+                "time"              => $out->time,
+                "maxpax"            => $out->maxpax,
+                "venue"             => $out->venue,
+                "downpayment"       => $out->downpayment,
+                "total_amount"      => $out->total_amount
             );
             
             Mail::send("doneemailbooking", $data, function($message) use ($to_name, $to_email){
