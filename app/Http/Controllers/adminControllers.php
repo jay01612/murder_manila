@@ -703,7 +703,7 @@ class adminControllers extends Controller
     
 
     public function doneBookingEmail (Request $request){
-        return $query = DB::connection('mysql')
+        $query = DB::connection('mysql')
                 ->table('booking_table as a')
                 ->select(
                     'a.email as email',
@@ -722,14 +722,13 @@ class adminControllers extends Controller
                     
                 )
                 ->leftjoin('themes as b', 'b.id', '=', 'a.theme_id')
-                //->where('book_date', '=', Carbon::now()->format('Y-m-d'))
-                //->where('end_time', '=', Carbon::now()->format('H:i:s'))
+                ->where('book_date', '=', Carbon::now()->format('Y-m-d'))
+                ->where('end_time', '=', Carbon::now()->format('H:i:s'))
                 ->where('a.is_booked', '=', 1)
                 ->where('is_cancelled', 0)
                 ->where('a.deleted_at', '=', null)
                 ->get();
-            $updateData = booking::where('id', $request->id)
-            ->update(['is_done' => 1]);
+            
         // $query = booking::where('book_date', '=', Carbon::now()->format('Y-m-d'))
         //          ->where('end_time', '=', Carbon::now()->format('H:i:s'))
         //          ->where('is_booked',1)
@@ -739,7 +738,11 @@ class adminControllers extends Controller
         //          ->where('is_paid',0)
         //          ->get();           
         foreach($query as $out){
+
+            $updateData = booking::where('id', $request->id)
+            ->update(['is_done' => 1]);
             $deleteData = booking::where('id', $out->id)->delete();
+            
             
             $to_name = $out->name;
             $to_email = $out->email;
