@@ -219,7 +219,7 @@ class adminControllers extends Controller
                      ->Select([
                         'booking.id as id',
 
-                        'booking.reference_number as Reference_Number',
+                        'booking.reference_number as reference_number',
             
                         DB::raw("CONCAT(booking.fname,' ',booking.lname) as name"),
                         'booking.email as email',
@@ -279,7 +279,7 @@ class adminControllers extends Controller
                      ->select([
                         'booking.id as id',
 
-                        'booking.reference_number as Reference_Number',
+                        'booking.reference_number as reference_number',
             
                         DB::raw("CONCAT(booking.fname,' ',booking.lname) as name"),
                         'booking.email as email',
@@ -325,7 +325,7 @@ class adminControllers extends Controller
                     ->select([
                         'booking.id as id',
 
-                        'booking.reference_number as Reference_Number',
+                        'booking.reference_number as reference_number',
             
                         DB::raw("CONCAT(booking.fname,' ',booking.lname) as name"),
                         'booking.email as email',
