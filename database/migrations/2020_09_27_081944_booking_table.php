@@ -48,9 +48,10 @@ class BookingTable extends Migration
             $table->tinyInteger('is_paid')->default(0);
             
             $table->bigInteger('updated_by')->nullable();
-                
-            
+           
+            $table->softDeletes();
             $table->timestamps();
+            
         });
     }
 

@@ -4,12 +4,14 @@ namespace App\Models\model;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Notifications\Notifiable;
 use Carbon\Carbon;
 use DB;
 
 class booking extends Model
 {
-    use HasFactory;
+    use HasFactory, Notifiable, softDeletes;
 
     protected $table = 'booking_table';
 
@@ -32,7 +34,8 @@ class booking extends Model
         'is_expired',
         'is_initial_paid',
         'is_fully_paid',
-        'is_paid'
+        'is_paid',
+        'deleted_at'
 
     ];
 
