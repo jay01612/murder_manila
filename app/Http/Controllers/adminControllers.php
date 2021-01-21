@@ -284,7 +284,7 @@ class adminControllers extends Controller
                         DB::raw("CONCAT(booking.fname,' ',booking.lname) as name"),
                         'booking.email as email',
             
-                        'theme.name as game',
+                        'theme.name as theme',
                       
                         DB::raw("DATE_FORMAT(booking.book_date, '%M %d %Y') as date"),
                         DB::raw("TIME_FORMAT(booking.book_time, '%H:%i %p') as time"),
