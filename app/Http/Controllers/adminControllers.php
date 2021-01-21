@@ -250,8 +250,8 @@ class adminControllers extends Controller
                         $data[$out->id]=[
                             'name'                  => $out->fname.' '.$out->lname,
                             'reference_number'      => $out->reference_number,
-                            'start'                 => $out->start,
-                            'end'                   => $out->end,
+                            'start'                 => $out->book_date.' '.$out->start,
+                            'end'                   => $out->book_date.' '.$out->end,
                             'book_date'             => $out->book_date,
                             'theme'                 => $out->theme,
                             'maxpax'                => $out->maxpax,
