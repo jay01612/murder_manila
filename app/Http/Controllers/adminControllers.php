@@ -731,7 +731,7 @@ class adminControllers extends Controller
                 ->where('is_paid',0)
                 ->where('a.deleted_at', '=', null)
                 ->get();
-            $updateData = booking::where('id', $out->id)
+            $updateData = booking::where('id', $request->id)
             ->update(['is_done' => 1]);
         // $query = booking::where('book_date', '=', Carbon::now()->format('Y-m-d'))
         //          ->where('end_time', '=', Carbon::now()->format('H:i:s'))
