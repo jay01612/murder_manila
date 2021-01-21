@@ -228,7 +228,7 @@ class adminControllers extends Controller
             
                         'theme.name as theme',
                       
-                         DB::raw("DATE_FORMAT(booking.book_date, '%Y-%m-%d') as book_date"),
+                        DB::raw("DATE_FORMAT(booking.book_date, '%Y-%m-%d') as book_date"),
                         DB::raw("TIME_FORMAT(booking.book_time, '%H:%i') as start"),
                         DB::raw("TIME_FORMAT(booking.end_time, '%H:%i') as end"),
                         DB::raw("DATE_FORMAT(booking.expiration_date, '%M %d %Y') as expiration_date"),
@@ -247,7 +247,7 @@ class adminControllers extends Controller
 
                      $data = [];
                      foreach($query as $out){
-                        $data[$out->name]=[
+                        $data[$out->id]=[
                             'name'                  => $out->fname.' '.$out->lname,
                             'reference_number'      => $out->reference_number,
                             'start'                 => $out->start,
@@ -726,8 +726,6 @@ class adminControllers extends Controller
                     
                 )
                 ->leftjoin('themes as b', 'b.id', '=', 'a.theme_id')
-                ->where('book_date', '=', Carbon::now()->format('Y-m-d'))
-                ->where('end_time', '=', Carbon::now()->format('H:i:s'))
                 ->where('a.is_booked', '=', 1)
                 ->where('is_cancelled', 0)
                 ->where('a.deleted_at', '=', null)
@@ -744,7 +742,10 @@ class adminControllers extends Controller
         foreach($query as $out){
 
             $updateData = booking::where('id', $request->id)
-            ->update(['is_done' => 1]);
+                          ->where('book_date', '=', Carbon::now()->format('Y-m-d'))
+                          ->where('end_time', '=', Carbon::now()->format('H:i:s'))
+                          ->update(['is_done' => 1]);
+                          
             $deleteData = booking::where('id', $out->id)->delete();
             
             
