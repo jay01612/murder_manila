@@ -222,6 +222,7 @@ class adminControllers extends Controller
                         'booking.reference_number as reference_number',
             
                         DB::raw("CONCAT(booking.fname,' ',booking.lname) as name"),
+                        'booking.mobile_number as mobile_number',
                         'booking.email as email',
             
                         'theme.name as theme',
