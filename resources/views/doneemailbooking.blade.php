@@ -20,14 +20,14 @@
 		<img src="https://i.ibb.co/c3yKXFM/mmlogo.png" width="150" height="150">
 		<p><h4>This is an automatic email, please do not reply.</h4></p><br>
 		<h3>Dear {{ $name }}</h3>
-		<p>Thank you for playing Murder Manila {{ $theme }} hope you had fun and see you on your next game</p>
+		<p>Thank you for playing Murder Manila {{ $theme_id }} hope you had fun and see you on your next game</p>
         <p>this is your booking details:</p>
 		<p> Name: {{ $name }}<br>
-            Reference Number: {{ $referenceNumber }}<br>
+            Reference Number: {{ $reference_number }}<br>
             Full Payment: {{$total_amount}}<br>
-            Date: {{ $date }}<br>
-            Time: {{ $time }}<br>
-            Theme: {{ $theme}}<br>
+            Date: {{ $book_date }}<br>
+            Time: {{ $book_time }}<br>
+            Theme: {{ $theme_id}}<br>
             Head Count: {{ $maxpax }}<br>
             Venue: {{ $venue }}</p>
 			

@@ -173,9 +173,7 @@ class adminControllers extends Controller
         // if(Auth::User()->position_id == 1 || Auth::User()->position_id == 2 || Auth::User()->position_id == 3){
 
             $query = User::getPendingBookings($request);
-            //$query = booking::where('is_booked', '=', 0)->where('is_cancelled', '=', 0 )->get();
-
-
+           
             if($query){
 
                 return response()   ->json([
@@ -228,7 +226,7 @@ class adminControllers extends Controller
                       
                         DB::raw("DATE_FORMAT(booking.book_date, '%M %d %Y') as date"),
                         DB::raw("TIME_FORMAT(booking.book_time, '%h:%i %p') as time"),
-                        DB::raw("TIME_FORMAT(booking.end_time, '%h:%i %p') as end_time"),
+                        DB::raw("TIME_FORMAT(booking.end_time, '%h:%i %p') as end"),
                         DB::raw("DATE_FORMAT(booking.expiration_date, '%M %d %Y') as expiration_date"),
                         'booking.venue as venue',
                         'booking.maxpax as maxpax',
@@ -288,7 +286,7 @@ class adminControllers extends Controller
                       
                         DB::raw("DATE_FORMAT(booking.book_date, '%M %d %Y') as date"),
                         DB::raw("TIME_FORMAT(booking.book_time, '%h:%i %p') as time"),
-                        DB::raw("TIME_FORMAT(booking.end_time, '%h:%i %p') as end_time"),
+                        DB::raw("TIME_FORMAT(booking.end_time, '%h:%i %p') as end"),
                         DB::raw("DATE_FORMAT(booking.expiration_date, '%M %d %Y') as expiration_date"),
                         'booking.venue as venue',
                         'booking.maxpax as maxpax',
@@ -334,7 +332,7 @@ class adminControllers extends Controller
                       
                         DB::raw("DATE_FORMAT(booking.book_date, '%M %d %Y') as date"),
                         DB::raw("TIME_FORMAT(booking.book_time, '%h:%i %p') as time"),
-                        DB::raw("TIME_FORMAT(booking.end_time, '%h:%i %p') as end_time"),
+                        DB::raw("TIME_FORMAT(booking.end_time, '%h:%i %p') as end"),
                         DB::raw("DATE_FORMAT(booking.expiration_date, '%M %d %Y') as expiration_date"),
                         'booking.venue as venue',
                         'booking.maxpax as maxpax',
@@ -737,18 +735,18 @@ class adminControllers extends Controller
             $deleteData = booking::where('id', $out->id)->delete();
             $updateData = booking::where('id', $out->id)
                           ->update(['is_done' => 1]);
-            $to_name = $out->name;
+            $to_name = $out->fname." ".$out->lname;
             $to_email = $out->email;
             $data =array(
-                "referenceNumber"   => $out->referenceNumber,
-                "name"              => $out->name,
-                "theme"             => $out->theme,
-                "date"              => $out->date,
-                "time"              => $out->time,
-                "maxpax"            => $out->maxpax,
-                "venue"             => $out->venue,
-                "downpayment"       => $out->downpayment,
-                "total_amount"      => $out->total_amount
+                "reference_number"   => $out->reference_number,
+                "name"               => $out->fname." ".$out->lname,
+                "theme_id"           => $out->theme_id,
+                "book_date"          => $out->book_date,
+                "book_time"          => $out->book_time,
+                "maxpax"             => $out->maxpax,
+                "venue"              => $out->venue,
+                "initial_payment"    => $out->initial_payment,
+                "total_amount"       => $out->total_amount
             );
             
             Mail::send("doneemailbooking", $data, function($message) use ($to_name, $to_email){
