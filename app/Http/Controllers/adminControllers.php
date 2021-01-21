@@ -215,22 +215,30 @@ class adminControllers extends Controller
         // if(Auth::User()->position_id == 1 || Auth::User()->position_id == 2 || Auth::User()->position_id ==3){
 
            $query = DB::connection('mysql')
-                     ->table('booking_table as a')
+                     ->table('booking_table as booking')
                      ->Select([
-                        'a.reference_number as reference_number',
-                        'a.book_date as start',
-                        'a.end_date as end_date',
-                        'a.book_time as time',
-                        'a.end_time as end',
-                        'b.name as theme',
-                        'a.maxpax as maxpax',
-                        'a.venue as venue',
-                        DB::raw("CONCAT(a.fname,',',a.lname) as name"),
-                        'a.mobile_number as mobile_number',
-                        'a.email as email',
+                        'booking.id as id',
+
+                        'booking.reference_number as Reference_Number',
+            
+                        DB::raw("CONCAT(booking.fname,' ',booking.lname) as Name"),
+                        'booking.email as email',
+            
+                        'theme.name as game',
+                      
+                        DB::raw("DATE_FORMAT(booking.book_date, '%M %d %Y') as date"),
+                        DB::raw("TIME_FORMAT(booking.book_time, '%h:%i %p') as time"),
+                        DB::raw("TIME_FORMAT(booking.end_time, '%h:%i %p') as end_time"),
+                        DB::raw("DATE_FORMAT(booking.expiration_date, '%M %d %Y') as expiration_date"),
+                        'booking.venue as venue',
+                        'booking.maxpax as maxpax',
+            
+                        'booking.initial_payment as Downpayment',
+                        'booking.total_amount as Total_Amount',
+                        'booking.is_paid as is_paid'
                         
                      ])
-                     ->leftjoin('themes as b', 'a.theme_id', '=', 'b.id')
+                     ->leftjoin('themes as theme', 'booking.theme_id', '=', 'theme.id')
                      ->where('book_date', $request->book_date)
                      ->orderBy('book_time', 'asc')
                      ->get();
@@ -267,22 +275,31 @@ class adminControllers extends Controller
          // if(Auth::User()->position_id == 1 || Auth::User()->position_id == 2 || Auth::User()->position_id ==3){
 
             $query = DB::connection('mysql')
-                     ->table('booking_table as a')
+                     ->table('booking_table as booking')
                      ->select([
-                            'a.reference_number as reference_number',
-                            'a.book_date as start',
-                            'a.end_date as end',
-                            'a.book_time as time',
-                            'b.name as theme',
-                            'a.maxpax as maxpax',
-                            'a.venue as venue',
-                            DB::raw("CONCAT(a.lname,',',a.fname) as name"),
-                            'a.mobile_number as mobile_number',
-                            'a.email as email',
+                        'booking.id as id',
+
+                        'booking.reference_number as Reference_Number',
+            
+                        DB::raw("CONCAT(booking.fname,' ',booking.lname) as Name"),
+                        'booking.email as email',
+            
+                        'theme.name as game',
+                      
+                        DB::raw("DATE_FORMAT(booking.book_date, '%M %d %Y') as date"),
+                        DB::raw("TIME_FORMAT(booking.book_time, '%h:%i %p') as time"),
+                        DB::raw("TIME_FORMAT(booking.end_time, '%h:%i %p') as end_time"),
+                        DB::raw("DATE_FORMAT(booking.expiration_date, '%M %d %Y') as expiration_date"),
+                        'booking.venue as venue',
+                        'booking.maxpax as maxpax',
+            
+                        'booking.initial_payment as Downpayment',
+                        'booking.total_amount as Total_Amount',
+                        'booking.is_paid as is_paid'
                     ])
-                    ->leftjoin('themes as b', 'a.theme_id', '=', 'b.id')
-                     ->where('is_booked', '=', 0)
-                     ->where('is_expired', '=', 1)
+                    ->leftjoin('themes as theme', 'booking.theme_id', '=', 'theme.id')
+                     ->where('booking.is_booked', '=', 0)
+                     ->where('booking.is_expired', '=', 1)
                      ->get();
 
             if($query){
@@ -304,22 +321,32 @@ class adminControllers extends Controller
         // if(Auth::User()->position_id == 1 || Auth::User()->position_id == 2 || Auth::User()->position_id ==3){
 
            $query = DB::connection('mysql')
-                    ->table('booking_table as a')
+                    ->table('booking_table as booking')
                     ->select([
-                           'a.reference_number as reference_number',
-                           'a.book_date as start',
-                           'a.end_date as end',
-                           'a.book_time as time',
-                           'a.theme_id as theme',
-                           'a.maxpax as maxpax',
-                           'a.venue as venue',
-                           DB::raw("CONCAT(a.lname,',',a.fname) as name"),
-                           'a.mobile_number as mobile_number',
-                           'a.email as email',
+                        'booking.id as id',
+
+                        'booking.reference_number as Reference_Number',
+            
+                        DB::raw("CONCAT(booking.fname,' ',booking.lname) as Name"),
+                        'booking.email as email',
+            
+                        'theme.name as game',
+                      
+                        DB::raw("DATE_FORMAT(booking.book_date, '%M %d %Y') as date"),
+                        DB::raw("TIME_FORMAT(booking.book_time, '%h:%i %p') as time"),
+                        DB::raw("TIME_FORMAT(booking.end_time, '%h:%i %p') as end_time"),
+                        DB::raw("DATE_FORMAT(booking.expiration_date, '%M %d %Y') as expiration_date"),
+                        'booking.venue as venue',
+                        'booking.maxpax as maxpax',
+            
+                        'booking.initial_payment as Downpayment',
+                        'booking.total_amount as Total_Amount',
+                        'booking.is_paid as is_paid'
                    ])
-                    ->where('is_booked', '=', 1)
-                    ->where('is_done', '=', 1)
-                    ->where('is_expired', '=', 0)
+                    ->leftjoin('themes as theme', 'booking.theme_id', '=', 'theme.id')
+                    ->where('booking.is_booked', '=', 1)
+                    ->where('booking.is_done', '=', 1)
+                    ->where('booking.is_expired', '=', 0)
                     ->get();
 
            if($query){
@@ -637,9 +664,9 @@ class adminControllers extends Controller
 
         $expiry = Carbon::now()->toFormattedDateString('%M %d %Y');
 
-            $expirationData = booking::where('is_booked', 0)
-                                ->get('expiration_date');
-                                
+        $expirationData = booking::where('is_booked', 0)
+                            ->get('expiration_date');
+
         if($expiry == $expirationData){
             $DataExpired = booking::where('is_booked', 0)
             ->update(['is_expired' => 1])->delete();
@@ -711,7 +738,7 @@ class adminControllers extends Controller
         }
 
         $checkDone = Carbon::now()->format('h:i:s');
-        $doneBooking = booking::where('is_booked', 1)
+        $doneBooking = booking::where('book_date', $request->book_date)
                        ->get('end_time');
 
     

@@ -158,12 +158,14 @@ class User extends Authenticatable
           
             DB::raw("DATE_FORMAT(booking.book_date, '%M %d %Y') as date"),
             DB::raw("TIME_FORMAT(booking.book_time, '%h:%i %p') as time"),
+            DB::raw("TIME_FORMAT(booking.end_time, '%h:%i %p') as end_time"),
             DB::raw("DATE_FORMAT(booking.expiration_date, '%M %d %Y') as expiration_date"),
             'booking.venue as venue',
             'booking.maxpax as maxpax',
 
             'booking.initial_payment as Downpayment',
             'booking.total_amount as Total_Amount',
+            'booking.is_paid as is_paid'
 
         )
         ->leftjoin('themes as theme', 'booking.theme_id', '=', 'theme.id')
