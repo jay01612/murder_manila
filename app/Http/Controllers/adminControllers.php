@@ -727,6 +727,7 @@ class adminControllers extends Controller
                     
                 )
                 ->leftjoin('themes as b', 'b.id', '=', 'a.theme_id')
+                ->where('book_date', '<', Carbon::now()->addDays()->format('Y-m-d'))
                 ->where('a.is_booked', '=', 1)
                 ->where('is_cancelled', 0)
                 ->where('a.deleted_at', '=', null)
@@ -743,8 +744,6 @@ class adminControllers extends Controller
         foreach($query as $out){
 
             $updateData = booking::where('id', $request->id)
-                          ->where('book_date', '=', Carbon::now()->format('Y-m-d'))
-                          ->where('end_time', '=', Carbon::now()->format('H:i:s'))
                           ->update(['is_done' => 1]);
 
             $deleteData = booking::where('id', $out->id)->delete();
