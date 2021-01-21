@@ -624,6 +624,7 @@ class adminControllers extends Controller
         $query = DB::connection('mysql')
                 ->table('booking_table as a')
                 ->select(
+                    'a.id as id',
                     'a.email as email',
 
                     DB::raw("CONCAT(a.lname,',',a.fname) as name"),
@@ -643,7 +644,7 @@ class adminControllers extends Controller
                 ->where('expiration_date', '<', Carbon::now()->addDays()->format('Y-m-d'))
                 ->where('a.is_booked', '=', 0)
                 -where('a.is_cancelled', '=', 0)
-                ->where('a.paid', '=', 0)
+                ->where('a.is_paid', '=', 0)
                 ->get();
       
         foreach($query as $out){
