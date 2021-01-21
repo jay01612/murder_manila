@@ -358,8 +358,6 @@ class bookingController extends Controller
         }
     }
 
-    
-
     public function sendBilling(Request $request){
         $send_name = $request->fname . " " . $request->lname;
 
@@ -423,5 +421,7 @@ class bookingController extends Controller
         $message->from("murdermanilabilling@gmail.com","Online Billing Payment Required");
         });
 
-    } 
+    }
+
+
 }

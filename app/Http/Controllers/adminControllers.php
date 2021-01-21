@@ -622,27 +622,100 @@ class adminControllers extends Controller
                 $DataExpired = booking::where('is_booked', 0)
                 ->update(['is_expired' => 1]);
 
-                $to_name = $out->name;
-                $to_email = $out->email;
-                $data =array(
-                    "referenceNumber"   => $out->referenceNumber,
-                    "name"              => $out->name,
-                    "theme"             => $out->theme,
-                    "date"              => $out->date,
-                    "time"              => $out-> time,
-                    "maxpax"            => $out->maxpax,
-                    "venue"             => $out->venue,
-                    "downpayment"       => $out->downpayment,
-                    "total_amount"      => $out->total_amount
-                );
-                
-                Mail::send("expiredemail", $data, function($message) use ($to_name, $to_email){
-                    $message->to($to_email, $to_name)
-                            ->subject("Booking expired");
-                    $message->from("murdermanilabilling@gmail.com", "Murder Manila");
-                });
-
                 if($DataExpired){
+                    $to_name = $out->name;
+                    $to_email = $out->email;
+                    $data =array(
+                        "referenceNumber"   => $out->referenceNumber,
+                        "name"              => $out->name,
+                        "theme"             => $out->theme,
+                        "date"              => $out->date,
+                        "time"              => $out->time,
+                        "maxpax"            => $out->maxpax,
+                        "venue"             => $out->venue,
+                        "downpayment"       => $out->downpayment,
+                        "total_amount"      => $out->total_amount
+                    );
+                    
+                    Mail::send("expiredemail", $data, function($message) use ($to_name, $to_email){
+                        $message->to($to_email, $to_name)
+                                ->subject("Booking expired");
+                        $message->from("murdermanilabilling@gmail.com", "Murder Manila");
+                    });
+                    return response()       ->json([
+                        'response'          =>  true    
+                    ],200);
+                }else{
+                    return response()       ->json([
+                        'rersponse'         =>  false,
+                        'message'           =>  'no expire booking'
+                    ],200);
+                }
+            }else{
+                return response()       ->json([
+                    'rersponse'         =>  false,
+                    'message'           =>  'no expired booking'
+                ],200); 
+            }
+                               
+        }
+
+    }
+
+    public function doneBookingEmail (Request $request){
+        $query = DB::connection('mysql')
+                ->table('booking_table as a')
+                ->select(
+                    'a.email as email',
+
+                    DB::raw("CONCAT(a.lname,',',a.fname) as name"),
+                    'a.reference_number as referenceNumber',
+                    'a.mobile_number as contactNumber',
+                    'a.book_date as date',
+                    'a.book_time as time',
+                    
+                    'a.maxpax as maxpax',
+                    'a.venue as venue',
+                    'b.name as theme',
+                    'a.initial_payment as downpayment',
+                    'a.total_amount as total_amount'
+                    
+                )
+                ->leftjoin('themes as b', 'b.id', '=', 'a.theme_id')
+                ->where('a.is_booked', '=', 1)
+                ->get();
+                    
+        foreach($query as $out){
+            $checkDone = Carbon::now()->format('h:i:s');
+
+            $doneBooking = booking::where('is_booked', 1)
+                           ->get('end_time');
+
+            if($checkDone == $doneBooking){
+                $DataDone = booking::where('is_booked', 1)
+                ->update(['is_done' => 1]);
+
+                if($DataDone){
+                    $to_name = $out->name;
+                    $to_email = $out->email;
+                    $data =array(
+                        "referenceNumber"   => $out->referenceNumber,
+                        "name"              => $out->name,
+                        "theme"             => $out->theme,
+                        "date"              => $out->date,
+                        "time"              => $out->time,
+                        "maxpax"            => $out->maxpax,
+                        "venue"             => $out->venue,
+                        "downpayment"       => $out->downpayment,
+                        "total_amount"      => $out->total_amount
+                    );
+                    
+                    Mail::send("doneemailbooking", $data, function($message) use ($to_name, $to_email){
+                        $message->to($to_email, $to_name)
+                                ->subject("Finish booking");
+                        $message->from("murdermanilabilling@gmail.com", "Murder Manila");
+                    });
+
                     return response()       ->json([
                         'response'          =>  true    
                     ],200);
