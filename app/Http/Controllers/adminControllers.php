@@ -710,6 +710,7 @@ class adminControllers extends Controller
         $query = DB::connection('mysql')
                 ->table('booking_table as a')
                 ->select(
+                    'a.id as id',
                     'a.email as email',
 
                     DB::raw("CONCAT(a.lname,',',a.fname) as name"),
@@ -745,7 +746,7 @@ class adminControllers extends Controller
                           ->where('book_date', '=', Carbon::now()->format('Y-m-d'))
                           ->where('end_time', '=', Carbon::now()->format('H:i:s'))
                           ->update(['is_done' => 1]);
-                          
+
             $deleteData = booking::where('id', $out->id)->delete();
             
             
