@@ -719,13 +719,13 @@ class adminControllers extends Controller
                 }else{
                     return response()       ->json([
                         'rersponse'         =>  false,
-                        'message'           =>  'no expire booking'
+                        'message'           =>  'no booking done'
                     ],200);
                 }
             }else{
                 return response()       ->json([
                     'rersponse'         =>  false,
-                    'message'           =>  'no expired booking'
+                    'message'           =>  'no booking done'
                 ],200); 
             }
                                
