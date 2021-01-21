@@ -638,7 +638,7 @@ class adminControllers extends Controller
         //         ->leftjoin('themes as b', 'b.id', '=', 'a.theme_id')
         //         ->where('a.is_booked', '=', 0)
         //         ->get();
-        return $query = booking::where('created_at', '<', Carbon::now())
+        $query = booking::where('expiration_date', '=', Carbon::now()->format('Y-m-d'))
                         ->where('is_booked',0)
                         ->where('is_cancelled', 0)
                         ->where('is_initial_paid', 0)
@@ -646,7 +646,9 @@ class adminControllers extends Controller
                         ->where('is_paid',0)
                         ->get();
         foreach($query as $out){
-            
+            $deleteData = booking::where('id', $out->id)->delete();
+            $updateData = booking::where('id', $out->id)
+                          ->update(['is_expired' => 1]);
             $to_name = $out->name;
             $to_email = $out->email;
             $data =array(
@@ -667,6 +669,10 @@ class adminControllers extends Controller
                 $message->from("murdermanilabilling@gmail.com", "Murder Manila");
             });                
         }
+        return response()   ->json([
+            'response'      =>  true
+        ],200);
+    }
 
         // $expiry = Carbon::now()->toFormattedDateString('%M %d %Y');
 
@@ -694,34 +700,43 @@ class adminControllers extends Controller
         //     ],200); 
         // }
 
-    }
+    
 
     public function doneBookingEmail (Request $request){
-        $query = DB::connection('mysql')
-                ->table('booking_table as a')
-                ->select(
-                    'a.email as email',
+        // $query = DB::connection('mysql')
+        //         ->table('booking_table as a')
+        //         ->select(
+        //             'a.email as email',
 
-                    DB::raw("CONCAT(a.lname,',',a.fname) as name"),
-                    'a.reference_number as referenceNumber',
-                    'a.mobile_number as contactNumber',
-                    'a.book_date as date',
-                    'a.book_time as time',
+        //             DB::raw("CONCAT(a.lname,',',a.fname) as name"),
+        //             'a.reference_number as referenceNumber',
+        //             'a.mobile_number as contactNumber',
+        //             'a.book_date as date',
+        //             'a.book_time as time',
                     
-                    'a.maxpax as maxpax',
-                    'a.venue as venue',
-                    'b.name as theme',
-                    'a.initial_payment as downpayment',
-                    'a.total_amount as total_amount'
+        //             'a.maxpax as maxpax',
+        //             'a.venue as venue',
+        //             'b.name as theme',
+        //             'a.initial_payment as downpayment',
+        //             'a.total_amount as total_amount'
                     
-                )
-                ->leftjoin('themes as b', 'b.id', '=', 'a.theme_id')
-                ->where('a.is_booked', '=', 1)
-                ->where('a.deleted_at', '=', null)
-                ->get();
-                    
+        //         )
+        //         ->leftjoin('themes as b', 'b.id', '=', 'a.theme_id')
+        //         ->where('a.is_booked', '=', 1)
+        //         ->where('a.deleted_at', '=', null)
+        //         ->get();
+        $query = booking::where('book_date', '=', Carbon::now()->format('Y-m-d'))
+                 ->where('end_time', '=', Carbon::now()->format('H:i:s'))
+                 ->where('is_booked',1)
+                 ->where('is_cancelled', 0)
+                 ->where('is_initial_paid', 1)
+                 ->where('is_fully_paid', 1)
+                 ->where('is_paid',0)
+                 ->get();           
         foreach($query as $out){
-           
+            $deleteData = booking::where('id', $out->id)->delete();
+            $updateData = booking::where('id', $out->id)
+                          ->update(['is_done' => 1]);
             $to_name = $out->name;
             $to_email = $out->email;
             $data =array(
@@ -742,31 +757,31 @@ class adminControllers extends Controller
                 $message->from("murdermanilabilling@gmail.com", "Murder Manila");
             });
         }
-
-        $checkDone = Carbon::now()->format('h:i:s');
-        $doneBooking = booking::where('book_date', $request->book_date)
-                       ->get('end_time');
+    }
+        // $checkDone = Carbon::now()->format('h:i:s');
+        // $doneBooking = booking::where('book_date', $request->book_date)
+            //                ->get('end_time');
 
     
-        if($checkDone == $doneBooking){
-            $DataDone = booking::where('is_booked', 1)
-            ->update(['is_done' => 1])->delete();
-            if($DataDone){
-                return response()       ->json([
-                    'response'          =>  true    
-                ],200);
-            }else{
-                return response()       ->json([
-                    'rersponse'         =>  false,
-                    'message'           =>  'no booking done'
-                ],200);
-            }
-        }else{
-            return response()       ->json([
-                'rersponse'         =>  false,
-                'message'           =>  'no booking done'
-            ],200); 
-        }                              
-    }
+    //     if($checkDone == $doneBooking){
+    //         $DataDone = booking::where('is_booked', 1)
+    //         ->update(['is_done' => 1])->delete();
+    //         if($DataDone){
+    //             return response()       ->json([
+    //                 'response'          =>  true    
+    //             ],200);
+    //         }else{
+    //             return response()       ->json([
+    //                 'rersponse'         =>  false,
+    //                 'message'           =>  'no booking done'
+    //             ],200);
+    //         }
+    //     }else{
+    //         return response()       ->json([
+    //             'rersponse'         =>  false,
+    //             'message'           =>  'no booking done'
+    //         ],200); 
+    //     }                              
+    // }
 
 }
