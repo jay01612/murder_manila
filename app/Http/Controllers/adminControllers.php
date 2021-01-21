@@ -228,8 +228,8 @@ class adminControllers extends Controller
                         'theme.name as theme',
                       
                         DB::raw("DATE_FORMAT(booking.book_date, '%M %d %Y') as book_date"),
-                        DB::raw("TIME_FORMAT(booking.book_time, '%H:%i %p') as start"),
-                        DB::raw("TIME_FORMAT(booking.end_time, '%H:%i %p') as end"),
+                        DB::raw("TIME_FORMAT(booking.book_time, '%H:%i') as start"),
+                        DB::raw("TIME_FORMAT(booking.end_time, '%H:%i') as end"),
                         DB::raw("DATE_FORMAT(booking.expiration_date, '%M %d %Y') as expiration_date"),
                         'booking.venue as venue',
                         'booking.maxpax as maxpax',
@@ -248,6 +248,7 @@ class adminControllers extends Controller
                      foreach($query as $out){
                         $data[$out->name]=[
                             'reference_number'      => $out->reference_number,
+                            'book_date'             => $out->book_date,
                             'start'                 => $out->start,
                             'end'                   => $out->end,
                             'theme'                 => $out->theme,
@@ -288,8 +289,8 @@ class adminControllers extends Controller
                         'theme.name as theme',
                       
                         DB::raw("DATE_FORMAT(booking.book_date, '%M %d %Y') as date"),
-                        DB::raw("TIME_FORMAT(booking.book_time, '%H:%i %p') as time"),
-                        DB::raw("TIME_FORMAT(booking.end_time, '%H:%i %p') as end_time"),
+                        DB::raw("TIME_FORMAT(booking.book_time, '%H:%i') as time"),
+                        DB::raw("TIME_FORMAT(booking.end_time, '%H:%i') as end_time"),
                         DB::raw("DATE_FORMAT(booking.expiration_date, '%M %d %Y') as expiration_date"),
                         'booking.venue as venue',
                         'booking.maxpax as maxpax',
@@ -334,8 +335,8 @@ class adminControllers extends Controller
                         'theme.name as game',
                       
                         DB::raw("DATE_FORMAT(booking.book_date, '%M %d %Y') as date"),
-                        DB::raw("TIME_FORMAT(booking.book_time, '%H:%i %p') as time"),
-                        DB::raw("TIME_FORMAT(booking.end_time, '%H:%i %p') as end_time"),
+                        DB::raw("TIME_FORMAT(booking.book_time, '%H:%i') as time"),
+                        DB::raw("TIME_FORMAT(booking.end_time, '%H:%i') as end_time"),
                         DB::raw("DATE_FORMAT(booking.expiration_date, '%M %d %Y') as expiration_date"),
                         'booking.venue as venue',
                         'booking.maxpax as maxpax',
