@@ -214,7 +214,7 @@ class adminControllers extends Controller
     public function getDailyBookings(Request $request){
         // if(Auth::User()->position_id == 1 || Auth::User()->position_id == 2 || Auth::User()->position_id ==3){
 
-           $query = DB::connection('mysql')
+           return $query = DB::connection('mysql')
                      ->table('booking_table as booking')
                      ->Select([
                         'booking.id as id',
@@ -226,9 +226,9 @@ class adminControllers extends Controller
             
                         'theme.name as game',
                       
-                        DB::raw("DATE_FORMAT(booking.book_date, '%M %d %Y') as date"),
-                        DB::raw("TIME_FORMAT(booking.book_time, '%h:%i %p') as time"),
-                        DB::raw("TIME_FORMAT(booking.end_time, '%h:%i %p') as end_time"),
+                        DB::raw("DATE_FORMAT(booking.book_date, '%M %d %Y') as book_date"),
+                        DB::raw("TIME_FORMAT(booking.book_time, '%h:%i %p') as start"),
+                        DB::raw("TIME_FORMAT(booking.end_time, '%h:%i %p') as end"),
                         DB::raw("DATE_FORMAT(booking.expiration_date, '%M %d %Y') as expiration_date"),
                         'booking.venue as venue',
                         'booking.maxpax as maxpax',
@@ -722,13 +722,10 @@ class adminControllers extends Controller
                     
                 )
                 ->leftjoin('themes as b', 'b.id', '=', 'a.theme_id')
-                ->where('book_date', '=', Carbon::now()->format('Y-m-d'))
-                ->where('end_time', '=', Carbon::now()->format('H:i:s'))
+                //->where('book_date', '=', Carbon::now()->format('Y-m-d'))
+                //->where('end_time', '=', Carbon::now()->format('H:i:s'))
                 ->where('a.is_booked', '=', 1)
                 ->where('is_cancelled', 0)
-                ->where('is_initial_paid', 1)
-                ->where('is_fully_paid', 1)
-                ->where('is_paid',0)
                 ->where('a.deleted_at', '=', null)
                 ->get();
             $updateData = booking::where('id', $request->id)
