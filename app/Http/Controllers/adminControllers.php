@@ -645,6 +645,7 @@ class adminControllers extends Controller
                 ->where('a.is_booked', '=', 0)
                 ->where('a.is_cancelled', '=', 0)
                 ->where('a.is_paid', '=', 0)
+                ->where('deleted_at', null)
                 ->get();
       
         foreach($query as $out){
