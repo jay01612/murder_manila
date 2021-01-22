@@ -642,10 +642,10 @@ class adminControllers extends Controller
                 )
                 ->leftjoin('themes as b', 'b.id', '=', 'a.theme_id')
                 ->where('expiration_date', '<', Carbon::now()->addDays()->format('Y-m-d'))
+                ->where('deleted_at', null)
                 ->where('a.is_booked', '=', 0)
                 ->where('a.is_cancelled', '=', 0)
                 ->where('a.is_paid', '=', 0)
-                ->where('deleted_at', null)
                 ->get();
       
         foreach($query as $out){
