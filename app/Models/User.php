@@ -135,7 +135,8 @@ class User extends Authenticatable
 
             'booking.initial_payment as Downpayment',
             'booking.total_amount as Total_Amount',
-            'booking.is_paid as is_paid'
+            'booking.is_initial_paid as is_initial_paid',
+            'booking.is_fully_paid as is_fully_paid'
 
         )
         ->leftjoin('themes as theme', 'booking.theme_id', '=', 'theme.id')
