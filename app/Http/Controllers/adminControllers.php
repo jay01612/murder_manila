@@ -643,13 +643,14 @@ class adminControllers extends Controller
                 ->leftjoin('themes as b', 'b.id', '=', 'a.theme_id')
                 ->where('expiration_date', '<', Carbon::now()->addDays()->format('Y-m-d'))
                 ->where('a.is_booked', '=', 0)
-                -where('a.is_cancelled', '=', 0)
+                ->where('a.is_cancelled', '=', 0)
                 ->where('a.is_paid', '=', 0)
                 ->get();
       
         foreach($query as $out){
             $updateData = booking::where('id', $out->id)
                           ->update(['is_expired' => 1]);
+
             $deleteData = booking::where('id', $out->id)->delete();
             
             $to_name = $out->name;

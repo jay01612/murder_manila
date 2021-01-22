@@ -106,6 +106,7 @@ class User extends Authenticatable
 
         )
         ->leftjoin('themes as theme', 'booking.theme_id', '=', 'theme.id')
+        ->where('is_expired', '=', 0)
         ->where('booking.is_booked', '=', 0)
         ->where('booking.is_cancelled', '=', 0)
         ->get();
