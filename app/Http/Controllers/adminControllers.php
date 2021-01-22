@@ -648,9 +648,10 @@ class adminControllers extends Controller
                 ->get();
       
         foreach($query as $out){
-            $deleteData = booking::where('id', $out->id)->delete();
             $updateData = booking::where('id', $out->id)
                           ->update(['is_expired' => 1]);
+            $deleteData = booking::where('id', $out->id)->delete();
+            
             $to_name = $out->name;
             $to_email = $out->email;
             $data =array(
