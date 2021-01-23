@@ -35,6 +35,27 @@ class adminControllers extends Controller
 
     }
 
+    public function showPositionName(Request $request){
+
+        $query = DB::connection('mysql')
+                 ->table('access_levels')
+                 ->select(
+                        'access_name'
+                 )->get();
+
+        if(sizeOf($query)>0){
+            return response()       ->json([
+                'response'          =>  true,
+                'data'              =>  $query
+            ],200);
+        }else{
+            return response()       ->json([
+                'response'          =>false,
+                'data'              =>[]
+            ],200);
+        }
+    }
+
     public function logIn(Request $request){
         $validation = Validator::make($request->all(), [
             'username'  =>  'required|string',
@@ -75,9 +96,8 @@ class adminControllers extends Controller
 
     public function logout(Request $request){
         Auth::logout();
-        // $request->session()->invalidate();
-        // $request->session()->regenerateToken();
-
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
         return response()       ->json([
             'response'          =>true,
             'message'           =>'Successfully Log out'
@@ -149,11 +169,14 @@ class adminControllers extends Controller
     }
 
     public function getPendBookings(Request $request){
-        if(Auth::User()->position_id == 1 || Auth::User()->position_id == 2 || Auth::User()->position_id == 3){
+        // if(Auth::User()->position_id == 1 || Auth::User()->position_id == 2 || Auth::User()->position_id == 3){
 
             $query = User::getPendingBookings($request);
+            //$query = booking::where('is_booked', '=', 0)->where('is_cancelled', '=', 0 )->get();
+
 
             if($query){
+
                 return response()   ->json([
                     'response'  => true,
                     'data'      => $query
@@ -165,10 +188,10 @@ class adminControllers extends Controller
                 ],200);    
             }
         }
-    }
+    
 
     public function getPaidBooking(Request $request){
-        if(Auth::User()->position_id == 1 || Auth::User()->position_id == 2 || Auth::User()->position_id == 3){
+        // if(Auth::User()->position_id == 1 || Auth::User()->position_id == 2 || Auth::User()->position_id == 3){
             
             $query = User::PaidBookings($request);
 
@@ -183,53 +206,65 @@ class adminControllers extends Controller
                     'data'      => []
                 ],200);
             }
-        }
+        
 
     }
 
     public function getDailyBookings(Request $request){
-        if(Auth::User()->position_id == 1 || Auth::User()->position_id == 2 || Auth::User()->position_id ==3){
+        // if(Auth::User()->position_id == 1 || Auth::User()->position_id == 2 || Auth::User()->position_id ==3){
 
             $query = DB::connection('mysql')
-                     ->table('booking_table')
+                     ->table('booking_table as a')
                      ->Select([
-                        'reference_number',
-                        'book_date',
-                        'end_date',
-                        'book_time',
-                        'theme_id',
-                        'maxpax',
-                        'venue',
-                        'fname',
-                        'lname',
-                        'mobile_number',
-                        'email',
-                        'initial_payment',
-                        'total_amount'
+                        'a.reference_number as reference_number',
+                        'a.book_date as start',
+                        'a.end_date as end',
+                        'a.book_time as time',
+                        'a.theme_id as theme',
+                        'a.maxpax as maxpax',
+                        'a.venue as venue',
+                        DB::raw("CONCAT(a.lname,',',a.fname) as name"),
+                        //'lname',
+                        'a.mobile_number as mobile_number',
+                        'a.email as email',
                      ])
                      ->where('book_date', $request->book_date)
                      ->orderBy('book_time', 'asc')
                      ->get();
 
+                     $data = [];
+                     foreach($query as $out){
+                        $data[$out->name]=[
+                            'reference_number'      => $out->reference_number,
+                            'start'                 => $out->start,
+                            'end'                   => $out->end,
+                            'theme'                 => $out->theme,
+                            'maxpax'                => $out->maxpax,
+                            'name'                  => $out->name,
+                            'mobile_number'         => $out->mobile_number,
+                            'email'                 => $out->email
+                        ];
+                     }
 
-                  $dateToday = Carbon::parse($request->book_date)->toFormattedDateString('m-d-Y');
 
-                     if(sizeOf($query) > 0){
+                  //$dateToday = Carbon::parse($request->book_date)->toFormattedDateString('Y-m-d');
+
+                     if(sizeOf($data) > 0){
                          return response()      ->json([
                              'response'         => true,
-                             'data'             => $query
+                             'data'             => $data
                          ],200);
                      }else{
                          return response()      ->json([
                              'response'         =>  false,
-                             'message'          =>  "there is no booking for " .  $dateToday,
+                             //'message'          =>  "there is no booking for " .  $dateToday,
                          ],200);
                      }    
         }
-    }
+    
 
     public function bookingEdit(Request $request){
-        if(Auth::User()->position_id == 1 || Auth::User()->position_id == 2){
+        // if(Auth::User()->position_id == 1 || Auth::User()->position_id == 2){
 
             $query = booking::editBooking($request);
 
@@ -245,17 +280,19 @@ class adminControllers extends Controller
                 ],200);
             }
         }
-    }
+    
 
     public function cancelBookingEdit(Request $request){
-        if(Auth::User()->position_id == 1 || Auth::user()->position_id == 2){
+        // if(Auth::User()->position_id == 1 || Auth::user()->position_id == 2){
 
-            $query = booking::cancelBookingEdit($request);
+            $query = booking::editToCancelBooking($request);
+
+
 
             if($query){
                 return response()   ->json([
                     'response'      => true,
-                    'message'       => 'Successfully cancelled the bookng'
+                    'message'       => 'Successfully cancel the bookng'
                 ],200);
             }else{
                 return response()   ->json([
@@ -264,10 +301,10 @@ class adminControllers extends Controller
                 ],200);
             }
         }
-    }
+    
 
     public function getCanceledBookings(Request $request){
-        if(Auth::User()->position_id == 1 || Auth::user()->position_id == 2 || Auth::user()-> position_id ==3){
+        // if(Auth::User()->position_id == 1 || Auth::user()->position_id == 2 || Auth::user()-> position_id ==3){
             $query = User::cancelBookings($request);
 
             if($query){
@@ -283,10 +320,10 @@ class adminControllers extends Controller
             }
             
         }
-    }
+    // }
 
     public function adminList(Request $request){
-       if(Auth::User()->position == 1){
+       // if(Auth::User()->position == 1){
             $query = User::getAdmins($request);
 
             if($query){
@@ -301,7 +338,7 @@ class adminControllers extends Controller
                 ],200);
             }
        }
-    }
+    
 
     
     public function sendRecievedHalfPaymentEmail (Request $request){

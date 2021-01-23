@@ -43,6 +43,7 @@ class User extends Authenticatable
         
     }
 
+
     public static function addAdmin($data){
         return User::insert([
             'fname'         =>  $data->fname,
@@ -85,7 +86,7 @@ class User extends Authenticatable
         ->select(
             'booking.id as id',
 
-            'booking.reference_number as Reference Number',
+            'booking.reference_number as Reference_Number',
 
             DB::raw("CONCAT(booking.lname,',',booking.fname) as Name"),
             'booking.email as email',
@@ -95,14 +96,15 @@ class User extends Authenticatable
             DB::raw("DATE_FORMAT(booking.book_date, '%M %d %Y') as date"),
             DB::raw("TIME_FORMAT(booking.book_time, '%h:%i %p') as time"),
             'booking.venue as venue',
-            'booking.maxpax as number of players',
+            'booking.maxpax as maxpax',
 
             'booking.initial_payment as Downpayment',
-            'booking.total_amount as Total Amount',
+            'booking.total_amount as Total_Amount',
 
         )
         ->leftjoin('themes as theme', 'booking.theme_id', '=', 'theme.id')
         ->where('booking.is_booked', '=', 0)
+        ->where('booking.is_cancelled', '=', 0)
         ->get();
 
     }
@@ -113,7 +115,7 @@ class User extends Authenticatable
         ->select(
             'booking.id as id',
 
-            'booking.reference_number as Reference Number',
+            'booking.reference_number as Reference_Number',
 
             DB::raw("CONCAT(booking.lname,',',booking.fname) as Name"),
             'booking.email as email',
@@ -123,10 +125,10 @@ class User extends Authenticatable
             DB::raw("DATE_FORMAT(booking.book_date, '%M %d %Y') as date"),
             DB::raw("TIME_FORMAT(booking.book_time, '%h:%i %p') as time"),
             'booking.venue as venue',
-            'booking.maxpax as number of players',
+            'booking.maxpax as maxpax',
 
             'booking.initial_payment as Downpayment',
-            'booking.total_amount as Total Amount',
+            'booking.total_amount as Total_Amount',
 
         )
         ->leftjoin('themes as theme', 'booking.theme_id', '=', 'theme.id')
@@ -141,7 +143,7 @@ class User extends Authenticatable
         ->select(
             'booking.id as id',
 
-            'booking.reference_number as Reference Number',
+            'booking.reference_number as Reference_Number',
 
             DB::raw("CONCAT(booking.lname,',',booking.fname) as Name"),
             'booking.email as email',
@@ -151,10 +153,10 @@ class User extends Authenticatable
             DB::raw("DATE_FORMAT(booking.book_date, '%M %d %Y') as date"),
             DB::raw("TIME_FORMAT(booking.book_time, '%h:%i %p') as time"),
             'booking.venue as venue',
-            'booking.maxpax as number of players',
+            'booking.maxpax as maxpax',
 
             'booking.initial_payment as Downpayment',
-            'booking.total_amount as Total Amount',
+            'booking.total_amount as Total_Amount',
 
         )
         ->leftjoin('themes as theme', 'booking.theme_id', '=', 'theme.id')

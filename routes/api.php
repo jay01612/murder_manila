@@ -38,6 +38,7 @@ Route::get('reciept', [bookingController::class, 'showReciept']);
 //admin login
 Route::post('logIn', [adminControllers::class, 'logIn']);
 Route::get('positions', [adminControllers::class, 'showPositions']);
+Route::get('positionName', [adminControllers::class, 'showPositionName']);
 Route::get('logout', [adminControllers::class, 'logout']);
 
 Route::middleware('auth:api')->get('user', function (Request $request){
@@ -47,15 +48,15 @@ Route::middleware('auth:api')->get('user', function (Request $request){
 //admin 
 Route::post('adminRegister', [adminControllers::class, 'registerAdmin'])->middleware('auth:api');
 Route::post('AdminDelete', [adminControllers::class, 'deleteAdmin'])->middleware('auth:api');
-Route::get('AdminList', [adminControllers::class, 'adminList'])->middleware('auth:api');
+Route::get('AdminList', [adminControllers::class, 'adminList']);
 
-Route::get('dailyBookings', [adminControllers::class, 'getDailyBookings'])->middleware('auth:api');
-Route::get('Pendings', [adminControllers::class, 'getPendBookings'])->middleware('auth:api');
-Route::get('Booked', [adminControllers::class, 'getPaidBooking'])->middleware('auth:api');
-Route::get('CancelledBookings', [adminControllers::class, 'getCanceledBookings'])->middleware('auth:api');
+Route::post('dailyBookings', [adminControllers::class, 'getDailyBookings']);
+Route::get('Pendings', [adminControllers::class, 'getPendBookings']);
+Route::get('Booked', [adminControllers::class, 'getPaidBooking']);
+Route::get('CancelledBookings', [adminControllers::class, 'getCanceledBookings']);//->middleware('auth:api');
 
-Route::put('editpending/{id}', [adminControllers::class, 'bookingEdit'])->middleware('auth:api');
-Route::put('editCancelBooking/{id}', [adminControllers::class, 'cancelBookingEdit'])->middleware('auth:api');
+Route::put('editpending/{id}', [adminControllers::class, 'bookingEdit']);
+Route::put('editCancelBooking/{id}', [adminControllers::class, 'cancelBookingEdit']);
 
 Route::post('initialPaymentEmail', [adminControllers::class, 'sendRecievedHalfPaymentEmail'])->middleware('auth:api');
 Route::post('fullPaymentEmail', [adminControllers::class, 'sendRecievedFullPaymentEmail'])->middleware('auth:api');

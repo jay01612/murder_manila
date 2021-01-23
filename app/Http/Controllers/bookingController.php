@@ -91,6 +91,8 @@ class bookingController extends Controller
             $bookDate = Carbon::parse($request->end_date);
             $dateValidation = $bookDate->addDays(6)->toFormattedDateString('Y-m-d');
 
+            
+
             $validation = Validator::make($request->all(), [ 
                 
                 'book_date'             =>  'required|date_format:Y-m-d|after:today|after:' . $dateValidation,
@@ -128,7 +130,7 @@ class bookingController extends Controller
         $query = booking::insertGetId([
                     'reference_number'          =>  $referenceNumber,
                     'book_date'                 =>  $request->book_date,
-                    'end_date'                  =>  Carbon::parse($request->book_date)->addDays(7),
+                    'end_date'                  =>  Carbon::parse($request->book_date)->addDays(6),
                     'book_time'                 =>  $request->book_time,
                     'theme_id'                  =>  $request->theme_id,
                     'maxpax'                    =>  $request->maxpax,
