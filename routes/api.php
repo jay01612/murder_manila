@@ -66,8 +66,8 @@ Route::put('editPartialPaid/{id}', [adminControllers::class, 'isPartialPaid']);
 Route::put('editFullyPaid/{id}', [adminControllers::class, 'isFullPaid']);
 
 Route::post('initialPaymentEmail', [adminControllers::class, 'sendRecievedHalfPaymentEmail']);//->middleware('auth:api');
-Route::post('fullPaymentEmail', [adminControllers::class, 'sendRecievedFullPaymentEmail'])->middleware('auth:api');
-Route::post('cancelBookingEmail', [adminControllers::class, 'cancelledBookingEmail'])->middleware('auth:api');
+Route::post('fullPaymentEmail', [adminControllers::class, 'sendRecievedFullPaymentEmail']);//->middleware('auth:api');
+Route::post('cancelBookingEmail', [adminControllers::class, 'cancelledBookingEmail']);//->middleware('auth:api');
 Route::put('expiredEmail', [adminControllers::class, 'expiredBookingEmail']);
 Route::put('doneEmail', [adminControllers::class, 'doneBookingEmail']);
 

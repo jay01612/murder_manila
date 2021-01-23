@@ -135,7 +135,7 @@ class User extends Authenticatable
 
             'booking.initial_payment as Downpayment',
             'booking.total_amount as Total_Amount',
-            'booking.is_initial_paid as is_initial_paid',
+            DB::raw("IF(booking.is_initial_paid = 1, 'Partial', 'Full') AS is_initial_paid"),            
             'booking.is_fully_paid as is_fully_paid'
 
         )
