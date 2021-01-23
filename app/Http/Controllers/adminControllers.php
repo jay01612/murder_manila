@@ -502,7 +502,7 @@ class adminControllers extends Controller
                         
                     )
                     ->leftjoin('themes as b', 'b.id', '=', 'a.theme_id')
-                    ->where('a.is_initial_paid', '=', 1)
+                    ->where('a.is_booked', '=', 0)
                     ->get();
             foreach($query as $out){
                 $to_name = $out->name;
@@ -547,7 +547,7 @@ class adminControllers extends Controller
                         
                     )
                     ->leftjoin('themes as b', 'b.id', '=', 'a.theme_id')
-                    ->where('a.is_fully_paid', '=', 1)
+                    ->where('a.is_booked', '=', 0)
                     ->get();
                     foreach($query as $out){
                         $to_name = $out->name;
