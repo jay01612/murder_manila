@@ -220,14 +220,15 @@ class adminControllers extends Controller
                         'booking.id as id',
 
                         'booking.reference_number as reference_number',
-            
+                        'booking.fname as fname',
+                        'booking.lname as lname',
                         DB::raw("CONCAT(booking.fname,' ',booking.lname) as name"),
                         'booking.mobile_number as mobile_number',
                         'booking.email as email',
             
                         'theme.name as theme',
                       
-                        DB::raw("DATE_FORMAT(booking.book_date, '%M %d %Y') as book_date"),
+                         DB::raw("DATE_FORMAT(booking.book_date, '%Y-%m-%d') as book_date"),
                         DB::raw("TIME_FORMAT(booking.book_time, '%H:%i') as start"),
                         DB::raw("TIME_FORMAT(booking.end_time, '%H:%i') as end"),
                         DB::raw("DATE_FORMAT(booking.expiration_date, '%M %d %Y') as expiration_date"),
@@ -247,10 +248,11 @@ class adminControllers extends Controller
                      $data = [];
                      foreach($query as $out){
                         $data[$out->name]=[
+                            'name'                  => $out->fname.' '.$out->lname,
                             'reference_number'      => $out->reference_number,
-                            'book_date'             => $out->book_date,
                             'start'                 => $out->start,
                             'end'                   => $out->end,
+                            'book_date'             => $out->book_date,
                             'theme'                 => $out->theme,
                             'maxpax'                => $out->maxpax,
                             'name'                  => $out->name,
